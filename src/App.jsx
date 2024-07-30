@@ -1,19 +1,22 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./Components/Home";
-import Header from "./Components/Header";
-import Footer from "./Components/Footer";
 import ProductCard from "./Components/ProductCard";
+import Layout from "./Components/Layout";
+import NewArrival from "./Components/NewArrival";
 
 function App() {
   return (
     <BrowserRouter>
-      <Header />
+
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/card" element={<ProductCard/>}/>
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="new-arrival" element={<NewArrival/>}/>
+          <Route path="/card" element={<ProductCard />} />
+        </Route>
       </Routes>
-      <Footer />
+
     </BrowserRouter>
   );
 }

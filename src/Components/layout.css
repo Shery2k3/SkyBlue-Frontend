@@ -1,0 +1,21 @@
+.layout {
+  display: flex;
+}
+
+.content {
+  margin-left: 277px; 
+  width: calc(100% - 277px);
+  display: flex;
+  flex-direction: column;
+}
+
+header, footer {
+  background-color: #f8f9fa;
+  padding: 10px;
+  text-align: center;
+}
+
+main {
+  padding: 20px;
+  flex-grow: 1;
+}
