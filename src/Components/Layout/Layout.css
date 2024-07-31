@@ -1,0 +1,27 @@
+.layout {
+  position: relative; 
+  min-height: 100vh; 
+  overflow: hidden; 
+}
+
+.layout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(rgba(210, 243, 247, 0.4), rgba(226, 249, 252, 0.4)), url('/Background/background.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  filter: blur(0.5px); 
+  z-index: -1; 
+}
+
+.content {
+  margin-left: 277px;
+  padding: 20px; /* to be removed in the future*/
+  position: relative; 
+  z-index: 1;
+}

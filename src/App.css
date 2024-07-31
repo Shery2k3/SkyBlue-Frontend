@@ -1,22 +1,23 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
 :root{
-  --dark-blue: #00273E,
-  --light-blue: #87CEEB
+  --accent: #87CEEB;
+  --dark: #00273E;
+  --light: #ECFCFF;
+  --secondary: #47B1F2;
+  --mid-light: #E8E8E8;
+  --accent-light: #D3F2FF;
+  --font-accent: "Montserrat", sans-serif;
+  --font-primary: "Inter", sans-serif;
 }
 
-.App{
-  width: 100vw;
-  height: 100vh;
-}
-
-body, html {
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
+  font-family: sans-serif;
 }
 
-#root {
-  height: 100%;
-}
 
