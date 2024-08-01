@@ -37,10 +37,10 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/new-arrival">
+              <Link to="/new-arrivals">
                 <div className="nav-link">
-                  <img src={newarrival} alt="new-arrival" />
-                  <span>New Arrival</span>
+                  <img src={newarrival} alt="new-arrivals" />
+                  <span>New Arrivals</span>
                 </div>
               </Link>
             </li>

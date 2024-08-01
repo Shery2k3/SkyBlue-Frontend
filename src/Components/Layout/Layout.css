@@ -21,7 +21,14 @@
 
 .content {
   margin-left: 277px;
-  padding: 20px; /* to be removed in the future*/
+  padding: 20px;
   position: relative; 
   z-index: 1;
+}
+
+@media (max-width: 867px) {
+  .content {
+    margin-left: 0;
+    padding: 0;
+  }
 }

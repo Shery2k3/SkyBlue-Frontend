@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./Pages/Home/Home";
-import NewArrival from "./Pages/NewArrival/NewArrival";
-import Footer1 from "./Components/Footer/Footer1";
+import NewArrivals from "./Pages/NewArrival/NewArrivals";
 
 function App() {
   return (
@@ -10,7 +9,7 @@ function App() {
 
       <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="new-arrival" element={<NewArrival/>}/>
+          <Route path="new-arrivals" element={<NewArrivals />}/>
       </Routes>
 
     </BrowserRouter>
