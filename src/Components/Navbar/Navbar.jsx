@@ -6,6 +6,8 @@ import {
   faCartShopping,
   faUser,
   faCaretDown,
+  faBars,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import LogoAccent from "/Logos/LogoAccent.png";
 import "./Navbar.css";
@@ -14,6 +16,36 @@ const Navbar = () => {
   const location = useLocation();
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const [isActive, setActive] = useState(false);
+  const [startX, setStartX] = useState(0);
+
+  const activate = () => {
+    setActive(!isActive);
+    if (!isActive) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+  };
+
+  const closeNav = () => {
+    setActive(false);
+    document.body.classList.remove("no-scroll");
+  };
+
+  const handleTouchStart = (e) => {
+    setStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    if (startX - e.touches[0].clientX > 50) {
+      closeNav();
+    }
+  };
+
+  useEffect(() => {
+    console.log(isActive);
+  }, [isActive]);
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
@@ -44,9 +76,26 @@ const Navbar = () => {
   return (
     <nav className={`navbar ${isSticky ? "sticky" : ""}`}>
       <Link to="/">
-        <img src={LogoAccent} alt="Logo" className={isSticky ? "small-logo" : ""} />
+        <img
+          src={LogoAccent}
+          alt="Logo"
+          className={isSticky ? "small-logo" : ""}
+        />
       </Link>
-      <ul className="nav-links">
+
+      <ul
+        className={isActive ? "nav-links open" : "nav-links"}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+      >
+        <FontAwesomeIcon
+          icon={faX}
+          className="menu-closer"
+          onClick={closeNav}
+        />
+        <Link to="/">
+          <img src={LogoAccent} alt="Logo" className="nav-logo" />
+        </Link>
         <li>
           <Link
             className={`nav-items ${
@@ -105,6 +154,9 @@ const Navbar = () => {
           </Link>
         </li>
       </ul>
+
+      <FontAwesomeIcon icon={faBars} onClick={activate} className="menu" />
+
       <div className="icons">
         <FontAwesomeIcon icon={faHeart} />
         <FontAwesomeIcon icon={faCartShopping} />
