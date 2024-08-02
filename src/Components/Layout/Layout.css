@@ -21,6 +21,7 @@
 
 .content-style1 {
   margin-left: 277px;
+  min-height: calc(100vh - 314.91px);
   padding: 20px;
   position: relative; 
   z-index: 1;
@@ -28,6 +29,7 @@
 
 .content-style2{
   margin-top: 82.5px;
+  min-height: calc(100vh - 397.49px);
 }
 
 @media (max-width: 867px) {
