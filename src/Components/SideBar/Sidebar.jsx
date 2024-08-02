@@ -61,9 +61,9 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/contact">
+              <Link to="/contact-us">
                 <div className="nav-link">
-                  <img src={contact} alt="contact" />
+                  <img src={contact} alt="contact-us" />
                   <span>Contact</span>
                 </div>
               </Link>

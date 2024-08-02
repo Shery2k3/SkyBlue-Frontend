@@ -1,10 +1,10 @@
-.layout {
+.layout1 {
   position: relative; 
   min-height: 100vh; 
   overflow: hidden; 
 }
 
-.layout::before {
+.layout1::before {
   content: '';
   position: absolute;
   top: 0;
@@ -19,16 +19,21 @@
   z-index: -1; 
 }
 
-.content {
+.content-style1 {
   margin-left: 277px;
   padding: 20px;
   position: relative; 
   z-index: 1;
 }
 
+.content-style2{
+  margin-top: 82.5px;
+}
+
 @media (max-width: 867px) {
-  .content {
-    margin-left: 0;
+  .content-style1 {
+    margin: 82.5px 0 0 0;
     padding: 0;
+
   }
 }

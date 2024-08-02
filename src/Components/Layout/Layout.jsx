@@ -5,7 +5,7 @@ import Footer1 from "../Footer/Footer1";
 import Footer2 from "../Footer/Footer2";
 import "./Layout.css";
 
-const Layout = ({ pageTitle, children }) => {
+const Layout = ({ pageTitle, children, style }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 867);
 
   useEffect(() => {
@@ -21,12 +21,19 @@ const Layout = ({ pageTitle, children }) => {
 
   return (
     <>
-      <div className="layout">
-        {isMobile ? <Navbar /> : <Sidebar />}
-        <div className="content">{children}</div>
-        {isMobile ? <Footer1 /> : <Footer2 />}
-        
-      </div>
+      {style == "style1" ? (
+        <div className="layout1">
+          {isMobile ? <Navbar /> : <Sidebar />}
+          <div className="content-style1">{children}</div>
+          {isMobile ? <Footer1 /> : <Footer2 />}
+        </div>
+      ) : (
+        <div className="layout2">
+          <Navbar />
+          <div className="content-style2">{children}</div>
+          <Footer1 />
+        </div>
+      )}
     </>
   );
 };

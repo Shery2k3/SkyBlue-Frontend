@@ -6,7 +6,7 @@ import ProductCard from "../../Components/ProductCard/ProductCard";
 const Home = () => {
   const [auth, setAuth] = useAuth();
   return (
-    <Layout pageTitle="Home">
+    <Layout pageTitle="Home" style ="style1">
       
       <br />
       <ProductCard
