@@ -11,7 +11,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background-image: linear-gradient(rgba(210, 243, 247, 0.4), rgba(226, 249, 252, 0.4)), url('/Background/background.png');
+  background-image: linear-gradient(rgba(223, 253, 255, 0.5), rgba(223, 253, 255, 0.5)), url(/Background/background.png);
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
