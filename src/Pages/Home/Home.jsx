@@ -4,6 +4,7 @@ import Layout from "../../Components/Layout/Layout";
 import productData from "../../Data/ProductData";
 import ProductSlider from "../../Components/ProductSlider/ProductSlider";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
+import ProductModal from "../../Components/ProductModal/ProductModal";
 
 const Home = () => {
   const [auth, setAuth] = useAuth();
@@ -12,6 +13,7 @@ const Home = () => {
       <ProductSlider category="New Arrivals" products={productData} />
       <ProductSlider category="Best Sellers" products={productData} />
       <ProductGrid category="Exclusive Products" products={productData} />
+      <ProductModal product={productData[4]} />
     </Layout>
   );
 };
