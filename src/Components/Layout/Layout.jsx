@@ -3,10 +3,13 @@ import Sidebar from "../SideBar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import Footer1 from "../Footer/Footer1";
 import Footer2 from "../Footer/Footer2";
+import ProductModal from "../ProductModal/ProductModal";
+import { useModal } from "../../Context/ModalContext/ModalContext"; 
 import "./Layout.css";
 
 const Layout = ({ pageTitle, children, style }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 867);
+  const { modalProduct, closeModal } = useModal();
 
   useEffect(() => {
     document.title = `SkyBlue | ${pageTitle}`;
@@ -33,6 +36,9 @@ const Layout = ({ pageTitle, children, style }) => {
           <div className="content-style2">{children}</div>
           <Footer1 />
         </div>
+      )}
+      {modalProduct && (
+        <ProductModal product={modalProduct} onClose={closeModal} />
       )}
     </>
   );

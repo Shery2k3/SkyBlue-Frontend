@@ -13,7 +13,6 @@ const Home = () => {
       <ProductSlider category="New Arrivals" products={productData} />
       <ProductSlider category="Best Sellers" products={productData} />
       <ProductGrid category="Exclusive Products" products={productData} />
-      <ProductModal product={productData[4]} />
     </Layout>
   );
 };

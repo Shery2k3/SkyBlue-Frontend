@@ -7,11 +7,10 @@ const ProductGrid = ({ category, products }) => {
     <div className="product-grid-container">
       <h2>{category}</h2>
       <div className="product-grid">
-        {products.map((product, index) => (
+        {products && products.map((product, index) => (
           <ProductCard
-            productImage={product.productImage}
-            productName={product.productName}
-            productPrice={product.productPrice}
+            key={index}
+            product={product}
           />
         ))}
       </div>

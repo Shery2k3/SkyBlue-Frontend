@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus, faCartShopping, faX } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMinus,
+  faPlus,
+  faCartShopping,
+  faX,
+} from "@fortawesome/free-solid-svg-icons";
 import "./ProductModal.css";
 
 const ProductModal = ({ product, onClose }) => {
+  const [quantity, setQuantity] = useState(1);
+
+  const increaseQuantity = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity((prevQuantity) => prevQuantity - 1);
+    }
+  };
+
+  const handleQuantityChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    if (!isNaN(value) && value > 0) {
+      setQuantity(value);
+    }
+  };
 
   const handleClose = (e) => {
     if (e.target.classList.contains("product-modal-container")) {
@@ -34,16 +57,17 @@ const ProductModal = ({ product, onClose }) => {
             </p>
           </span>
           <div className="product-quantity">
-            <span className="button">
+            <span className="button" onClick={decreaseQuantity}>
               <FontAwesomeIcon icon={faMinus} />
             </span>
             <input
               type="number"
               className="quantity"
-              value={1}
-              readOnly
+              value={quantity}
+              onChange={handleQuantityChange}
+              min="1"
             />
-            <span className="button">
+            <span className="button" onClick={increaseQuantity}>
               <FontAwesomeIcon icon={faPlus} />
             </span>
           </div>
