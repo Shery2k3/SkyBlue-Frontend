@@ -1,18 +1,35 @@
-import React from "react";
-import { useAuth } from "../../Context/User/UserContextProvider";
+import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
 import productData from "../../Data/ProductData";
 import ProductSlider from "../../Components/ProductSlider/ProductSlider";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
-import ProductModal from "../../Components/ProductModal/ProductModal";
 
 const Home = () => {
-  const [auth, setAuth] = useAuth();
+  const [isLoaded, setIsLoaded] = useState(true);
+
+  useEffect(() => {
+    // Simulate API calls or other data loading processes here
+    const fetchData = async () => {
+      try {
+        // Replace with actual data fetching logic
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate loading time
+        setIsLoaded(false); // Set to true once data is loaded
+      } catch (error) {
+        console.error("Failed to load data:", error);
+        setIsLoaded(false); // Handle loading failure if necessary
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <Layout pageTitle="Home" style ="style1">
-      <ProductSlider category="New Arrivals" products={productData} />
-      <ProductSlider category="Best Sellers" products={productData} />
-      <ProductGrid category="Exclusive Products" products={productData} />
+    <Layout pageTitle="Home" style="style1" isLoaded={isLoaded}>
+      <>
+        <ProductSlider category="New Arrivals" products={productData} />
+        <ProductSlider category="Best Sellers" products={productData} />
+        <ProductGrid category="Exclusive Products" products={productData} />
+      </>
     </Layout>
   );
 };

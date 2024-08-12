@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
+import Loader from "../Loader/Loader";
 import Sidebar from "../SideBar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import Footer1 from "../Footer/Footer1";
 import Footer2 from "../Footer/Footer2";
 import ProductModal from "../ProductModal/ProductModal";
-import { useModal } from "../../Context/ModalContext/ModalContext"; 
+import { useModal } from "../../Context/ModalContext/ModalContext";
 import "./Layout.css";
 
-const Layout = ({ pageTitle, children, style }) => {
+const Layout = ({ pageTitle, children, style, isLoaded }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 867);
   const { modalProduct, closeModal } = useModal();
 
@@ -24,6 +25,8 @@ const Layout = ({ pageTitle, children, style }) => {
 
   return (
     <>
+      <Loader isActive={isLoaded} />
+
       {style == "style1" ? (
         <div className="layout1">
           {isMobile ? <Navbar /> : <Sidebar />}
