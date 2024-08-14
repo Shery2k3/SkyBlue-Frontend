@@ -4,6 +4,7 @@ import Home from "./Pages/Home/Home";
 import NewArrivals from "./Pages/NewArrival/NewArrivals";
 import BestSeller from "./Pages/BestSeller/BestSeller";
 import ExclusiveProducts from "./Pages/ExclusiveProducts/ExclusiveProducts";
+import Search from "./Pages/Search/Search";
 import ContactUs from "./Pages/ContactUs/ContactUs";
 import Cart from "./Pages/Cart/Cart";
 import { ModalProvider } from "./Context/ModalContext/ModalContext";
@@ -17,6 +18,7 @@ function App() {
           <Route path="new-arrivals" element={<NewArrivals />} />
           <Route path="best-sellers" element={<BestSeller />} />
           <Route path="exclusive-products" element={<ExclusiveProducts />} />
+          <Route path="search" element={<Search />} />
           <Route path="contact-us" element={<ContactUs />} />
           <Route path="cart" element={<Cart />} />
         </Routes>
