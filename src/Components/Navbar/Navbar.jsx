@@ -73,6 +73,11 @@ const Navbar = () => {
     };
   }, []);
 
+  const handleLinkClick = () => {
+    setActive(false);
+    document.body.classList.remove("no-scroll");
+  };
+
   return (
     <nav className={`navbar ${isSticky ? "sticky" : ""}`}>
       <Link to="/">
@@ -101,7 +106,10 @@ const Navbar = () => {
             className={`nav-items ${
               location.pathname === "/" ? "nav-item-active" : ""
             }`}
-            onClick={scrollToTop}
+            onClick={() => {
+              scrollToTop();
+              handleLinkClick();
+            }}
             to="/"
           >
             Home
@@ -112,7 +120,10 @@ const Navbar = () => {
             className={`nav-items ${
               location.pathname === "/new-arrivals" ? "nav-item-active" : ""
             }`}
-            onClick={scrollToTop}
+            onClick={() => {
+              scrollToTop();
+              handleLinkClick();
+            }}
             to="/new-arrivals"
           >
             New Arrivals
@@ -123,7 +134,10 @@ const Navbar = () => {
             className={`nav-items ${
               location.pathname === "/best-sellers" ? "nav-item-active" : ""
             }`}
-            onClick={scrollToTop}
+            onClick={() => {
+              scrollToTop();
+              handleLinkClick();
+            }}
             to="/best-sellers"
           >
             Best Sellers
@@ -136,7 +150,10 @@ const Navbar = () => {
                 ? "nav-item-active"
                 : ""
             }`}
-            onClick={scrollToTop}
+            onClick={() => {
+              scrollToTop();
+              handleLinkClick();
+            }}
             to="/exclusive-products"
           >
             Exclusive Products
@@ -147,7 +164,10 @@ const Navbar = () => {
             className={`nav-items ${
               location.pathname === "/contact" ? "nav-item-active" : ""
             }`}
-            onClick={scrollToTop}
+            onClick={() => {
+              scrollToTop();
+              handleLinkClick();
+            }}
             to="/contact"
           >
             Contact
