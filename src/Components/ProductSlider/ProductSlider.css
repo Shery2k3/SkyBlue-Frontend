@@ -1,40 +1,39 @@
-.product-slider{
-    margin: 3rem 0;
+.product-slider {
+    margin: 1.5rem 0rem 3rem 0rem;
 }
 
-.slider-header {
+.product-slider .slider-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1rem;
 }
 
-.slider-header h2 {
+.product-slider .slider-header h2 {
     font-family: var(--font-primary);
     font-size: 2rem;
     font-weight: 900;
 }
 
-.slider-controller {
+.product-slider .slider-controller {
     width: 3.5rem;
     display: flex;
     justify-content: space-between;
 }
 
-.slider-controller-button {
+.product-slider .slider-controller-button {
     font-size: 1.5rem;
     cursor: pointer;
 }
 
-.slick-track {
-    margin:auto;
+.product-slider .slick-track {
+    margin: auto;
     display: flex !important;
     justify-content: center;
 }
 
-.slider-item{
+.product-slider .slider-item {
     display: flex !important;
     align-items: center;
     justify-content: center;
 }
-

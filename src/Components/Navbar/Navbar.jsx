@@ -158,7 +158,6 @@ const Navbar = () => {
       <FontAwesomeIcon icon={faBars} onClick={activate} className="menu" />
 
       <div className="icons">
-        <FontAwesomeIcon icon={faHeart} />
         <FontAwesomeIcon icon={faCartShopping} />
         <div className="user" onClick={toggleDropdown}>
           <span className="user-icon">

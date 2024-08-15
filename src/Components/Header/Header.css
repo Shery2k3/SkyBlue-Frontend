@@ -1,0 +1,16 @@
+.header {
+    display: flex;
+    align-items: center;
+    gap: 15px
+}
+
+.header .shoping-cart {
+    font-size: 30px;
+    color: var(--dark);
+}
+
+@media (max-width: 480px) {
+    .header .shoping-cart {
+        display: none;
+    }
+  }
