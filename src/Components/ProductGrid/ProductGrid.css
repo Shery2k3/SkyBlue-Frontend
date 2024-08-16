@@ -6,10 +6,12 @@
 }
 
 .product-grid-container h2 {
+  text-align: center;
   font-family: var(--font-primary);
   font-size: 2rem;
   font-weight: 900;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  color: var(--dark);
 }
 
 .product-grid-container {
