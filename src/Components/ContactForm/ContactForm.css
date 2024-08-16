@@ -1,0 +1,106 @@
+.contact-form-wrapper .contact-form {
+  max-width: 60vw;
+  margin: 0 auto;
+  padding: 0px;
+  border-radius: 8px;
+  margin-bottom: 4rem;
+}
+
+.contact-form-wrapper .form-group {
+  margin-bottom: 15px;
+}
+
+.contact-form-wrapper .form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.contact-form-wrapper .form-row .form-group {
+  flex: 1;
+}
+
+.contact-form-wrapper label {
+  font-family: var(--font-primary);
+  color: var(--dark);
+  font-weight: 600;
+  margin-left: 0.25rem;
+}
+
+.contact-form-wrapper input[type="text"],
+.contact-form-wrapper input[type="email"],
+.contact-form-wrapper select,
+.contact-form-wrapper textarea {
+  background-color: transparent;
+  width: 100%;
+  height: 50px;
+  padding: 12px;
+  border: 1.5px solid var(--dark);
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  font-family: var(--font-primary);
+  font-weight: 550;
+  color: var(--dark);
+}
+
+.contact-form-wrapper input[type="text"]::placeholder,
+.contact-form-wrapper input[type="email"]::placeholder,
+.contact-form-wrapper select::placeholder,
+.contact-form-wrapper textarea::placeholder {
+  color: #00273ead;
+}
+
+.contact-form-wrapper select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px top 50%;
+  background-size: 12px auto;
+  cursor: pointer;
+}
+
+.contact-form-wrapper textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.contact-form-wrapper .submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--accent);
+  color: var(--dark);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 800;
+  transition: background-color 0.2s ease;
+}
+
+.contact-form-wrapper .submit-button:hover {
+  background-color: var(--secondary);
+}
+
+@media (max-width: 978px) {
+  .contact-form-wrapper .contact-form {
+    max-width: 80vw;
+  }
+}
+
+@media (max-width: 795px) {
+  .contact-form-wrapper .contact-form {
+    max-width: 90vw;
+    margin-bottom: 3rem;
+  }
+}
+
+@media (max-width: 625px) {
+  .contact-form-wrapper .form-row {
+    flex-direction: column;
+  }
+
+  .contact-form-wrapper .form-row .form-group {
+    width: 100%;
+  }
+}
