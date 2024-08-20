@@ -23,4 +23,37 @@
 body{
   background-color: var(--light);
 }
+                                       /* for login */
+.imagebg {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.imagebg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Gradient Overlay */
+.imagebg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom right,rgba(20, 84, 134, 0.7),rgba(5, 20, 32, 0.7));
+  
+  z-index: 1;
+}
+
+.imagebg img {
+  position: relative;
+  z-index: 0;
+}
+
+
 

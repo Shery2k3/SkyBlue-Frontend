@@ -7,6 +7,8 @@ import ExclusiveProducts from "./Pages/ExclusiveProducts/ExclusiveProducts";
 import Search from "./Pages/Search/Search";
 import ContactUs from "./Pages/ContactUs/ContactUs";
 import Cart from "./Pages/Cart/Cart";
+import Login from "./Pages/login/login";
+
 import { ModalProvider } from "./Context/ModalContext/ModalContext";
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
           <Route path="search" element={<Search />} />
           <Route path="contact-us" element={<ContactUs />} />
           <Route path="cart" element={<Cart />} />
+          <Route path="login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </ModalProvider>
