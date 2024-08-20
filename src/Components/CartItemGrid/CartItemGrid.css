@@ -1,0 +1,33 @@
+.cart-grid{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cartItemGrid {
+  margin: 0px 10px 10px 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end; 
+}
+
+.cart-heading {
+  color: var(--dark);
+  font-family: var(--font-primary);
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0px 10px 10px 10px;
+}
+
+.cartItemGrid .clear-button{
+  cursor: pointer;
+  color: var(--dark);
+  font-family: var(--font-primary);
+  font-size: 1.25rem;
+  font-weight: 800;
+  align-self: flex-end;
+  padding: 5px 10px; 
+  display: inline-block; 
+}
