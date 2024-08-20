@@ -22,6 +22,10 @@
     justify-content: center;
     margin-bottom: 0px;
   }
+  .logo img {
+    width: 215px;
+    margin: 30px 0 20px 0;
+}
   
   /* Form Group */
   .wrapper-login .input-box {
@@ -136,7 +140,7 @@
   .wrapper-login .register_link p {
     font-family: var(--font-primary);
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 200;
     color: var(--dark);
   }
   
@@ -150,12 +154,41 @@
   .wrapper-login .register_link a:hover {
     color: var(--secondary);
   }
+  .linebreak h3 {
+    width: 100%; 
+    text-align: center; 
+    border-bottom: 0.5px solid #0b0322; 
+    line-height: 0.1em;
+    margin: 10px 0 20px; 
+ 
+  }
+  .linebreak h3 span { 
+    background:rgb(236,252,255); 
+    padding:0 10px; 
+}
   
   /* Media Queries */
   @media (max-width: 468px) {
     .wrapper-login {
       width: 400px;
     }
+    inner-wrapper-login {
+      padding-left: 40px;
+      padding-right: 40px;
+      padding-bottom: 30px;
+      padding-top: 0px;
+  }
+  }
+  @media (max-width: 320px) {
+    .wrapper-login {
+      width: 320px;
+    }
+    .inner-wrapper-login {
+      padding-left: 0px;
+      padding-right: 0px;
+      padding-bottom: 30px;
+      padding-top: 0px;
+  }
   }
 
   

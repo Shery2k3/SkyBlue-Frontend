@@ -8,6 +8,7 @@ import Search from "./Pages/Search/Search";
 import ContactUs from "./Pages/ContactUs/ContactUs";
 import Cart from "./Pages/Cart/Cart";
 import Login from "./Pages/login/login";
+import NotFound from "./Components/NotFound/NotFound";
 
 import { ModalProvider } from "./Context/ModalContext/ModalContext";
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="contact-us" element={<ContactUs />} />
           <Route path="cart" element={<Cart />} />
           <Route path="login" element={<Login />} />
+          <Route path="*" element={<NotFound />} /> 
         </Routes>
       </BrowserRouter>
     </ModalProvider>

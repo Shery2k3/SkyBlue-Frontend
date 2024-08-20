@@ -65,13 +65,15 @@ const LoginForm = () => {
               />
               <p className="remember-me">Remember me</p>
             </label>
-            <Link to="/forget-password">Forget password</Link>
+            <Link to="/forget-password">Forget password?</Link>
           </div>
           <button type="submit" className="submit-button">
             Log in
           </button>
         </form>
-        <hr />
+        <div className="linebreak">
+        <h3><span>or</span></h3>
+        </div>
         <div className="register_link">
           <p>
             Do not Have an Account? <Link to="/signup">Sign Up</Link> 
