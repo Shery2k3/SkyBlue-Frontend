@@ -1,18 +1,13 @@
-import React from 'react';
-import LoginForm from '../../Components/loginform/loginform';
-import login from "/Background/login.jpg";
-
+import React from "react";
+import LoginForm from "../../Components/loginform/loginform";
+import VerifcationLayout from "../../Components/VerificationLayout/VerificationLayout";
 
 const Login = () => {
   return (
-    <div className='imagebg'>
-      <img src={login} alt="Background" />
-      <div className="wrapper-login">
-        <LoginForm />
-      </div>
-    </div>
+    <VerifcationLayout>
+      <LoginForm />
+    </VerifcationLayout>
   );
-}
+};
 
 export default Login;
-

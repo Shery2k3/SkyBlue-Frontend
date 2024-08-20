@@ -1,15 +1,10 @@
 /* General Wrapper for Login Form */
 .wrapper-login {
-  max-width: 40vw;
-  margin: 0 auto;
+  width: 430px;
   padding: 0;
   border-radius: 8px;
   background-color: rgb(236,252,255);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: absolute;
-  top: 50%;  /* Position from the top */
-  left: 50%; /* Position from the left */
-  transform: translate(-50%, -50%); /* Center the form */
   z-index: 2;
   }
   
@@ -88,6 +83,10 @@
     font-weight: 500;
     color: var(--dark);
   }
+
+  .remember-me{
+    margin-left: 3px;
+  }
   
   .wrapper-login .remember-forget a {
     color: rgb(13,30,44);
@@ -153,21 +152,10 @@
   }
   
   /* Media Queries */
-  @media (max-width: 978px) {
+  @media (max-width: 468px) {
     .wrapper-login {
-      max-width: 60vw;
+      width: 400px;
     }
   }
-  
-  @media (max-width: 795px) {
-    .wrapper-login {
-      max-width: 80vw;
-    }
-  }
-  
-  @media (max-width: 625px) {
-    .wrapper-login {
-      max-width: 90vw;
-    }
-  }
+
   
