@@ -86,3 +86,35 @@
   cursor: pointer;
   transition: color 0.2s, border 0.2s;
 }
+
+
+@media only screen and (max-width: 840px) {
+  .cart-item .product-image-container {
+    min-width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 8px;
+  }
+
+  .cart-item .product-data {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cart-item .product-name {
+    font-size: 0.8rem;
+  }
+
+  .cart-item .controller-container {
+    gap: 15px;
+    margin: 0 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 752px) {
+}

@@ -6,7 +6,7 @@
   margin: 0px 15px;
   font-family: var(--font-accent);
   position: sticky;
-  top: 111.5px; /* Adjust this value as needed */
+  top: 111.5px; 
 }
 
 .cart-info .info-item {
@@ -54,4 +54,18 @@
 
 .checkout-button:hover {
   background-color: var(--secondary);
+}
+
+@media only screen and (max-width: 752px) {
+  .cart-info {
+    margin: 0 0 2rem 0;
+  }
+
+  .cart-info .info-item {
+    width: calc(95vw - 38px);
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
 }
