@@ -5,18 +5,18 @@ import ContactForm from "../../Components/ContactForm/ContactForm";
 import Map from "../../Components/Map/Map";
 
 const ContactUs = () => {
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoaded(false);
+      setisLoading(false);
     }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <Layout pageTitle="Contact Us" isLoaded={isLoaded}>
+    <Layout pageTitle="Contact Us" isLoading={isLoading}>
       <ContactUsGrid />
       <ContactForm />
       <Map />

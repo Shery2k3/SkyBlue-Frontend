@@ -10,7 +10,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import "./Search.css";
 
 const Search = () => {
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoading, setisLoading] = useState(true);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [category, setCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,7 +31,7 @@ const Search = () => {
     setSearchTerm(term);
 
     const fetchData = async () => {
-      setIsLoaded(true);
+      setisLoading(true);
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -46,10 +46,10 @@ const Search = () => {
         });
 
         setFilteredProducts(filtered);
-        setIsLoaded(false);
+        setisLoading(false);
       } catch (error) {
         console.error("Failed to load data:", error);
-        setIsLoaded(false);
+        setisLoading(false);
       }
     };
 
@@ -60,7 +60,7 @@ const Search = () => {
     <Layout
       pageTitle={`Search Results for "${searchTerm}"`}
       style="style1"
-      isLoaded={isLoaded}
+      isLoading={isLoading}
     >
       {filteredProducts.length > 0 ? (
         <ProductGrid category={`Search Results (${searchTerm})`} products={filteredProducts} />

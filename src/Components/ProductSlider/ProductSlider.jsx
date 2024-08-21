@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const ProductSlider = ({ category, products }) => {
-  const sliderRef = useRef(null); // Create a ref for the Slider
+  const sliderRef = useRef(null); 
 
   const settings = {
     dots: true,
@@ -90,13 +90,13 @@ const ProductSlider = ({ category, products }) => {
         </div>
       </div>
       <div className="slider-container">
-        <Slider ref={sliderRef} {...settings}>
-          {products.map((product, index) => (
-            <div className="slider-item" key={index}>
-              <ProductCard key={index} product={product} />
-            </div>
-          ))}
-        </Slider>
+        {products.length>0 && <Slider ref={sliderRef} {...settings}>
+            {products.map((product, index) => (
+              <div className="slider-item" key={index}>
+                <ProductCard key={index} product={product} />
+              </div>
+            ))}
+          </Slider>}
       </div>
     </div>
   );

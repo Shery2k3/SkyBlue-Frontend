@@ -1,20 +1,35 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../../constant";
+import axios from "axios";
 import "./SearchBar.css";
 
 const SearchBar = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All Category");
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState({
+    Id: "all",
+    Name: "All Category",
+  });
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
-  const categories = [
-    "All Category",
-    "Vape",
-    "Clothing",
-    "Lambi wali category hai ye",
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/product/category/all`
+        );
+        console.log(response);
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Failed to load data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -26,7 +41,11 @@ const SearchBar = () => {
 
   const handleSearchClick = () => {
     if (searchTerm.trim() !== "") {
-      navigate(`/search?category=${encodeURIComponent(selectedCategory)}&term=${encodeURIComponent(searchTerm)}`);
+      navigate(
+        `/search?category=${encodeURIComponent(
+          selectedCategory.Id
+        )}&term=${encodeURIComponent(searchTerm)}`
+      );
     }
   };
 
@@ -40,15 +59,18 @@ const SearchBar = () => {
     <div className="search-bar">
       <div className="category-dropdown">
         <button className="category-dropbtn">
-          {selectedCategory}
+          {selectedCategory.Name}
           <span className="drop-down-icon">
             <FontAwesomeIcon icon={faCaretDown} />
           </span>
         </button>
         <div className="category-dropdown-content">
           {categories.map((category) => (
-            <p key={category} onClick={() => handleCategoryClick(category)}>
-              {category}
+            <p
+              key={category.Id}
+              onClick={() => handleCategoryClick(category)}
+            >
+              {category.Name}
             </p>
           ))}
         </div>

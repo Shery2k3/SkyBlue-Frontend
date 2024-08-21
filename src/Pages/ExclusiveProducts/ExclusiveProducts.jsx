@@ -5,7 +5,7 @@ import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import productData from "../../Data/ProductData";
 
 const ExclusiveProducts = () => {
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
     // Simulate API calls or other data loading processes here
@@ -13,17 +13,17 @@ const ExclusiveProducts = () => {
       try {
         // Replace with actual data fetching logic
         await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate loading time
-        setIsLoaded(false); // Set to true once data is loaded
+        setisLoading(false); // Set to true once data is loaded
       } catch (error) {
         console.error("Failed to load data:", error);
-        setIsLoaded(false); // Handle loading failure if necessary
+        setisLoading(false); // Handle loading failure if necessary
       }
     };
 
     fetchData();
   }, []);
   return (
-    <Layout pageTitle="Exclusive Products" style="style1" isLoaded={isLoaded}>
+    <Layout pageTitle="Exclusive Products" style="style1" isLoading={isLoading}>
       <ProductGrid category="Exclusive Products" products={productData} />
     </Layout>
   );

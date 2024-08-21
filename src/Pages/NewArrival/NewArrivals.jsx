@@ -2,21 +2,22 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import Layout from '../../Components/Layout/Layout';
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
-import productData from "../../Data/ProductData";
+import API_BASE_URL from '../../constant';
+import axios from 'axios';
 
 const NewArrivals = () => {
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoading, setisLoading] = useState(true);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Simulate API calls or other data loading processes here
     const fetchData = async () => {
       try {
-        // Replace with actual data fetching logic
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate loading time
-        setIsLoaded(false); // Set to true once data is loaded
+        const response = await axios.get(`${API_BASE_URL}/product/newarrivals`)
+        setProducts(response.data);
+        setisLoading(false); 
       } catch (error) {
         console.error("Failed to load data:", error);
-        setIsLoaded(false); // Handle loading failure if necessary
+        setisLoading(false);
       }
     };
 
@@ -24,8 +25,8 @@ const NewArrivals = () => {
   }, []);
 
   return (
-    <Layout pageTitle="New Arrivals" style ="style1" isLoaded={isLoaded}>
-      <ProductGrid category="New Arrivals" products={productData} />
+    <Layout pageTitle="New Arrivals" style ="style1" isLoading={isLoading}>
+      <ProductGrid category="New Arrivals" products={products} />
     </Layout>
 
 

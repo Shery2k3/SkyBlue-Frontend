@@ -10,7 +10,7 @@ import ProductModal from "../ProductModal/ProductModal";
 import { useModal } from "../../Context/ModalContext/ModalContext";
 import "./Layout.css";
 
-const Layout = ({ pageTitle, children, style, isLoaded }) => {
+const Layout = ({ pageTitle, children, style, isLoading }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 867);
   const { modalProduct, closeModal } = useModal();
 
@@ -27,7 +27,7 @@ const Layout = ({ pageTitle, children, style, isLoaded }) => {
 
   return (
     <>
-      <Loader isActive={isLoaded} />
+      <Loader isActive={isLoading} />
 
       {style == "style1" ? (
         <div className="layout1">

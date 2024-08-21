@@ -10,6 +10,8 @@ import "./ProductModal.css";
 
 const ProductModal = ({ product, onClose }) => {
   const [quantity, setQuantity] = useState(1);
+  const { data } = product
+  const { Image, Name, Price, Stock } = data;
 
   const increaseQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -38,23 +40,17 @@ const ProductModal = ({ product, onClose }) => {
     <div className="product-modal-container" onClick={handleClose}>
       <div className="product-modal">
         <div className="product-image-container">
-          <img
-            src={product.productImage}
-            className="product-image"
-            alt={product.productName}
-          />
+          <img src={Image} className="product-image" alt={Name} />
         </div>
         <div className="product-detail">
           <span>
-            <h2 className="product-title">{product.productName}</h2>
-            <p className="available">Availability: In stock (987)</p>
+            <h2 className="product-title">{Name}</h2>
+            <p className="available">Availability: In stock ({Stock})</p>
           </span>
           <span>
-            <p className="product-price">${product.productPrice}</p>
+            <p className="product-price">${Price}</p>
             <hr />
-            <p className="product-unit-price">
-              Unit Price: ${product.productPrice}
-            </p>
+            <p className="product-unit-price">Unit Price: ${Price}</p>
           </span>
           <div className="product-quantity">
             <span className="button" onClick={decreaseQuantity}>

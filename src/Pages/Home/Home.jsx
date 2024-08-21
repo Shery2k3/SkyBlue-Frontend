@@ -1,22 +1,39 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
-import productData from "../../Data/ProductData";
 import ProductSlider from "../../Components/ProductSlider/ProductSlider";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
+import API_BASE_URL from "../../constant";
+import axios from "axios";
 
 const Home = () => {
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoading, setisLoading] = useState(true);
+  const [bestSellers, setBestSellers] = useState([]);
+  const [newArrival, setNewArrival] = useState([]);
 
   useEffect(() => {
-    // Simulate API calls or other data loading processes here
     const fetchData = async () => {
       try {
-        // Replace with actual data fetching logic
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate loading time
-        setIsLoaded(false); // Set to true once data is loaded
+        const [bestSellersResult, newArrivalResult] = await Promise.allSettled([
+          axios.get(`${API_BASE_URL}/product/bestseller`),
+          axios.get(`${API_BASE_URL}/product/newarrivals`)
+        ]);
+
+        if (bestSellersResult.status === "fulfilled") {
+          setBestSellers(bestSellersResult.value.data);
+        } else {
+          console.error("Failed to load bestsellers:", bestSellersResult.reason);
+        }
+
+        if (newArrivalResult.status === "fulfilled") {
+          setNewArrival(newArrivalResult.value.data);
+        } else {
+          console.error("Failed to load new arrivals:", newArrivalResult.reason);
+        }
+
+        setisLoading(false);
       } catch (error) {
         console.error("Failed to load data:", error);
-        setIsLoaded(false); // Handle loading failure if necessary
+        setisLoading(false);
       }
     };
 
@@ -24,11 +41,11 @@ const Home = () => {
   }, []);
 
   return (
-    <Layout pageTitle="Home" style="style1" isLoaded={isLoaded}>
+    <Layout pageTitle="Home" style="style1" isLoading={isLoading}>
       <>
-        <ProductSlider category="New Arrivals" products={productData} />
-        <ProductSlider category="Best Sellers" products={productData} />
-        <ProductGrid category="Exclusive Products" products={productData} />
+        <ProductSlider category="New Arrivals" products={newArrival} />
+        <ProductSlider category="Best Sellers" products={bestSellers} />
+        <ProductGrid category="Exclusive Products" products={bestSellers} />
       </>
     </Layout>
   );
