@@ -12,7 +12,7 @@ const NewArrivals = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/product/newarrivals`)
+        const response = await axios.get(`${API_BASE_URL}/product/newarrivals?size=12`)
         setProducts(response.data);
         setisLoading(false); 
       } catch (error) {
