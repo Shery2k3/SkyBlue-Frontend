@@ -7,8 +7,9 @@ const NotFound = () => {
   return (
     <div className="bg-container">
         <div className='container'>
-            <h1 className="title">404</h1>
-            <p className="text">Oops! The page you're looking for doesn't exist.</p>
+            <img src='./public/images/404.png' alt="404 images"></img>
+            < p className="text">SORRY WE CAN'T FIND THE PAGE.</p>
+            <p>The page you are looking for was moved, removed, renamed or never existed.</p>
             <Link to="/" className="link">Return to Home</Link>
         </div>
     </div>
