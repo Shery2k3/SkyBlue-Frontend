@@ -2,8 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./sidebar.css";
 import logo from "../../../public/Logos/logo.png";
-import sorting from "../../assets/sidebar/Sorting.svg";
-import expandarrow from "../../assets/sidebar/ExpandArrow.svg";
+import CategoryDropDown from "../CategoryDropDown/CategoryDropDown";
 import home from "../../assets/sidebar/HomePage.svg";
 import newarrival from "../../assets/sidebar/New.svg";
 import bestseller from "../../assets/sidebar/BestSeller.svg";
@@ -20,11 +19,7 @@ const Sidebar = () => {
         <div className="logo">
           <img src={logo} alt="SkyBlue Logo" />
         </div>
-        <button className="category-button">
-          <img src={sorting} alt="sorting image" />
-          <p className="button-text">Categories</p>
-          <img src={expandarrow} alt="expandarrow" />
-        </button>
+        <CategoryDropDown />
 
         <nav className="nav-section main-nav">
           <ul className="nav-list">

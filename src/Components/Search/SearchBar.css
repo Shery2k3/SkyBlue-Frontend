@@ -1,3 +1,4 @@
+/* Search Bar Component */
 .search-bar {
     border-radius: 25px;
     border: 3px solid var(--dark);
@@ -9,61 +10,64 @@
     background-color: rgba(227, 250, 255, 0.2); 
 }
 
-/* Category Dropdown */
-.category-dropbtn {
+.search-bar .category-dropbtn {
     background-color: var(--dark);
     color: white;
     padding: 10px 20px;
     font-size: 14px;
+    font-family: var(--font-accent);
+    font-weight: 600;
     border: none;
     cursor: pointer;
     border-radius: 25px;
 }
 
-.drop-down-icon {
+.search-bar .drop-down-icon {
     font-size: 12px;
     margin-left: 10px;
 }
 
-.category-dropdown {
+.search-bar .category-dropdown {
     position: relative;
     display: inline-block;
 }
 
-.category-dropdown-content {
+.search-bar .category-dropdown-content {
     display: none; 
     margin-top: 2px;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 135px;
+    min-width: 150px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     border-radius: 5px;
 }
 
-.category-dropdown-content p {
-    color: black;
+.search-bar .category-dropdown-content p {
+    text-align: center;
+    color: var(--dark);
     padding: 10px 12px;
     margin: 0;
     font-size: 14px;
+    font-family: var(--font-accent);
+    font-weight: 600;
     cursor: pointer;
 }
 
-.category-dropdown-content p:hover {
+.search-bar .category-dropdown-content p:hover {
     background-color: var(--accent);
 }
 
-.category-dropdown:hover .category-dropdown-content {
+.search-bar .category-dropdown:hover .category-dropdown-content {
     display: block;
 }
 
-.category-dropdown:hover .category-dropbtn {
+.search-bar .category-dropdown:hover .category-dropbtn {
     background-color: var(--secondary);
     color: var(--dark);
 }
 
-/* Search Input */
-.search-input {
+.search-bar .search-input {
     flex: 1;
     min-width: 20px;
     padding: 10px 15px;
@@ -75,13 +79,12 @@
     color: var(--dark); /* Ensure text color is visible */
 }
 
-.search-input::placeholder {
+.search-bar .search-input::placeholder {
     color: var(--dark); /* Adjust placeholder color */
 }
 
-/* Search Icon */
-.search-icon {
-    margin: 0px 8px 0px auto ;
+.search-bar .search-icon {
+    margin: 0px 8px 0px auto;
     color: var(--dark);
     font-size: 20px;
     cursor: pointer;
