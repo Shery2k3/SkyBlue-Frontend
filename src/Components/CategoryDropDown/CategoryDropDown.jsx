@@ -46,7 +46,7 @@ const CategoryDropDown = () => {
   };
 
   const handleCategoryClick = (category) => {
-    navigate(`/category/${category.Id}`);
+    navigate(`/category/${category.Id}?page=1`);
     setIsDropdownVisible(false); 
     setIsArrowRotated(false); 
   };
