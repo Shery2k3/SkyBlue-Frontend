@@ -6,8 +6,7 @@ import { useModal } from "../../Context/ModalContext/ModalContext";
 
 const ProductCard = ({ product }) => {
   const { openModal } = useModal();
-  const { data } = product;
-  const { Image, Name, Price } = data;
+  const { Image, Name, Price } = product.data || product;
 
   const shortenedName =
     Name.length > 36

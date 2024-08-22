@@ -21,7 +21,6 @@ const SearchBar = () => {
         const response = await axios.get(
           `${API_BASE_URL}/product/category/all`
         );
-        console.log(response);
         setCategories(response.data);
       } catch (error) {
         console.error("Failed to load data:", error);

@@ -9,7 +9,7 @@ import API_BASE_URL from "../../constant";
 const CategoryDropDown = () => {
   const [categories, setCategories] = useState([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [isArrowRotated, setIsArrowRotated] = useState(false); // New state for arrow rotation
+  const [isArrowRotated, setIsArrowRotated] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 

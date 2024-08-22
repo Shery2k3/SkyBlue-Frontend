@@ -10,7 +10,7 @@ import Cart from "./Pages/Cart/Cart";
 import Login from "./Pages/login/login";
 import NotFound from "./Components/NotFound/NotFound";
 import AgeVerification from "./Components/AgeVerificationForm/AgeVerificationForm";
-
+import Category from "./Pages/Category/Category";
 import { ModalProvider } from "./Context/ModalContext/ModalContext";
 
 function App() {
@@ -27,6 +27,7 @@ function App() {
           <Route path="cart" element={<Cart />} />
           <Route path="login" element={<Login />} />
           <Route path="ageverification" element={<AgeVerification/>}/>
+          <Route path="category/:categoryId" element={<Category />} />
           <Route path="*" element={<NotFound />} /> 
         </Routes>
       </BrowserRouter>

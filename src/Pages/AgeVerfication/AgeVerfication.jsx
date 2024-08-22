@@ -1,20 +1,13 @@
-import React from 'react'
-import AgeVerificationForm from '../../Components/AgeVerificationForm/AgeVerificationForm'
-import VerifcationLayout from '../../Components/VerificationLayout/VerificationLayout'
-
+import React from "react";
+import AgeVerificationForm from "../../Components/AgeVerificationForm/AgeVerificationForm";
+import VerifcationLayout from "../../Components/VerificationLayout/VerificationLayout";
 
 function AgeVerfication() {
-
-
-
   return (
-    <div><AgeVerificationForm/></div>
-      
-   
-        
-
-    
-  )
+    <div>
+      <AgeVerificationForm />
+    </div>
+  );
 }
 
-export default AgeVerfication
+export default AgeVerfication;

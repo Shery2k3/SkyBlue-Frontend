@@ -10,8 +10,7 @@ import "./ProductModal.css";
 
 const ProductModal = ({ product, onClose }) => {
   const [quantity, setQuantity] = useState(1);
-  const { data } = product
-  const { Image, Name, Price, Stock } = data;
+  const { Image, Name, Price, Stock } = product.data || product;
 
   const increaseQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
