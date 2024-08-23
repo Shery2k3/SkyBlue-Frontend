@@ -4,7 +4,21 @@ import { faSearch, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import API_BASE_URL from "../../constant";
+import { useModal } from "../../Context/ModalContext/ModalContext";
 import "./SearchBar.css";
+
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+  return debouncedValue;
+};
 
 const SearchBar = () => {
   const [categories, setCategories] = useState([]);
@@ -15,13 +29,20 @@ const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isArrowRotated, setIsArrowRotated] = useState(false);
+  const [suggestedProducts, setSuggestedProducts] = useState([]);
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const { openModal } = useModal();
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+  const suggestionsRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/product/category/all`);
+        const response = await axios.get(
+          `${API_BASE_URL}/product/category/all`
+        );
         setCategories(response.data);
       } catch (error) {
         console.error("Failed to load data:", error);
@@ -32,10 +53,37 @@ const SearchBar = () => {
   }, []);
 
   useEffect(() => {
+    setSuggestedProducts([]);
+
+    const fetchData = async () => {
+      if (debouncedSearchTerm) {
+        try {
+          console.log(`${API_BASE_URL}/product/search/${encodeURIComponent(selectedCategory.Id)}?term=${debouncedSearchTerm}&page=1&size=6`)
+          const response = await axios.get(
+            `${API_BASE_URL}/product/search/${encodeURIComponent(selectedCategory.Id)}?term=${debouncedSearchTerm.trim()}&page=1&size=6`
+          );
+          if (response.data.data.length > 0) {
+            setSuggestedProducts(response.data.data);
+          } else {
+            setSuggestedProducts([]);
+          }
+        } catch (error) {
+          console.error("Failed to load data:", error);
+          setSuggestedProducts([]);
+        }
+      } else {
+        setSuggestedProducts([]);
+      }
+    };
+    fetchData();
+  }, [debouncedSearchTerm, selectedCategory]);
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target) && suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
         setIsDropdownVisible(false);
         setIsArrowRotated(false);
+        setSuggestedProducts([]);
       }
     };
 
@@ -58,12 +106,14 @@ const SearchBar = () => {
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
-  };
+  };  
 
   const handleSearchClick = () => {
     if (searchTerm.trim() !== "") {
       navigate(
-        `/search?category=${encodeURIComponent(selectedCategory.Id)}&term=${encodeURIComponent(searchTerm)}`
+        `/search?category=${encodeURIComponent(
+          selectedCategory.Id
+        )}&term=${encodeURIComponent(searchTerm.trim())}`
       );
     }
   };
@@ -74,40 +124,66 @@ const SearchBar = () => {
     }
   };
 
+  const handleClick = (product) => () => {
+    openModal(product);
+    setSuggestedProducts([]);
+  };
+
   return (
-    <div className="search-bar">
-      <div className="category-dropdown" ref={dropdownRef}>
-        <button className="category-dropbtn" onClick={handleButtonClick}>
-          {selectedCategory.Name}
-          <span className={`drop-down-icon ${isArrowRotated ? "rotated" : ""}`}>
-            <FontAwesomeIcon icon={faCaretDown} />
-          </span>
-        </button>
-        <div className={`category-dropdown-content ${isDropdownVisible ? "show" : ""}`}>
-          {categories.map((category) => (
-            <p
-              key={category.Id}
-              onClick={() => handleCategoryClick(category)}
-              className="category-drop-down-item"
+    <div className="searchbar-container">
+      <div className="search-bar">
+        <div className="category-dropdown" ref={dropdownRef}>
+          <button className="category-dropbtn" onClick={handleButtonClick}>
+            {selectedCategory.Name}
+            <span
+              className={`drop-down-icon ${isArrowRotated ? "rotated" : ""}`}
             >
-              {category.Name}
-            </p>
-          ))}
+              <FontAwesomeIcon icon={faCaretDown} />
+            </span>
+          </button>
+          <div
+            className={`category-dropdown-content ${
+              isDropdownVisible ? "show" : ""
+            }`}
+          >
+            {categories.map((category) => (
+              <p
+                key={category.Id}
+                onClick={() => handleCategoryClick(category)}
+                className="category-drop-down-item"
+              >
+                {category.Name}
+              </p>
+            ))}
+          </div>
         </div>
+        <input
+          type="text"
+          className="search-input"
+          value={searchTerm}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          placeholder="Search"
+        />
+        <FontAwesomeIcon
+          icon={faSearch}
+          className="search-icon"
+          onClick={handleSearchClick}
+        />
       </div>
-      <input
-        type="text"
-        className="search-input"
-        value={searchTerm}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-        placeholder="Search"
-      />
-      <FontAwesomeIcon
-        icon={faSearch}
-        className="search-icon"
-        onClick={handleSearchClick}
-      />
+      <div
+        className={`search-suggestions ${suggestedProducts.length > 0 ? "show" : ""}`}
+        ref={suggestionsRef}
+      >
+        {suggestedProducts.map((product) => (
+          <span key={product.Id} onClick={handleClick(product)}>
+            <div className="image-container">
+              <img src={product.Image} alt={product.Name} className="product-image"/>
+            </div>
+            {product.Name}
+          </span>
+        ))}
+      </div>
     </div>
   );
 };
