@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import Pagination from "../../Components/Pagination/Pagination";
@@ -13,11 +13,16 @@ const Category = () => {
   const { categoryId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page")) || 1;
+  const navigate = useNavigate();
+
+  const handlePageChange = (pageNumber) => {
+    navigate(`?page=${pageNumber}`);
+  };
 
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
     setIsLoading(true);
     const fetchData = async () => {
@@ -27,9 +32,9 @@ const Category = () => {
         );
         setProducts(response.data.data);
         setTotalPages(response.data.totalPages);
-        setIsLoading(false);
       } catch (error) {
         console.error("Failed to load data:", error);
+      } finally {
         setIsLoading(false);
       }
     };
@@ -40,7 +45,11 @@ const Category = () => {
   return (
     <Layout pageTitle="Best Seller" style="style1" isLoading={isLoading}>
       <ProductGrid category="Best Sellers" products={products} />
-      <Pagination currentPage={currentPage} totalPages={totalPages}/>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+      />
     </Layout>
   );
 };

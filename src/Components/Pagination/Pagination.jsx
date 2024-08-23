@@ -1,16 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
 import "./Pagination.css";
 
-const Pagination = ({ currentPage, totalPages }) => {
-  const navigate = useNavigate();
+const Pagination = ({ currentPage, totalPages, handlePageChange }) => {
   const pageNumbers = [];
-
-  const handlePageChange = (pageNumber) => {
-    navigate(`?page=${pageNumber}`);
-  };
 
   let startPage = Math.max(1, currentPage - 2);
   let endPage = Math.min(totalPages, currentPage + 2);

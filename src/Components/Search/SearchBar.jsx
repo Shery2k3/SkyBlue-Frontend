@@ -43,7 +43,7 @@ const SearchBar = () => {
       navigate(
         `/search?category=${encodeURIComponent(
           selectedCategory.Id
-        )}&term=${encodeURIComponent(searchTerm)}`
+        )}&term=${encodeURIComponent(searchTerm)}&page=1&size=18`
       );
     }
   };
