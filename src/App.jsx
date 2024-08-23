@@ -26,7 +26,7 @@ function App() {
           <Route path="contact-us" element={<ContactUs />} />
           <Route path="cart" element={<Cart />} />
           <Route path="login" element={<Login />} />
-          <Route path="ageverification" element={<AgeVerification/>}/>
+          
           <Route path="category/:categoryId" element={<Category />} />
           <Route path="*" element={<NotFound />} /> 
         </Routes>
