@@ -14,8 +14,8 @@ const ProductSlider = ({ category, products }) => {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 6,
-    slidesToScroll: 6,
+    slidesToShow: 5,
+    slidesToScroll: 5,
     initialSlide: 0,
     arrows: false,
     responsive: [

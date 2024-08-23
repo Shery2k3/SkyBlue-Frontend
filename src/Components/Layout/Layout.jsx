@@ -15,6 +15,10 @@ const Layout = ({ pageTitle, children, style, isLoading }) => {
   const { modalProduct, closeModal } = useModal();
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
     document.title = `SkyBlue | ${pageTitle}`;
 
     const handleResize = () => {

@@ -162,13 +162,13 @@ const Navbar = () => {
         <li>
           <Link
             className={`nav-items ${
-              location.pathname === "/contact" ? "nav-item-active" : ""
+              location.pathname === "/contact-us" ? "nav-item-active" : ""
             }`}
             onClick={() => {
               scrollToTop();
               handleLinkClick();
             }}
-            to="/contact"
+            to="/contact-us"
           >
             Contact
           </Link>
@@ -178,7 +178,8 @@ const Navbar = () => {
       <FontAwesomeIcon icon={faBars} onClick={activate} className="menu" />
 
       <div className="icons">
-        <FontAwesomeIcon icon={faCartShopping} />
+        <Link className="cart-icon" to="/cart">
+        <FontAwesomeIcon icon={faCartShopping} /></Link>
         <div className="user" onClick={toggleDropdown}>
           <span className="user-icon">
             <FontAwesomeIcon icon={faUser} />

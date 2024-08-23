@@ -86,10 +86,15 @@
 }
 
 .icons {
+  color: var(--dark);
   font-size: 1.25rem;
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.icons .cart-icon{
+  color: var(--dark);
 }
 
 .user {
