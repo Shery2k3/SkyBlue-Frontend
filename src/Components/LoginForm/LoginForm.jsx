@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import API_BASE_URL from "../../constant";
+import axios from "axios";
 import "./LoginForm.css";
 import LogoAccent from "/Logos/LogoAccent.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../Context/AuthContext/AuthContext";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +12,9 @@ const LoginForm = () => {
     password: "",
     rememberMe: false,
   });
+
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -18,9 +24,27 @@ const LoginForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+        email: formData.loginemail,
+        password: formData.password,
+      });
+
+      if (response.status === 200) {
+        const { token } = response.data;
+        login(token, formData.rememberMe);
+        navigate("/"); // Navigate to a protected route
+      } else {
+        console.error("Login failed");
+        // Handle login errors (e.g., show a message)
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      // Handle error (e.g., show a message)
+    }
   };
 
   return (

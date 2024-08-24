@@ -14,7 +14,10 @@ import "./Layout.css";
 
 const Layout = ({ pageTitle, children, style, isLoading}) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 867);
+  const isAgeVerified = localStorage.getItem('isAgeVerified') === 'true';
   const { modalProduct, closeModal } = useModal();
+
+  console.log(localStorage.getItem('isAgeVerified'))
 
   useEffect(() => {
     window.scrollTo({
@@ -34,7 +37,7 @@ const Layout = ({ pageTitle, children, style, isLoading}) => {
   return (
     <>
       <Loader isActive={isLoading} />
-      {false ? (
+      {!isAgeVerified ? (
         <AgeVerificationForms />
       ) : (
         <>

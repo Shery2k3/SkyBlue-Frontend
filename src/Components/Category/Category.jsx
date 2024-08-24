@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import API_BASE_URL from "../../constant";
+import axiosInstance from "../../api/axiosConfig"; // Import the configured Axios instance
 import "./Category.css";
 
 const Category = () => {
@@ -11,9 +10,9 @@ const Category = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/product/category/all`
-        );
+        const response = await axiosInstance.get(
+          `/product/category/all`
+        ); // Use axiosInstance
         setCategories(response.data);
       } catch (error) {
         console.error("Failed to load data:", error);
@@ -29,7 +28,7 @@ const Category = () => {
 
   return (
     <div className="category-container">
-        <h2>Categories</h2>
+      <h2>Categories</h2>
       <div className="category-menu">
         {categories.map((category) => (
           <span key={category.Id} onClick={() => handleCategoryClick(category)}>

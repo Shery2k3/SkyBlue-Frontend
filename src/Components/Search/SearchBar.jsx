@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import API_BASE_URL from "../../constant";
+import axiosInstance from "../../api/axiosConfig"; // Import the configured Axios instance
 import { useModal } from "../../Context/ModalContext/ModalContext";
 import "./SearchBar.css";
 
@@ -40,8 +39,8 @@ const SearchBar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/product/category/all`
+        const response = await axiosInstance.get(
+          `/product/category/all`
         );
         setCategories(response.data);
       } catch (error) {
@@ -58,9 +57,8 @@ const SearchBar = () => {
     const fetchData = async () => {
       if (debouncedSearchTerm) {
         try {
-          console.log(`${API_BASE_URL}/product/search/${encodeURIComponent(selectedCategory.Id)}?term=${debouncedSearchTerm}&page=1&size=6`)
-          const response = await axios.get(
-            `${API_BASE_URL}/product/search/${encodeURIComponent(selectedCategory.Id)}?term=${debouncedSearchTerm.trim()}&page=1&size=6`
+          const response = await axiosInstance.get(
+            `/product/search/${encodeURIComponent(selectedCategory.Id)}?term=${debouncedSearchTerm.trim()}&page=1&size=6`
           );
           if (response.data.data.length > 0) {
             setSuggestedProducts(response.data.data);

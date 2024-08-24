@@ -7,8 +7,7 @@ import searchImage from "../../../public/Images/search.png";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import API_BASE_URL from "../../constant";
-import axios from "axios";
+import axiosInstance from "../../api/axiosConfig";
 import "./Search.css";
 
 const Search = () => {
@@ -55,8 +54,8 @@ const Search = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/product/search/${category}?term=${term}&page=${page}&size=${size}`
+        const response = await axiosInstance.get(
+          `/product/search/${category}?term=${term}&page=${page}&size=${size}`
         );
         setProducts(response.data.data);
         setTotalPages(response.data.totalPages);

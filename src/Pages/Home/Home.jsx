@@ -1,10 +1,10 @@
+// src/pages/Home.js
 import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
 import Category from "../../Components/Category/Category";
 import ProductSlider from "../../Components/ProductSlider/ProductSlider";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
-import API_BASE_URL from "../../constant";
-import axios from "axios";
+import axiosInstance from "../../api/axiosConfig"; // Import the Axios instance
 
 const Home = () => {
   const [isLoading, setisLoading] = useState(true);
@@ -15,8 +15,8 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const [bestSellersResult, newArrivalResult] = await Promise.allSettled([
-          axios.get(`${API_BASE_URL}/product/bestseller`),
-          axios.get(`${API_BASE_URL}/product/newarrivals`),
+          axiosInstance.get(`/product/bestseller`),
+          axiosInstance.get(`/product/newarrivals`),
         ]);
 
         if (bestSellersResult.status === "fulfilled") {

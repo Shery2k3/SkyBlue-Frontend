@@ -1,10 +1,7 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
-import productData from "../../Data/ProductData";
-import API_BASE_URL from "../../constant";
-import axios from "axios";
+import axiosInstance from "../../api/axiosConfig";
 
 const BestSeller = () => {
   const [isLoading, setisLoading] = useState(true);
@@ -13,9 +10,9 @@ const BestSeller = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/product/bestseller?size=12`)
+        const response = await axiosInstance.get("/product/bestseller?size=12");
         setProducts(response.data);
-        setisLoading(false); 
+        setisLoading(false);
       } catch (error) {
         console.error("Failed to load data:", error);
         setisLoading(false);
@@ -24,7 +21,7 @@ const BestSeller = () => {
 
     fetchData();
   }, []);
-  
+
   return (
     <Layout pageTitle="Best Seller" style="style1" isLoading={isLoading}>
       <ProductGrid category="Best Sellers" products={products} />

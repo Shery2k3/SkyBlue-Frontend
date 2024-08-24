@@ -3,8 +3,7 @@ import sorting from "../../assets/sidebar/Sorting.svg";
 import expandarrow from "../../assets/sidebar/ExpandArrow.svg";
 import { useNavigate } from "react-router-dom";
 import "./CategoryDropDown.css";
-import axios from "axios";
-import API_BASE_URL from "../../constant";
+import axiosInstance from "../../api/axiosConfig"; // Import the configured Axios instance
 
 const CategoryDropDown = () => {
   const [categories, setCategories] = useState([]);
@@ -16,7 +15,7 @@ const CategoryDropDown = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/product/category/all`);
+        const response = await axiosInstance.get(`/product/category/all`); // Use axiosInstance
         setCategories(response.data);
       } catch (error) {
         console.error("Failed to load data:", error);

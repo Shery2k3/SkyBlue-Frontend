@@ -3,15 +3,14 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import Pagination from "../../Components/Pagination/Pagination";
-import API_BASE_URL from "../../constant";
-import axios from "axios";
+import axiosInstance from "../../api/axiosConfig"; // Import the configured Axios instance
 
 const Category = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const { categoryId } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page")) || 1;
   const navigate = useNavigate();
 
@@ -27,8 +26,8 @@ const Category = () => {
     setIsLoading(true);
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/product/category/${categoryId}?page=${currentPage}&size=18`
+        const response = await axiosInstance.get(
+          `/product/category/${categoryId}?page=${currentPage}&size=18`
         );
         setProducts(response.data.data);
         setTotalPages(response.data.totalPages);
@@ -43,8 +42,8 @@ const Category = () => {
   }, [categoryId, currentPage]);
 
   return (
-    <Layout pageTitle="Best Seller" style="style1" isLoading={isLoading}>
-      <ProductGrid category="Best Sellers" products={products} />
+    <Layout pageTitle="Category" style="style1" isLoading={isLoading}>
+      <ProductGrid category="Category" products={products} />
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

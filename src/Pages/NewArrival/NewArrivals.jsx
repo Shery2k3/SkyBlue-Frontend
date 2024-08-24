@@ -1,9 +1,7 @@
-import React from 'react'
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../../Components/Layout/Layout';
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
-import API_BASE_URL from '../../constant';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosConfig';
 
 const NewArrivals = () => {
   const [isLoading, setisLoading] = useState(true);
@@ -12,7 +10,7 @@ const NewArrivals = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/product/newarrivals?size=12`)
+        const response = await axiosInstance.get('/product/newarrivals?size=12'); 
         setProducts(response.data);
         setisLoading(false); 
       } catch (error) {
@@ -25,12 +23,10 @@ const NewArrivals = () => {
   }, []);
 
   return (
-    <Layout pageTitle="New Arrivals" style ="style1" isLoading={isLoading}>
+    <Layout pageTitle="New Arrivals" style="style1" isLoading={isLoading}>
       <ProductGrid category="New Arrivals" products={products} />
     </Layout>
-
-
-  )
+  );
 }
 
 export default NewArrivals;
