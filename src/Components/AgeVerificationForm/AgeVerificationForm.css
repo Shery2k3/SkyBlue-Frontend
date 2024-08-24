@@ -65,8 +65,19 @@
   background-color: var(--light);
   font-family: var(--font-accent);
   font-size: 20px;
+  font-weight: 700;
   color: var(--dark);
   text-align: center;
+}
+.age-verification-page .d-m-y select::-ms-expand {
+  display: none; /* Hides default arrow in Internet Explorer */
+}
+
+.age-verification-page .d-m-y option {
+  background-color: var(--light);
+  color: var(--dark);
+  font-family: var(--font-accent);
+  font-size: 16px; /* Adjusted font size */
 }
 
 .age-verification-page .av-form p {
@@ -79,7 +90,8 @@
 .age-verification-page .av-button {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 10px;
 }
 
 .age-verification-page button {
