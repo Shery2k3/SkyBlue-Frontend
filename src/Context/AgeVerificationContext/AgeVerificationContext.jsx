@@ -1,4 +1,4 @@
-// src/Context/AgeVerificationContext.js
+
 import React, { createContext, useState, useContext } from 'react';
 
 const AgeVerificationContext = createContext();

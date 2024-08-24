@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import './AgeVerificationForm.css';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const AgeVerificationForm = () => {
+
+  const navigate = useNavigate();
+
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
@@ -20,7 +26,7 @@ const AgeVerificationForm = () => {
     if (day && month && year) {
       const age = currentYear - year;
       if (age >= 18) {
-        alert("Access granted!");
+        navigate('/'); 
         
       } else {
         alert("Access denied! You must be 18 or older.");

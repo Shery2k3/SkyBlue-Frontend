@@ -13,6 +13,10 @@ import AgeVerification from "./Components/AgeVerificationForm/AgeVerificationFor
 import Category from "./Pages/Category/Category";
 import { ModalProvider } from "./Context/ModalContext/ModalContext";
 
+
+import SignUp from "./Pages/SignUp/SignUp";
+
+
 function App() {
   return (
     <ModalProvider>
@@ -26,6 +30,9 @@ function App() {
           <Route path="contact-us" element={<ContactUs />} />
           <Route path="cart" element={<Cart />} />
           <Route path="login" element={<Login />} />
+          <Route path="signup" element={<SignUp />} />
+          
+          
           
           <Route path="category/:categoryId" element={<Category />} />
           <Route path="*" element={<NotFound />} /> 
