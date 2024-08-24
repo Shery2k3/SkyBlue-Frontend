@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMinus,
@@ -9,24 +9,47 @@ import {
 import "./ProductModal.css";
 
 const ProductModal = ({ product, onClose }) => {
-  const [quantity, setQuantity] = useState(1);
-  const { Image, Name, Price, Stock } = product.data || product;
+  const { Image, Name, Price, Stock, OrderMinimumQuantity } =
+    product.data || product;
+  const [quantity, setQuantity] = useState(OrderMinimumQuantity || 1);
+  const quantities = Array.from({ length: 20 }, (_, i) => (i + 1) * OrderMinimumQuantity);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const dropdownRef = useRef(null);
+  const dropdownContainerRef = useRef(null);
+  const inputRef = useRef(null);
 
   const increaseQuantity = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
+    setQuantity((prevQuantity) => prevQuantity + (OrderMinimumQuantity || 1));
   };
 
   const decreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity((prevQuantity) => prevQuantity - 1);
+    if (quantity > (OrderMinimumQuantity || 1)) {
+      setQuantity((prevQuantity) => prevQuantity - (OrderMinimumQuantity || 1));
     }
   };
 
   const handleQuantityChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value > 0) {
-      setQuantity(value);
+    setQuantity(e.target.value);
+  };
+
+  const handleBlur = () => {
+    const value = parseInt(inputRef.current.value, 10);
+    if (!isNaN(value) && value >= (OrderMinimumQuantity || 1)) {
+      const roundedValue = Math.max(
+        OrderMinimumQuantity || 1,
+        Math.ceil(value / (OrderMinimumQuantity || 1)) *
+          (OrderMinimumQuantity || 1)
+      );
+      setQuantity(roundedValue);
+    } else {
+      setQuantity(OrderMinimumQuantity || 1);
     }
+  };
+
+  const handleDropdownSelection = (selectedQuantity) => {
+    setQuantity(selectedQuantity);
+    setDropdownOpen(false);
   };
 
   const handleClose = (e) => {
@@ -34,6 +57,22 @@ const ProductModal = ({ product, onClose }) => {
       onClose();
     }
   };
+
+  const handleClickOutside = (e) => {
+    if (
+      dropdownContainerRef.current &&
+      !dropdownContainerRef.current.contains(e.target)
+    ) {
+      setDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="product-modal-container" onClick={handleClose}>
@@ -55,13 +94,33 @@ const ProductModal = ({ product, onClose }) => {
             <span className="button" onClick={decreaseQuantity}>
               <FontAwesomeIcon icon={faMinus} />
             </span>
-            <input
-              type="number"
-              className="quantity"
-              value={quantity}
-              onChange={handleQuantityChange}
-              min="1"
-            />
+            {OrderMinimumQuantity === 1 ? (
+              <input
+                type="number"
+                className="quantity"
+                value={quantity}
+                onChange={handleQuantityChange}
+                onBlur={handleBlur}
+                min={OrderMinimumQuantity || 1}
+                ref={inputRef}
+              />
+            ) : (
+              <div className="quantity-dropdown-container" ref={dropdownContainerRef}>
+                <div
+                  className="quantity-dropdown"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  {quantity}
+                </div>
+                <div className={`quantity-dropdown-menu ${dropdownOpen ? "show" : ""}`} ref={dropdownRef}>
+                  {quantities.map((qty) => (
+                    <span key={qty} onClick={() => handleDropdownSelection(qty)}>
+                      {qty}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
             <span className="button" onClick={increaseQuantity}>
               <FontAwesomeIcon icon={faPlus} />
             </span>

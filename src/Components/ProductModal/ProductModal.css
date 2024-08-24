@@ -130,6 +130,118 @@
   -moz-appearance: textfield;
 }
 
+.quantity-dropdown-container{
+  position: relative;
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.product-modal .quantity-dropdown-menu {
+  border: 2px solid var(--secondary);
+  background-color: var(--light);
+  border-radius: 12px;
+  width: 70px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 30px; /* Adjust as needed */
+  left: 0;
+  animation: dropdownSlideIn 0.3s ease-out;
+  opacity: 0; /* Start hidden */
+  visibility: hidden; /* Hide from layout */
+}
+
+.product-modal .quantity-dropdown-menu.show {
+  opacity: 1;
+  visibility: visible; /* Show in layout */
+}
+
+.quantity-dropdown-container {
+  position: relative;
+}
+
+.product-modal .quantity-dropdown {
+  cursor: pointer;
+  width: 70px;
+  height: 25px;
+  font-family: var(--font-accent);
+  font-weight: 700;
+  text-align: center;
+  font-size: 16px;
+  border: 2px solid var(--accent);
+  border-radius: 25px;
+}
+
+.product-modal .quantity-dropdown-menu {
+  border: 2px solid var(--secondary);
+  background-color: var(--light);
+  border-radius: 12px;
+  width: 70px;
+  max-height: 330px; /* Set the fixed height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 30px; /* Adjust as needed */
+  left: 0;
+  animation: dropdownSlideIn 0.3s ease-out;
+  opacity: 0; /* Start hidden */
+  visibility: hidden; /* Hide from layout */
+}
+
+/* For Webkit browsers (Chrome, Safari, and Edge) */
+.product-modal .quantity-dropdown-menu::-webkit-scrollbar {
+  width: 4px; /* Slimmer scrollbar */
+}
+
+.product-modal .quantity-dropdown-menu::-webkit-scrollbar-thumb {
+  background-color: var(--secondary); /* Customize the color */
+  border-radius: 2px; /* Round the scrollbar thumb */
+}
+
+.product-modal .quantity-dropdown-menu::-webkit-scrollbar-track {
+  background: transparent; /* Optional: customize the track */
+}
+
+/* For Firefox */
+.product-modal .quantity-dropdown-menu {
+  scrollbar-width: thin; /* Make the scrollbar slim */
+  scrollbar-color: var(--secondary) transparent; /* Customize scrollbar color */
+}
+
+.product-modal .quantity-dropdown-menu span {
+  width: 100%;
+  text-align: center;
+  padding: 8px;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+}
+
+.product-modal .quantity-dropdown-menu span:first-child {
+  border-radius: 12px 12px 0 0;
+}
+
+.product-modal .quantity-dropdown-menu span:last-child {
+  border-radius: 0 0 12px 12px;
+}
+
+.product-modal .quantity-dropdown-menu span:hover {
+  background-color: var(--accent-light);
+}
+
+
 .product-modal .quantity::-webkit-outer-spin-button,
 .product-modal .quantity::-webkit-inner-spin-button {
   -webkit-appearance: none;
