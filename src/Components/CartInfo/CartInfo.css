@@ -16,14 +16,14 @@
   justify-content: space-between;
 }
 
-.info-item span {
+.cart-info .info-item span {
     font-size: 1rem;
     color: var(--dark);
     font-family: var(--font-accent);
     font-weight: 600;
 }
 
-.cart-total {
+.cart-info .cart-total {
   border-top: 2px solid var(--dark);
   padding-top: 10px;
   margin-bottom: 16px;
@@ -32,14 +32,14 @@
   
 }
 
-.cart-total span {
+.cart-info .cart-total span {
     font-size: 1.25rem;
     color: var(--dark);
     font-family: var(--font-accent);
     font-weight: 800;
 }
 
-.checkout-button {
+.cart-info .checkout-button {
   width: 100%;
   padding: 10px;
   background-color: var(--accent);
@@ -52,7 +52,7 @@
   font-weight: 800;
 }
 
-.checkout-button:hover {
+.cart-info .checkout-button:hover {
   background-color: var(--secondary);
 }
 

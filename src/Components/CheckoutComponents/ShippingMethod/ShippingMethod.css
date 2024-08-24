@@ -1,0 +1,74 @@
+.shipping-method {
+  margin: 2rem 0 1rem 0;
+  padding: 2rem;
+  border: 3px solid var(--secondary);
+  border-radius: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.shipping-method h3 {
+  text-align: center;
+  font-family: var(--font-accent);
+  color: var(--dark);
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.option {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background-color: #e4f7ff;
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-family: var(--font-accent);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.option input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  border: 2px solid var(--secondary);
+  margin-right: 1rem;
+  position: relative;
+}
+
+.option input[type="radio"]:checked::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: var(
+    --secondary
+  ); /* Adjust this color to match the design */
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.option.active {
+  background-color: var(
+    --accent-light
+  ); /* Adjust this color to match the design */
+  border: 2px solid var(--secondary); /* Adjust this color to match the design */
+}

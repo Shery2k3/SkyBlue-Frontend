@@ -11,6 +11,7 @@ import Login from "./Pages/login/login";
 import NotFound from "./Components/NotFound/NotFound";
 import AgeVerification from "./Components/AgeVerificationForm/AgeVerificationForm";
 import Category from "./Pages/Category/Category";
+import OnePageCheckout from "./Pages/OnePageCheckout/OnePageCheckout";
 import { ModalProvider } from "./Context/ModalContext/ModalContext";
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="ageverification" element={<AgeVerification/>}/>
           <Route path="category/:categoryId" element={<Category />} />
+          <Route path="onepagecheckout" element={<OnePageCheckout />} />
           <Route path="*" element={<NotFound />} /> 
         </Routes>
       </BrowserRouter>

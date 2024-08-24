@@ -1,0 +1,57 @@
+.Order-Confirmation {
+  margin-top: 10px;
+    border: 3px solid var(--secondary);
+    border-radius: 1rem;
+    padding: 16px;
+    height: 305px;
+    font-family: var(--font-accent);
+    position: sticky;
+    top: 111.5px; 
+  }
+  
+  .Order-Confirmation .info-item {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .Order-Confirmation .info-item span {
+      font-size: 1rem;
+      color: var(--dark);
+      font-family: var(--font-accent);
+      font-weight: 600;
+  }
+  
+  .Order-Confirmation .cart-total {
+    border-top: 2px solid var(--dark);
+    padding-top: 10px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    
+  }
+  
+  .Order-Confirmation .cart-total span {
+      font-size: 1.25rem;
+      color: var(--dark);
+      font-family: var(--font-accent);
+      font-weight: 800;
+  }
+  
+  .Order-Confirmation .checkout-button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--accent);
+    color: var(--dark);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: var(--font-accent);
+    font-size: 1.25rem;
+    font-weight: 800;
+  }
+  
+  .Order-Confirmation .checkout-button:hover {
+    background-color: var(--secondary);
+  }

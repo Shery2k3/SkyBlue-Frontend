@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import "./CartInfo.css";
+import "./OrderConfirmation.css";
 
-const CartInfo = ({ subTotal, shipping, tax, discount }) => {
+const OrderConfirmation = ({ subTotal, shipping, tax, discount }) => {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -11,7 +10,7 @@ const CartInfo = ({ subTotal, shipping, tax, discount }) => {
   }, [subTotal, shipping, tax, discount]);
 
   return (
-    <div className="cart-info">
+    <div className="Order-Confirmation">
       <div className="info-item">
         <span>Sub-Total:</span>
         <span>${subTotal.toFixed(2)}</span>
@@ -32,9 +31,9 @@ const CartInfo = ({ subTotal, shipping, tax, discount }) => {
         <span>Total:</span>
         <span>${total}</span>
       </div>
-      <Link to='/onepagecheckout'><button className="checkout-button">Checkout</button></Link>
+      <button className="checkout-button">Confirm</button>
     </div>
   );
 };
 
-export default CartInfo;
+export default OrderConfirmation;

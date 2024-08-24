@@ -1,0 +1,84 @@
+.onepagecheckout {
+  margin: 0 2rem;
+  overflow: hidden;
+}
+
+.checkout-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.checkout-buttons .left-button,
+.checkout-buttons .right-button {
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 8px;
+  background-color: var(--secondary);
+  border: none;
+  color: var(--dark);
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.left-button {
+  background-color: var(--secondary);
+  align-self: flex-start;
+}
+
+.right-button {
+  align-self: flex-end;
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+/* Forward animation */
+.fade-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms;
+}
+.fade-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.fade-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Backward animation */
+.fade-backward-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.fade-backward-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms;
+}
+.fade-backward-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.fade-backward-exit-active {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 300ms, transform 300ms;
+}
+
+
+@media (max-width: 456px) {
+  .onepagecheckout {
+    margin: 0 10px;
+  }
+}
