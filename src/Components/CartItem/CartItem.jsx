@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import axiosInstance from "../../api/axiosConfig";
@@ -15,39 +15,46 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
     setPrice(product.Price * tempQuantity);
   }, [tempQuantity]);
 
-  // Debounced function to update quantity
-  const debouncedUpdateQuantity = debounce(async (quantity) => {
-    try {
-      await axiosInstance.post("/cart/update", {
-        id: product.ID,
-        quantity,
-        shoppingCartTypeId: product.ShoppingCartTypeId,
-      });
-      if (onUpdate) onUpdate();
-    } catch (error) {
-      console.error("Error updating quantity:", error);
-    }
-  }, 500); // Delay of 500ms
+  // Debounced function to update quantity with leading true to apply the first update instantly
+  const debouncedUpdateQuantity = useCallback(
+    debounce(async (quantity) => {
+      try {
+        console.log("hitting api")
+        await axiosInstance.put("/cart/update", {
+          id: product.Id,
+          quantity,
+          shoppingCartTypeId: product.ShoppingCartTypeId,
+        });
+        if (onUpdate) onUpdate();
+      } catch (error) {
+        console.error("Error updating quantity:", error);
+      }
+    }, 500), // 500ms delay
+    [product.Id, product.ShoppingCartTypeId, onUpdate]
+  );
 
   // Debounced function to remove item
-  const debouncedRemoveItem = debounce(async () => {
-    message.loading({ content: 'Removing item...', key: 'remove' });
-    try {
-      await axiosInstance.delete(`/cart/remove/${product.Id}`);
-      message.success({ content: 'Item removed successfully!', key: 'remove', duration: 2 });
-      if (onRemove) onRemove();
-    } catch (error) {
-      message.error({ content: 'Failed to remove item. Please try again.', key: 'remove', duration: 2 });
-      console.error("Error removing item from cart:", error);
-    }
-  }, 300); 
+  const debouncedRemoveItem = useCallback(
+    debounce(async () => {
+      message.loading({ content: 'Removing item...', key: 'remove' });
+      try {
+        await axiosInstance.delete(`/cart/remove/${product.Id}`);
+        message.success({ content: 'Item removed successfully!', key: 'remove', duration: 2 });
+        if (onRemove) onRemove();
+      } catch (error) {
+        message.error({ content: 'Failed to remove item. Please try again.', key: 'remove', duration: 2 });
+        console.error("Error removing item from cart:", error);
+      }
+    }, 300), 
+    [product.Id, onRemove]
+  );
 
   useEffect(() => {
     if (isUserInteraction) {
       debouncedUpdateQuantity(tempQuantity);
       setUserInteraction(false); // Reset interaction flag
     }
-  }, [tempQuantity, isUserInteraction]);
+  }, [tempQuantity, isUserInteraction, debouncedUpdateQuantity]);
 
   const increaseQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);

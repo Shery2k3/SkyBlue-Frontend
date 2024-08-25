@@ -45,6 +45,8 @@
 }
 
 .cart-item .price {
+  text-align: center;
+  width: 69px;
   font-family: var(--font-accent);
   font-weight: bold;
 }

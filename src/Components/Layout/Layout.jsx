@@ -8,19 +8,19 @@ import Footer1 from "../Footer/Footer1";
 import Footer2 from "../Footer/Footer2";
 import ProductModal from "../ProductModal/ProductModal";
 import { useModal } from "../../Context/ModalContext/ModalContext";
+import { useAgeVerification } from "../../Context/AuthContext/AgeVerificationContext";
 import AgeVerificationForms from "../AgeVerificationForm/AgeVerificationForm";
 import "./Layout.css";
 
-const Layout = ({ pageTitle, children, style, isLoading}) => {
+const Layout = ({ pageTitle, children, style, isLoading }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 867);
-  const isAgeVerified = localStorage.getItem('isAgeVerified') === 'true';
   const { modalProduct, closeModal } = useModal();
-
+  const { isAgeVerified } = useAgeVerification();
 
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
     document.title = `SkyBlue | ${pageTitle}`;
 

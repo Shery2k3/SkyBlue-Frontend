@@ -22,8 +22,8 @@ const Cart = () => {
         subtotal: response.data.totalPrice,
         Shipping: 0,
         tax: response.data.taxAmount,
-        Discount: 0,
-        total: response.data.finalPrice,
+        Discount: 1.19,
+        total: response.data.finalPrice - 1.19,
       });
     } catch (error) {
       console.error("Failed to load data:", error);

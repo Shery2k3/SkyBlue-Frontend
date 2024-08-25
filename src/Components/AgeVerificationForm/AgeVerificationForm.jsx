@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './AgeVerificationForm.css';
 import { useNavigate } from 'react-router-dom';
+import { useAgeVerification } from '../../Context/AuthContext/AgeVerificationContext';
 
 const AgeVerificationForm = () => {
   const navigate = useNavigate();
+  const { verifyAge } = useAgeVerification();
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
@@ -31,7 +33,7 @@ const AgeVerificationForm = () => {
         (age === 18 && (monthDiff > 0 || (monthDiff === 0 && dayDiff >= 0)));
   
       if (isOldEnough) {
-        localStorage.setItem('isAgeVerified', 'true');
+        verifyAge();
         navigate('/');
       } else {
         alert("Access denied! You must be 18 or older.");
