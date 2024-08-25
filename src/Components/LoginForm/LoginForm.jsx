@@ -5,12 +5,18 @@ import "./LoginForm.css";
 import LogoAccent from "/Logos/LogoAccent.png";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
+import { Alert } from "antd";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
     loginemail: "",
     password: "",
     rememberMe: false,
+  });
+  const [alert, setAlert] = useState({
+    visible: false,
+    message: "",
+    type: "error", // Could be "success", "info", "warning", or "error"
   });
 
   const { login } = useContext(AuthContext);
@@ -38,21 +44,33 @@ const LoginForm = () => {
         login(token, formData.rememberMe);
         navigate("/"); // Navigate to a protected route
       } else {
-        console.error("Login failed");
-        // Handle login errors (e.g., show a message)
+        console.error("Login failed with status code:", response.status);
+        setAlert({
+          visible: true,
+          message: "Login failed. Please check your email and password.",
+          type: "error",
+        });
       }
     } catch (error) {
-      console.error("Error during login:", error);
-      // Handle error (e.g., show a message)
+      console.error("Error during login:", error.response ? error.response.data : error.message);
+      setAlert({
+        visible: true,
+        message: error.response ? error.response.data.message || "An error occurred during login. Please try again." : "An error occurred during login. Please try again.",
+        type: "error",
+      });
     }
   };
 
   return (
+    
     <div className="wrapper-login">
+     
       <div className="logo">
         <img src={LogoAccent} alt="Company Logo" />
       </div>
       <div className="inner-wrapper-login">
+         
+        
         <form onSubmit={handleSubmit}>
           <h2 className="form-heading">Welcome, Please Sign In!</h2>
           <div className="input-box">
@@ -81,7 +99,7 @@ const LoginForm = () => {
           </div>
           <div className="remember-forget">
             <label>
-              <input    
+              <input
                 type="checkbox"
                 name="rememberMe"
                 checked={formData.rememberMe}
@@ -91,16 +109,25 @@ const LoginForm = () => {
             </label>
             <Link to="/forget-password">Forget password?</Link>
           </div>
+          {alert.visible && (
+      <Alert
+        message={alert.message}
+        type={alert.type}
+        closable
+        onClose={() => setAlert({ ...alert, visible: false })}
+        style={{ marginBottom: 16 }}
+      />
+    )} 
           <button type="submit" className="submit-button">
             Log in
           </button>
         </form>
         <div className="linebreak">
-        <h3><span>or</span></h3>
+          <h3><span>or</span></h3>
         </div>
         <div className="register_link">
           <p>
-            Do not Have an Account? <Link to="/signup">Sign Up</Link> 
+            Do not Have an Account? <Link to="/signup">Sign Up</Link>
           </p>
         </div>
       </div>
