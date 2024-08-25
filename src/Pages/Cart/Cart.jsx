@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import Layout from "../../Components/Layout/Layout";
+import { Link } from "react-router-dom";
+import emptyCart from "/Images/empty-cart.png";
 import CartItemGrid from "../../Components/CartItemGrid/CartItemGrid";
 import axiosInstance from "../../api/axiosConfig";
+import "./Cart.css";
 
 const Cart = () => {
   const [isLoading, setisLoading] = useState(true);
@@ -47,7 +50,11 @@ const Cart = () => {
   return (
     <Layout pageTitle="Cart" isLoading={isLoading}>
       {products.length === 0 ? (
-        <p>Your cart is empty</p>
+        <div className="cart-page">
+          <img src={emptyCart} alt="" />
+          <h2>Your Cart Is Currently Empty!</h2>
+          <Link className="return-home" to="/">Return to Home</Link>
+        </div>
       ) : (
         <CartItemGrid
           products={products}
