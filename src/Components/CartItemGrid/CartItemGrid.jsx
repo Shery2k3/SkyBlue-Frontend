@@ -1,20 +1,32 @@
 import "./CartItemGrid.css";
 import CartItem from "../CartItem/CartItem";
-import productData from "../../Data/ProductData";
 import CartInfo from "../CartInfo/CartInfo";
 
-const CartItemGrid = () => {
+const CartItemGrid = ({ products, cartSummary, onUpdate, onRemove }) => {
+  const { subtotal, shipping, tax, discount, total } = cartSummary;
+
   return (
     <>
       <h2 className="cart-heading">Your Cart</h2>
       <div className="cart-grid">
         <div className="cartItemGrid">
-          {productData.map((product) => (
-            <CartItem product={product} quantity={4} price={199} />
+          {products.map((product) => (
+            <CartItem
+              key={product.ID}
+              product={product}
+              onUpdate={onUpdate}
+              onRemove={onRemove}
+            />
           ))}
           <span className="clear-button">Clear Cart</span>
         </div>
-        <CartInfo subTotal={152.85} shipping={0} tax={19.87} discount={1.19} />
+        <CartInfo
+          subtotal={subtotal}
+          shipping={shipping}
+          tax={tax}
+          discount={discount}
+          total={total}
+        />
       </div>
     </>
   );

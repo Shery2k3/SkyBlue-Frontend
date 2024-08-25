@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Loader from "../Loader/Loader";
-
 import Sidebar from "../SideBar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import Header from "../Header/Header";
@@ -17,7 +16,6 @@ const Layout = ({ pageTitle, children, style, isLoading}) => {
   const isAgeVerified = localStorage.getItem('isAgeVerified') === 'true';
   const { modalProduct, closeModal } = useModal();
 
-  console.log(localStorage.getItem('isAgeVerified'))
 
   useEffect(() => {
     window.scrollTo({

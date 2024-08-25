@@ -7,12 +7,17 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import "./ProductModal.css";
+import { message } from "antd";
+import axiosInstance from "../../api/axiosConfig";
 
 const ProductModal = ({ product, onClose }) => {
-  const { Image, Name, Price, Stock, OrderMinimumQuantity } =
+  const { Id, Image, Name, Price, Stock, OrderMinimumQuantity } =
     product.data || product;
   const [quantity, setQuantity] = useState(OrderMinimumQuantity || 1);
-  const quantities = Array.from({ length: 20 }, (_, i) => (i + 1) * OrderMinimumQuantity);
+  const quantities = Array.from(
+    { length: 20 },
+    (_, i) => (i + 1) * OrderMinimumQuantity
+  );
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const dropdownRef = useRef(null);
@@ -67,6 +72,19 @@ const ProductModal = ({ product, onClose }) => {
     }
   };
 
+  const handleSubmit = async () => {
+    try {
+      const response = await axiosInstance.post(`/cart/add`, {
+        productId: Id,
+        quantity: quantity,
+      });
+      message.success("Order Placed");
+      onClose()
+    } catch (error) {
+      console.error("Error submitting product:", error);
+    }
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -105,16 +123,27 @@ const ProductModal = ({ product, onClose }) => {
                 ref={inputRef}
               />
             ) : (
-              <div className="quantity-dropdown-container" ref={dropdownContainerRef}>
+              <div
+                className="quantity-dropdown-container"
+                ref={dropdownContainerRef}
+              >
                 <div
                   className="quantity-dropdown"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
                   {quantity}
                 </div>
-                <div className={`quantity-dropdown-menu ${dropdownOpen ? "show" : ""}`} ref={dropdownRef}>
+                <div
+                  className={`quantity-dropdown-menu ${
+                    dropdownOpen ? "show" : ""
+                  }`}
+                  ref={dropdownRef}
+                >
                   {quantities.map((qty) => (
-                    <span key={qty} onClick={() => handleDropdownSelection(qty)}>
+                    <span
+                      key={qty}
+                      onClick={() => handleDropdownSelection(qty)}
+                    >
                       {qty}
                     </span>
                   ))}
@@ -125,7 +154,7 @@ const ProductModal = ({ product, onClose }) => {
               <FontAwesomeIcon icon={faPlus} />
             </span>
           </div>
-          <div className="add-to-cart">
+          <div className="add-to-cart" onClick={handleSubmit}>
             <FontAwesomeIcon icon={faCartShopping} /> <p>Add to Cart</p>
           </div>
         </div>

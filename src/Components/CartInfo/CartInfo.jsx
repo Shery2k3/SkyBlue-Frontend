@@ -1,20 +1,13 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./CartInfo.css";
 
-const CartInfo = ({ subTotal, shipping, tax, discount }) => {
-  const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    const calculatedTotal = subTotal + shipping + tax - discount;
-    setTotal(calculatedTotal.toFixed(2));
-  }, [subTotal, shipping, tax, discount]);
+const CartInfo = ({ subtotal = 0, shipping = 0, tax = 0, discount = 0, total = 0 }) => {
 
   return (
     <div className="cart-info">
       <div className="info-item">
         <span>Sub-Total:</span>
-        <span>${subTotal.toFixed(2)}</span>
+        <span>${subtotal.toFixed(2)}</span>
       </div>
       <div className="info-item">
         <span>Shipping:</span>
@@ -30,7 +23,7 @@ const CartInfo = ({ subTotal, shipping, tax, discount }) => {
       </div>
       <div className="cart-total">
         <span>Total:</span>
-        <span>${total}</span>
+        <span>${total.toFixed(2)}</span>
       </div>
       <Link to='/onepagecheckout'><button className="checkout-button">Checkout</button></Link>
     </div>

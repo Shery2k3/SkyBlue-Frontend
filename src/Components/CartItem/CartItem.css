@@ -87,6 +87,9 @@
   transition: color 0.2s, border 0.2s;
 }
 
+.remove-item{
+  cursor: pointer;
+}
 
 @media only screen and (max-width: 840px) {
   .cart-item .product-image-container {
