@@ -7,6 +7,7 @@ import axiosInstance from "../../api/axiosConfig"; // Import the configured Axio
 
 const Category = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [category, setCategory] = useState()
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const { categoryId } = useParams();
@@ -29,6 +30,7 @@ const Category = () => {
         const response = await axiosInstance.get(
           `/product/category/${categoryId}?page=${currentPage}&size=18`
         );
+        setCategory(response.data.categoryName);
         setProducts(response.data.data);
         setTotalPages(response.data.totalPages);
       } catch (error) {
@@ -42,8 +44,8 @@ const Category = () => {
   }, [categoryId, currentPage]);
 
   return (
-    <Layout pageTitle="Category" style="style1" isLoading={isLoading}>
-      <ProductGrid category="Category" products={products} />
+    <Layout pageTitle={category} style="style1" isLoading={isLoading}>
+      <ProductGrid category={category} products={products} />
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

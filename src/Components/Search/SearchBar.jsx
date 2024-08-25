@@ -39,10 +39,14 @@ const SearchBar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(
-          `/product/category/all`
-        );
-        setCategories(response.data);
+        const response = await axiosInstance.get(`/product/category/all`);
+        const categoriesData = response.data;
+        setCategories(categoriesData);
+
+        // Set the selected category to the last item in the fetched categories
+        if (categoriesData.length > 0) {
+          setSelectedCategory(categoriesData[categoriesData.length - 1]);
+        }
       } catch (error) {
         console.error("Failed to load data:", error);
       }
