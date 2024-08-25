@@ -5,6 +5,7 @@ import ShippingMethod from "../../Components/CheckoutComponents/ShippingMethod/S
 import PaymentInformation from "../../Components/CheckoutComponents/PaymentInformation/PaymentInformation";
 import Confirmation from "../../Components/CheckoutComponents/Confirmation/Confirmation";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+import axiosInstance from "../../api/axiosConfig";
 import "./OnePageCheckout.css";
 
 const items = [
@@ -23,6 +24,36 @@ const OnePageCheckout = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [shippingMethod, setShippingMethod] = useState("Pickup");
   const [direction, setDirection] = useState("forward");
+  const [products, setProducts] = useState([]);
+  const [cartSummary, setCartSummary] = useState({
+    subtotal: 0,
+    Shipping: 0,
+    tax: 0,
+    Discount: 1.19,
+    total: 0,
+  });
+
+  const fetchCartData = async () => {
+    try {
+      const response = await axiosInstance.get("/cart/items");
+      setProducts(response.data.cartItems);
+      setCartSummary({
+        subtotal: response.data.totalPrice,
+        Shipping: 0,
+        tax: response.data.taxAmount,
+        Discount: 1.19,
+        total: response.data.finalPrice - 1.19,
+      });
+    } catch (error) {
+      console.error("Failed to load data:", error);
+    } finally {
+      setisLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCartData();
+  }, []);
 
   const nextStep = () => {
     if (currentStep < items.length - 1) {
@@ -50,7 +81,7 @@ const OnePageCheckout = () => {
       case 1:
         return <PaymentInformation />;
       case 2:
-        return <Confirmation shippingMethod={shippingMethod} />;
+        return <Confirmation shippingMethod={shippingMethod} products={products} cartSummary={cartSummary} />;
       default:
         return null;
     }

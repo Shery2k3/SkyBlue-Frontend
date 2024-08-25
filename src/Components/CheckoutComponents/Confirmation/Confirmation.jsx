@@ -1,24 +1,9 @@
 import "./Confirmation.css";
 import OrderConfirmation from "../../OrderConfirmation/OrderConfirmation";
 
-const productData = [
-  {
-    Image:
-      "https://skybluewholesale.com/content/images/thumbs/0016493_7up-regular-591ml-1ct_550.png",
-    Name: "7up Regular 591ML 1ct",
-    Price: 1.59,
-    Quantity: 2, // Add quantity to each product
-  },
-  {
-    Image:
-      "https://skybluewholesale.com/content/images/thumbs/0012639_rizla-rolling-paper-flavour-cards-combo-special-4999_550.jpeg",
-    Name: "Rizla Rolling Paper & Flavour Cards **COMBO SPECIAL $49.99**",
-    Price: 49.99,
-    Quantity: 3, // Add quantity to each product
-  },
-];
+const Confirmation = ({ shippingMethod, products, cartSummary }) => {
+  const { subtotal, Shipping, tax, Discount, total } = cartSummary;
 
-const Confirmation = ({ shippingMethod }) => {
   return (
     <div className="confirmation">
       <div className="address-container">
@@ -73,12 +58,12 @@ const Confirmation = ({ shippingMethod }) => {
             </tr>
           </thead>
           <tbody>
-            {productData.map((product, index) => (
+            {products.map((product, index) => (
               <tr key={index}>
                 <td>
                   <span className="image-container">
                     <img
-                      src={product.Image}
+                      src={product.image}
                       alt={product.Name}
                       className="product-image"
                     />
@@ -94,10 +79,11 @@ const Confirmation = ({ shippingMethod }) => {
         </table>
       </div>
       <OrderConfirmation
-        subTotal={152.85}
-        shipping={0}
-        tax={19.87}
-        discount={1.19}
+        subTotal={subtotal}
+        shipping={Shipping}
+        tax={tax}
+        discount={Discount}
+        total={total}
       />
     </div>
   );

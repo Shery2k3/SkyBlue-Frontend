@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
 import "./OrderConfirmation.css";
 
-const OrderConfirmation = ({ subTotal, shipping, tax, discount }) => {
-  const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    const calculatedTotal = subTotal + shipping + tax - discount;
-    setTotal(calculatedTotal.toFixed(2));
-  }, [subTotal, shipping, tax, discount]);
+const OrderConfirmation = ({ subTotal, shipping, tax, discount, total }) => {
 
   return (
     <div className="Order-Confirmation">

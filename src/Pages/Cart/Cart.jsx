@@ -13,7 +13,7 @@ const Cart = () => {
     subtotal: 0,
     Shipping: 0,
     tax: 0,
-    Discount: 0,
+    Discount: 1.19,
     total: 0,
   });
 
