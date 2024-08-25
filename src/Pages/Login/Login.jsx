@@ -1,27 +1,44 @@
-import { useState, useEffect } from "react";
-import LoginForm from "../../Components/loginform/loginform";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import LoginForm from "../../Components/LoginForm/LoginForm";
 import VerifcationLayout from "../../Components/VerificationLayout/VerificationLayout";
+import { AuthContext } from "../../Context/AuthContext/AuthContext";
 
 const Login = () => {
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const { token: contextToken } = useContext(AuthContext); // Get token from AuthContext
+  const navigate = useNavigate(); // Hook to programmatically navigate
+
+  // Function to check if user is logged in
+  const isLoggedIn = () => {
+    // Check both AuthContext and localStorage for token
+    const localStorageToken = localStorage.getItem("token");
+    return contextToken || localStorageToken;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Replace with actual data fetching logic
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate loading time
-        setisLoading(false); // Set to true once data is loaded
+        // Simulate loading time
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setIsLoading(false); // Set to true once data is loaded
       } catch (error) {
         console.error("Failed to load data:", error);
-        setisLoading(false); // Handle loading failure if necessary
+        setIsLoading(false); // Handle loading failure if necessary
       }
     };
 
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate("/");
+    }
+  }, [contextToken, navigate]);
+
   return (
-    <VerifcationLayout isLoading={isLoading} > 
+    <VerifcationLayout isLoading={isLoading}>
       <LoginForm />
     </VerifcationLayout>
   );
