@@ -53,7 +53,9 @@ const Cart = () => {
         <div className="cart-page">
           <img src={emptyCart} alt="" />
           <h2>Your Cart Is Currently Empty!</h2>
-          <Link className="return-home" to="/">Return to Home</Link>
+          <Link className="return-home" to="/">
+            Return to Home
+          </Link>
         </div>
       ) : (
         <CartItemGrid

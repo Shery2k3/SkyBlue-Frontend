@@ -48,9 +48,9 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/exclusive-products">
+              <Link to="/all-products">
                 <div className="nav-link">
-                  <img src={exclusiveproducts} alt="exclusive-products" />
+                  <img src={exclusiveproducts} alt="all-products" />
                   <span>Exclusive Products</span>
                 </div>
               </Link>

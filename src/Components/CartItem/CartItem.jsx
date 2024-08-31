@@ -85,7 +85,7 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
       <div className="product-data">
         <span className="product-image-container">
           <img
-            src={product.image}
+            src={product.images}
             alt="product-image"
             className="product-image"
           />

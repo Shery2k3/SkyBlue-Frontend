@@ -4,7 +4,7 @@ import "./App.css";
 import Home from "./Pages/Home/Home";
 import NewArrivals from "./Pages/NewArrival/NewArrivals";
 import BestSeller from "./Pages/BestSeller/BestSeller";
-import ExclusiveProducts from "./Pages/ExclusiveProducts/ExclusiveProducts";
+import AllProducts from "./Pages/AllIProducts/AllProducts";
 import Search from "./Pages/Search/Search";
 import ContactUs from "./Pages/ContactUs/ContactUs";
 import Cart from "./Pages/Cart/Cart";
@@ -29,7 +29,7 @@ function App() {
           <Route path="/" element={<ProtectedRoute element={Home} />} />
           <Route path="new-arrivals" element={<ProtectedRoute element={NewArrivals} />} />
           <Route path="best-sellers" element={<ProtectedRoute element={BestSeller} />} />
-          <Route path="exclusive-products" element={<ProtectedRoute element={ExclusiveProducts} />} />
+          <Route path="all-products" element={<ProtectedRoute element={AllProducts} />} />
           <Route path="search" element={<ProtectedRoute element={Search} />} />
           <Route path="contact-us" element={<ProtectedRoute element={ContactUs} />} />
           <Route path="cart" element={<ProtectedRoute element={Cart} />} />

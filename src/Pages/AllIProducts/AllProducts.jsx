@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import Pagination from "../../Components/Pagination/Pagination";
-import axiosInstance from "../../api/axiosConfig"; // Import the configured Axios instance
+import axiosInstance from "../../api/axiosConfig"; 
 
-
-const Category = () => {
+const AllProducts = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [category, setCategory] = useState()
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
-  const { categoryId } = useParams();
+
   const [searchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page")) || 1;
   const navigate = useNavigate();
@@ -29,7 +28,7 @@ const Category = () => {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get(
-          `/product/category/${categoryId}?page=${currentPage}&size=18`
+          `/product/category/-1?page=${currentPage}&size=18`
         );
         setCategory(response.data.categoryName);
         setProducts(response.data.data);
@@ -42,11 +41,11 @@ const Category = () => {
     };
 
     fetchData();
-  }, [categoryId, currentPage]);
+  }, [currentPage]);
 
   return (
-    <Layout pageTitle={category} style="style1" isLoading={isLoading}>
-      <ProductGrid category={category} products={products} />
+    <Layout pageTitle="All Products" style="style1" isLoading={isLoading}>
+      <ProductGrid category="All Products" products={products} />
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
@@ -56,4 +55,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default AllProducts;

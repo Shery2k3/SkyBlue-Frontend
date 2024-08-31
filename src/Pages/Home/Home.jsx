@@ -10,13 +10,15 @@ const Home = () => {
   const [isLoading, setisLoading] = useState(true);
   const [bestSellers, setBestSellers] = useState([]);
   const [newArrival, setNewArrival] = useState([]);
+  const [allProducts, setAllProducts] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [bestSellersResult, newArrivalResult] = await Promise.allSettled([
+        const [bestSellersResult, newArrivalResult, allProducts] = await Promise.allSettled([
           axiosInstance.get(`/product/bestseller`),
           axiosInstance.get(`/product/newarrivals`),
+          axiosInstance.get(`/product/category/-1?page=1&size=9`),
         ]);
 
         if (bestSellersResult.status === "fulfilled") {
@@ -37,6 +39,15 @@ const Home = () => {
           );
         }
 
+        if (allProducts.status === "fulfilled") {
+          setAllProducts(allProducts.value.data.data);
+        } else {
+          console.error(
+            "Failed to load All Products:",
+            allProducts.reason
+          );
+        }
+
         setisLoading(false);
       } catch (error) {
         console.error("Failed to load data:", error);
@@ -53,7 +64,7 @@ const Home = () => {
         <Category />
         <ProductSlider category="New Arrivals" products={newArrival} />
         <ProductSlider category="Best Sellers" products={bestSellers} />
-        <ProductGrid category="Exclusive Products" products={bestSellers} />
+        <ProductGrid category="Exclusive Products" products={allProducts} />
       </>
     </Layout>
   );

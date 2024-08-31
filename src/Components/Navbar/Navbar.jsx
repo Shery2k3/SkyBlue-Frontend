@@ -43,9 +43,6 @@ const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(isActive);
-  }, [isActive]);
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
@@ -146,7 +143,7 @@ const Navbar = () => {
         <li>
           <Link
             className={`nav-items ${
-              location.pathname === "/exclusive-products"
+              location.pathname === "/all-products"
                 ? "nav-item-active"
                 : ""
             }`}
@@ -154,7 +151,7 @@ const Navbar = () => {
               scrollToTop();
               handleLinkClick();
             }}
-            to="/exclusive-products"
+            to="/all-products"
           >
             Exclusive Products
           </Link>

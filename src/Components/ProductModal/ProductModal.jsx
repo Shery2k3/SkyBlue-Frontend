@@ -11,7 +11,7 @@ import { message } from "antd";
 import axiosInstance from "../../api/axiosConfig";
 
 const ProductModal = ({ product, onClose }) => {
-  const { Id, Image, Name, Price, Stock, OrderMinimumQuantity } =
+  const { Id, Images, Name, Price, Stock, OrderMinimumQuantity } =
     product.data || product;
   const [quantity, setQuantity] = useState(OrderMinimumQuantity || 1);
   const quantities = Array.from(
@@ -96,7 +96,7 @@ const ProductModal = ({ product, onClose }) => {
     <div className="product-modal-container" onClick={handleClose}>
       <div className="product-modal">
         <div className="product-image-container">
-          <img src={Image} className="product-image" alt={Name} />
+          <img src={Images[0]} className="product-image" alt={Name} />
         </div>
         <div className="product-detail">
           <span>
