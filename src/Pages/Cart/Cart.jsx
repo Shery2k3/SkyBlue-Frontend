@@ -28,10 +28,9 @@ const Cart = () => {
         Discount: 1.19,
         total: response.data.finalPrice - 1.19,
       });
+      setisLoading(false);
     } catch (error) {
       console.error("Failed to load data:", error);
-    } finally {
-      setisLoading(false);
     }
   };
 

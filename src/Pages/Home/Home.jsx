@@ -18,7 +18,7 @@ const Home = () => {
         const [bestSellersResult, newArrivalResult, allProducts] = await Promise.allSettled([
           axiosInstance.get(`/product/bestseller`),
           axiosInstance.get(`/product/newarrivals`),
-          axiosInstance.get(`/product/category/-1?page=1&size=9`),
+          axiosInstance.get(`/product/category/-1?page=1&size=12`),
         ]);
 
         if (bestSellersResult.status === "fulfilled") {

@@ -27,7 +27,6 @@ const SearchBar = () => {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [isArrowRotated, setIsArrowRotated] = useState(false);
   const [suggestedProducts, setSuggestedProducts] = useState([]);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -84,7 +83,6 @@ const SearchBar = () => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target) && suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
         setIsDropdownVisible(false);
-        setIsArrowRotated(false);
         setSuggestedProducts([]);
       }
     };
@@ -98,12 +96,10 @@ const SearchBar = () => {
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
     setIsDropdownVisible(false);
-    setIsArrowRotated(false);
   };
 
   const handleButtonClick = () => {
     setIsDropdownVisible(!isDropdownVisible);
-    setIsArrowRotated(!isArrowRotated);
   };
 
   const handleInputChange = (e) => {
@@ -138,7 +134,7 @@ const SearchBar = () => {
           <button className="category-dropbtn" onClick={handleButtonClick}>
             {selectedCategory.Name}
             <span
-              className={`drop-down-icon ${isArrowRotated ? "rotated" : ""}`}
+              className={`drop-down-icon`}
             >
               <FontAwesomeIcon icon={faCaretDown} />
             </span>
