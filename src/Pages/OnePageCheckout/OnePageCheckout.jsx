@@ -6,7 +6,7 @@ import PaymentInformation from "../../Components/CheckoutComponents/PaymentInfor
 import Confirmation from "../../Components/CheckoutComponents/Confirmation/Confirmation";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import axiosInstance from "../../api/axiosConfig";
-import "./OnePageCheckout.css";
+import "./OnePageCheckOut.css";
 
 const items = [
   {
