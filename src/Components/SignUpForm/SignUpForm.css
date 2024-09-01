@@ -2,7 +2,7 @@
 .bg-signup{
     background-image: linear-gradient(rgba(20, 85, 134, 0.9), rgba(5, 20, 32, 0.9)), url(/Background/login.jpg);
     display: flex;
-    width: 100vw;
+     /*width: 100vw;*ye kutta  scrollbar dal raha tah*/ 
     align-items: center;
     justify-content: center;
     background-position: center;
