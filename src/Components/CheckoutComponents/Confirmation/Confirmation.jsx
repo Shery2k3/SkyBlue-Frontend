@@ -63,7 +63,7 @@ const Confirmation = ({ shippingMethod, products, cartSummary }) => {
                 <td>
                   <span className="image-container">
                     <img
-                      src={product.image}
+                      src={product.images}
                       alt={product.Name}
                       className="product-image"
                     />

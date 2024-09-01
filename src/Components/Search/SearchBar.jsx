@@ -176,7 +176,7 @@ const SearchBar = () => {
         {suggestedProducts.map((product) => (
           <span key={product.Id} onClick={handleClick(product)}>
             <div className="image-container">
-              <img src={product.Image} alt={product.Name} className="product-image"/>
+              <img src={product.Images[0]} alt={product.Name} className="product-image"/>
             </div>
             {product.Name}
           </span>
