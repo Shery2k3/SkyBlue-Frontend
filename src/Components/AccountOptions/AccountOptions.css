@@ -1,0 +1,72 @@
+.account-options-container {
+  margin: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 50vh;
+  min-width: 175px;
+  border-right: 2px solid var(--secondary);
+}
+
+.account-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.account-options li {
+  list-style: none;
+}
+
+.account-options li:hover {
+  color: var(--secondary);
+  background-color: var(--accent-light);
+}
+
+.account-options .account-link {
+  display: block;
+  text-decoration: none;
+  width: 100%;
+  padding: 1rem 10px;
+  font-size: 1rem;
+  color: var(--dark);
+  font-family: var(--font-primary);
+  font-weight: 600;
+}
+
+.logout-button{
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  text-align: left;
+  text-decoration: none;
+  width: 100%;
+  padding: 1rem 10px;
+  font-size: 1rem;
+  color: var(--dark);
+  font-family: var(--font-primary);
+  font-weight: 600;
+}
+
+.logout-button:hover{
+  background-color: rgba(255, 0, 0, 0.382);
+}
+
+@media only screen and (max-width: 768px) {
+  .account-options-container {
+    margin: 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: auto;
+    min-width: auto;
+    border-right: none;
+    border-bottom: 2px solid var(--secondary);
+  }
+  .account-options {
+    flex-direction: row;
+  }
+
+  .logout-button{
+    display: none;
+  }
+}

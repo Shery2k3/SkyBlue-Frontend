@@ -78,7 +78,7 @@ const ProductModal = ({ product, onClose }) => {
         productId: Id,
         quantity: quantity,
       });
-      message.success("Order Placed");
+      message.success("Added to Cart");
       onClose()
     } catch (error) {
       console.error("Error submitting product:", error);

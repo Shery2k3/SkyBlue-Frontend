@@ -1,0 +1,12 @@
+.accountPage {
+  display: flex;
+  margin-bottom: 3rem;
+}
+
+@media only screen and (max-width: 768px) {
+  .accountPage {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 3rem;
+  }
+}

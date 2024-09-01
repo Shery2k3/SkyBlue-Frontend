@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./Pages/Home/Home";
+import Account from "./Pages/Account/Account";
 import NewArrivals from "./Pages/NewArrival/NewArrivals";
 import BestSeller from "./Pages/BestSeller/BestSeller";
 import AllProducts from "./Pages/AllIProducts/AllProducts";
@@ -27,6 +28,8 @@ function App() {
 
           {/* Protected Routes */}
           <Route path="/" element={<ProtectedRoute element={Home} />} />
+          <Route path="user/account-info" element={<ProtectedRoute element={Account} page="info" />} />
+          <Route path="user/change-password" element={<ProtectedRoute element={Account} page="password" />} />
           <Route path="new-arrivals" element={<ProtectedRoute element={NewArrivals} />} />
           <Route path="best-sellers" element={<ProtectedRoute element={BestSeller} />} />
           <Route path="all-products" element={<ProtectedRoute element={AllProducts} />} />

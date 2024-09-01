@@ -71,7 +71,7 @@ const Sidebar = () => {
         <ul className="nav-list">
           <li className="nav-item">
             <hr className="divider" />
-            <Link to="/account">
+            <Link to="/user/account-info">
               <div className="nav-link">
                 <img src={account} alt="account" />
                 <span>Account</span>
