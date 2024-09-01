@@ -97,6 +97,7 @@
     font-weight: 600;
     text-decoration: none;
     transition: color 0.2s ease;
+    margin-bottom: 3px;
   }
   
   .wrapper-login .remember-forget a:hover {
