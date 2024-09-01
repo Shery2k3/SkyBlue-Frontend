@@ -1,7 +1,9 @@
 .account-info {
   width: 100%;
-  padding: 20px 60px 20px 20px;
+  padding: 20px 60px 20px 40px;
   color: var(--dark);
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
 }
 
 .account-info h2 {

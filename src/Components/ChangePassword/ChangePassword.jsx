@@ -21,6 +21,13 @@ const ChangePassword = () => {
   const handleSave = async () => {
     const { currentPassword, newPassword, confirmPassword } = formData;
 
+    // Check if all fields are filled
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      message.error("All fields are required.");
+      return;
+    }
+
+    // Check if new password and confirm password match
     if (newPassword !== confirmPassword) {
       message.error("New Password and Confirm Password do not match.");
       return;

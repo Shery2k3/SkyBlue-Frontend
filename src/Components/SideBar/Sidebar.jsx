@@ -78,14 +78,7 @@ const Sidebar = () => {
               </div>
             </Link>
           </li>
-          <li className="nav-item">
-            <Link to="/settings">
-              <div className="nav-link">
-                <img src={settings} alt="settings" />
-                <span>Settings</span>
-              </div>
-            </Link>
-          </li>
+      
         </ul>
       </nav>
     </div>

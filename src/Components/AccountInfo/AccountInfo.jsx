@@ -14,9 +14,11 @@ const AccountInfo = ({ userInfo }) => {
     CountryId: "",
     StateProvinceId: "",
     PhoneNumber: "",
+    Email: "Noman@skybluewholesale.com", // Assuming this is provided by userInfo
   });
 
-  // Update formData whenever userInfo changes
+  const [errors, setErrors] = useState({});
+
   useEffect(() => {
     setFormData({
       FirstName: userInfo.FirstName || "",
@@ -28,6 +30,7 @@ const AccountInfo = ({ userInfo }) => {
       CountryId: userInfo.CountryId || "",
       StateProvinceId: userInfo.StateProvinceId || "",
       PhoneNumber: userInfo.PhoneNumber || "",
+      Email: userInfo.Email || "Noman@skybluewholesale.com",
     });
   }, [userInfo]);
 
@@ -39,16 +42,39 @@ const AccountInfo = ({ userInfo }) => {
     });
   };
 
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.FirstName) newErrors.FirstName = "First name is required";
+    if (!formData.LastName) newErrors.LastName = "Last name is required";
+    if (!formData.Address1) newErrors.Address1 = "Street address is required";
+    if (!formData.ZipPostalCode) newErrors.ZipPostalCode = "Zip / postal code is required";
+    if (!formData.City) newErrors.City = "City is required";
+    if (!formData.CountryId) newErrors.CountryId = "Country is required";
+    if (!formData.StateProvinceId) newErrors.StateProvinceId = "State / province is required";
+    if (!formData.PhoneNumber) newErrors.PhoneNumber = "Phone number is required";
+    if (!formData.Email) {
+      newErrors.Email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.Email)) {
+      newErrors.Email = "Email is not valid";
+    }
+    setErrors(newErrors);
+    return newErrors;
+  };
+
   const handleSave = async () => {
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      const errorMessages = Object.values(validationErrors).join(", ");
+      message.error(`Please fix the following errors: ${errorMessages}`);
+      return;
+    }
+
     try {
-      const response = await axiosInstance.put(
-        "/customer/update-info",
-        formData
-      );
+      const response = await axiosInstance.put("/customer/update-info", formData);
       message.success("Info Updated");
     } catch (error) {
       console.error("Error:", error);
-      message.success("Failed to Update");
+      message.error("Failed to Update");
     }
   };
 
@@ -79,14 +105,15 @@ const AccountInfo = ({ userInfo }) => {
           </div>
         </div>
         <div className="form-group">
-            <label>Email: *</label>
-            <input
-              type="email"
-              name="Email"
-              value="Noman@skybluewholesale.com"
-              readOnly
-            />
-          </div>
+          <label>Email: *</label>
+          <input
+            type="email"
+            name="Email"
+            value={formData.Email}
+            onChange={handleChange}
+            readOnly
+          />
+        </div>
       </section>
 
       <section className="form-section">

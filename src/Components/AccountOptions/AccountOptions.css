@@ -1,10 +1,10 @@
 .account-options-container {
-  margin: 1rem 2rem;
+  margin: 1rem 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 50vh;
-  min-width: 175px;
+  min-width: 200px;
   border-right: 2px solid var(--secondary);
 }
 
@@ -26,11 +26,16 @@
   display: block;
   text-decoration: none;
   width: 100%;
-  padding: 1rem 10px;
+  padding: 1rem 1.5rem;
   font-size: 1rem;
   color: var(--dark);
   font-family: var(--font-primary);
   font-weight: 600;
+}
+
+.account-options .account-link.active {
+  font-weight: bold;
+  background-color: var(--accent);
 }
 
 .logout-button{
@@ -40,15 +45,15 @@
   text-align: left;
   text-decoration: none;
   width: 100%;
-  padding: 1rem 10px;
+  padding: 1rem 1.5rem;
   font-size: 1rem;
-  color: var(--dark);
+  color: rgb(201, 29, 29);
   font-family: var(--font-primary);
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .logout-button:hover{
-  background-color: rgba(255, 0, 0, 0.382);
+  background-color: rgba(255, 60, 60, 0.405);
 }
 
 @media only screen and (max-width: 768px) {
@@ -62,6 +67,11 @@
     border-right: none;
     border-bottom: 2px solid var(--secondary);
   }
+
+  .account-options .account-link.active {
+    border-radius: 15px 15px 0 0;
+  }
+
   .account-options {
     flex-direction: row;
   }
