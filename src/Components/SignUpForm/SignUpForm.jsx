@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./SignupForm.css";
+import "./SignUpForm.css";
 import LogoAccent from "/Logos/LogoAccent.png";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
