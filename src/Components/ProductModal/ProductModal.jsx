@@ -7,6 +7,7 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import "./ProductModal.css";
+import { Skeleton } from "antd";
 import { message } from "antd";
 import axiosInstance from "../../api/axiosConfig";
 
@@ -19,6 +20,7 @@ const ProductModal = ({ product, onClose }) => {
     (_, i) => (i + 1) * OrderMinimumQuantity
   );
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const dropdownRef = useRef(null);
   const dropdownContainerRef = useRef(null);
@@ -79,7 +81,7 @@ const ProductModal = ({ product, onClose }) => {
         quantity: quantity,
       });
       message.success("Added to Cart");
-      onClose()
+      onClose();
     } catch (error) {
       console.error("Error submitting product:", error);
     }
@@ -92,11 +94,22 @@ const ProductModal = ({ product, onClose }) => {
     };
   }, []);
 
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
+
   return (
     <div className="product-modal-container" onClick={handleClose}>
       <div className="product-modal">
         <div className="product-image-container">
-          <img src={Images[0]} className="product-image" alt={Name} />
+          {isLoading && <Skeleton.Image active />}
+          <img
+            src={Images[0]}
+            className="product-image"
+            alt={Name}
+            onLoad={handleImageLoad}
+            style={{ display: isLoading ? "none" : "block" }}
+          />
         </div>
         <div className="product-detail">
           <span>

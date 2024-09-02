@@ -7,9 +7,9 @@ const ProductGrid = ({ category, products }) => {
     <div className="product-grid-container">
       <h2>{category}</h2>
       <div className="product-grid">
-        {products && products.map((product, index) => (
+        {products && products.map((product) => (
           <ProductCard
-            key={index}
+            key={product.Id}
             product={product}
           />
         ))}
