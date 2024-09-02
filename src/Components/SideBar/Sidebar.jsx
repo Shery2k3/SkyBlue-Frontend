@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./sidebar.css";
 import logo from "../../../public/Logos/logo.png";
 import CategoryDropDown from "../CategoryDropDown/CategoryDropDown";
 import home from "../../assets/sidebar/HomePage.svg";
@@ -9,7 +8,6 @@ import bestseller from "../../assets/sidebar/BestSeller.svg";
 import exclusiveproducts from "../../assets/sidebar/Star.svg";
 import contact from "../../assets/sidebar/IDVerified.svg";
 import account from "../../assets/sidebar/Registration.svg";
-import settings from "../../assets/sidebar/Settings.svg";
 
 const Sidebar = () => {
   return (

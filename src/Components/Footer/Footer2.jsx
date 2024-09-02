@@ -12,7 +12,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import bytesync from "/Logos/bytesync.png";
 import { Link } from "react-router-dom";
-import "./Footer2.css";
 
 const Footer2 = () => {
   const emailAddress = "sales@skybluewholesale.com";

@@ -1,9 +1,10 @@
 import React from "react";
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import SubBanner from "/Images/sub-banner.png";
 import Banner1 from "/Images/banner1.png";
-import Banner2 from "/Images/banner2.png";
-import "./Banner.css";
+import Banner2 from "/Images/banner2.png"
 
 function Banner() {
   const settings = {

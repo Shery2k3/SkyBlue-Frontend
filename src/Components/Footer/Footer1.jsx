@@ -13,7 +13,6 @@ import {
 import logo from "/Logos/logo.png";
 import bytesync from "/Logos/bytesync.png";
 import { Link } from "react-router-dom";
-import "./Footer1.css";
 
 const Footer1 = () => {
   const emailAddress = "sales@skybluewholesale.com";

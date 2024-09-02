@@ -1,9 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import Layout from "../../Components/Layout/Layout";
 import { Steps } from "antd";
-import ShippingMethod from "../../Components/CheckoutComponents/ShippingMethod/ShippingMethod";
-import PaymentInformation from "../../Components/CheckoutComponents/PaymentInformation/PaymentInformation";
-import Confirmation from "../../Components/CheckoutComponents/Confirmation/Confirmation";
+const ShippingMethod = lazy(() =>
+  import("../../Components/CheckoutComponents/ShippingMethod/ShippingMethod")
+);
+const PaymentInformation = lazy(() =>
+  import(
+    "../../Components/CheckoutComponents/PaymentInformation/PaymentInformation"
+  )
+);
+const Confirmation = lazy(() =>
+  import("../../Components/CheckoutComponents/Confirmation/Confirmation")
+);
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import axiosInstance from "../../api/axiosConfig";
 import "./OnePageCheckOut.css";
@@ -71,21 +79,29 @@ const OnePageCheckout = () => {
     switch (currentStep) {
       case 0:
         return (
-          <ShippingMethod
-            selectedOption={shippingMethod}
-            setSelectedOption={setShippingMethod}
-            shippingMethods={shippingMethods}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <ShippingMethod
+              selectedOption={shippingMethod}
+              setSelectedOption={setShippingMethod}
+              shippingMethods={shippingMethods}
+            />
+          </Suspense>
         );
       case 1:
-        return <PaymentInformation />;
+        return (
+          <Suspense fallback={<div>Loading...</div>}>
+            <PaymentInformation />
+          </Suspense>
+        );
       case 2:
         return (
-          <Confirmation
-            shippingMethod={shippingMethod}
-            products={products}
-            cartSummary={cartSummary}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Confirmation
+              shippingMethod={shippingMethod}
+              products={products}
+              cartSummary={cartSummary}
+            />
+          </Suspense>
         );
       default:
         return null;

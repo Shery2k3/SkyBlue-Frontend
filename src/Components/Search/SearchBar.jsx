@@ -2,9 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../api/axiosConfig"; // Import the configured Axios instance
+import axiosInstance from "../../api/axiosConfig";
 import { useModal } from "../../Context/ModalContext/ModalContext";
-import "./SearchBar.css";
 
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);

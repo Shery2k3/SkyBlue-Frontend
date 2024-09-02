@@ -13,8 +13,6 @@ import Menu from "antd/es/menu";
 import LogoAccent from "/Logos/LogoAccent.png";
 import { useContext } from "react";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
-import "./Navbar.css";
-
 
 const Navbar = () => {
   const location = useLocation();

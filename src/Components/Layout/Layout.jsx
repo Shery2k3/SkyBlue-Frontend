@@ -1,16 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import Loader from "../Loader/Loader";
-import Sidebar from "../SideBar/Sidebar";
-import Navbar from "../Navbar/Navbar";
-import Header from "../Header/Header";
-import Banner from "../Banner/Banner";
-import Footer1 from "../Footer/Footer1";
-import Footer2 from "../Footer/Footer2";
-import ProductModal from "../ProductModal/ProductModal";
+
+// Lazy load components
+const Sidebar = lazy(() => import("../SideBar/Sidebar"));
+const Navbar = lazy(() => import("../Navbar/Navbar"));
+const Header = lazy(() => import("../Header/Header"));
+const Banner = lazy(() => import("../Banner/Banner"));
+const Footer1 = lazy(() => import("../Footer/Footer1"));
+const Footer2 = lazy(() => import("../Footer/Footer2"));
+const AgeVerificationForms = lazy(() =>
+  import("../AgeVerificationForm/AgeVerificationForm")
+);
+const ProductModal = lazy(() => import("../ProductModal/ProductModal"));
+
 import { useModal } from "../../Context/ModalContext/ModalContext";
 import { useAgeVerification } from "../../Context/AuthContext/AgeVerificationContext";
-import AgeVerificationForms from "../AgeVerificationForm/AgeVerificationForm";
-import "./Layout.css";
 
 const Layout = ({ pageTitle, children, style, isLoading }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 867);
@@ -36,28 +40,46 @@ const Layout = ({ pageTitle, children, style, isLoading }) => {
     <>
       <Loader isActive={isLoading} />
       {!isAgeVerified ? (
-        <AgeVerificationForms />
+        <Suspense fallback={<Loader isActive={true} />}>
+          <AgeVerificationForms />
+        </Suspense>
       ) : (
         <>
           {style === "style1" ? (
             <div className="layout1">
-              {isMobile ? <Navbar /> : <Sidebar />}
-              <div className="content-style1">
-                <Header />
-                <Banner />
-                {children}
-              </div>
-              {isMobile ? <Footer1 /> : <Footer2 />}
+              <Suspense fallback={<Loader isActive={true} />}>
+                {isMobile ? <Navbar /> : <Sidebar />}
+                <div className="content-style1">
+                  <Header />
+                  <Banner />
+                  {children}
+                </div>
+                {isMobile ? (
+                  <Suspense fallback={<Loader isActive={true} />}>
+                    <Footer1 />
+                  </Suspense>
+                ) : (
+                  <Suspense fallback={<Loader isActive={true} />}>
+                    <Footer2 />
+                  </Suspense>
+                )}
+              </Suspense>
             </div>
           ) : (
             <div className="layout2">
-              <Navbar />
+              <Suspense fallback={<Loader isActive={true} />}>
+                <Navbar />
+              </Suspense>
               <div className="content-style2">{children}</div>
-              <Footer1 />
+              <Suspense fallback={<Loader isActive={true} />}>
+                <Footer1 />
+              </Suspense>
             </div>
           )}
           {modalProduct && (
-            <ProductModal product={modalProduct} onClose={closeModal} />
+            <Suspense fallback={<Loader isActive={true} />}>
+              <ProductModal product={modalProduct} onClose={closeModal} />
+            </Suspense>
           )}
         </>
       )}
