@@ -5,10 +5,17 @@ import axiosInstance from "../../api/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
 
-const CartItemGrid = ({ products, cartSummary, onUpdate, onRemove }) => {
+const CartItemGrid = ({
+  products,
+  cartSummary,
+  onUpdate,
+  onRemove,
+  isFetching,
+}) => {
   const { subtotal, shipping, tax, discount, total } = cartSummary;
 
   const navigate = useNavigate();
+  console.log(isFetching)
 
   const handleClearCart = async () => {
     try {
@@ -31,7 +38,7 @@ const CartItemGrid = ({ products, cartSummary, onUpdate, onRemove }) => {
         <div className="cartItemGrid">
           {products.map((product) => (
             <CartItem
-              key={product.ID}
+              key={product.Id}
               product={product}
               onUpdate={onUpdate}
               onRemove={onRemove}
@@ -42,6 +49,7 @@ const CartItemGrid = ({ products, cartSummary, onUpdate, onRemove }) => {
           </span>
         </div>
         <CartInfo
+          isFetching={isFetching}
           subtotal={subtotal}
           shipping={shipping}
           tax={tax}

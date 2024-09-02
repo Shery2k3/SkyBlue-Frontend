@@ -8,6 +8,7 @@ import "./Cart.css";
 
 const Cart = () => {
   const [isLoading, setisLoading] = useState(true);
+  const [isFetching, setFetching] = useState(false)
   const [products, setProducts] = useState([]);
   const [cartSummary, setCartSummary] = useState({
     subtotal: 0,
@@ -18,6 +19,7 @@ const Cart = () => {
   });
 
   const fetchCartData = async () => {
+    setFetching(true)
     try {
       const response = await axiosInstance.get("/cart/items");
       setProducts(response.data.cartItems);
@@ -29,6 +31,7 @@ const Cart = () => {
         total: response.data.finalPrice - 1.19,
       });
       setisLoading(false);
+      setFetching(false)
     } catch (error) {
       console.error("Failed to load data:", error);
     }
@@ -60,6 +63,7 @@ const Cart = () => {
         <CartItemGrid
           products={products}
           cartSummary={cartSummary}
+          isFetching={isFetching}
           onUpdate={handleUpdate}
           onRemove={handleRemove}
         />
