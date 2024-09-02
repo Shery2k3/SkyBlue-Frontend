@@ -1,43 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./ShippingMethod.css";
 
-const ShippingMethod = ({ selectedOption, setSelectedOption }) => {
+const ShippingMethod = ({ selectedOption, setSelectedOption, shippingMethods }) => {
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    setOptions(shippingMethods);
+  }, [shippingMethods]);
 
   const handleOptionChange = (e) => {
-    setSelectedOption(e.target.value);
+    const selectedMethod = options.find(option => option.shippingMethod === e.target.value);
+    setSelectedOption(selectedMethod);
   };
 
   return (
     <div className="shipping-method">
       <h3>Select Shipping Method</h3>
       <div className="options">
-        <label className={`option ${selectedOption === "Pickup" ? "active" : ""}`}>
-          <input
-            type="radio"
-            value="Pickup"
-            checked={selectedOption === "Pickup"}
-            onChange={handleOptionChange}
-          />
-          Pickup ($0.00)
-        </label>
-        <label className={`option ${selectedOption === "Delivery" ? "active" : ""}`}>
-          <input
-            type="radio"
-            value="Delivery"
-            checked={selectedOption === "Delivery"}
-            onChange={handleOptionChange}
-          />
-          Delivery ($0.00)
-        </label>
-        <label className={`option ${selectedOption === "Pallet Shipping" ? "active" : ""}`}>
-          <input
-            type="radio"
-            value="Pallet Shipping"
-            checked={selectedOption === "Pallet Shipping"}
-            onChange={handleOptionChange}
-          />
-          Pallet Shipping ($0.00)
-        </label>
+        {options.map((method) => (
+          <label key={method.newShippingMethodId} className={`option ${selectedOption === method ? "active" : ""}`}>
+            <input
+              type="radio"
+              value={method.shippingMethod}
+              checked={selectedOption === method}
+              onChange={handleOptionChange}
+            />
+            {method.shippingMethod} ($0.00)
+          </label>
+        ))}
       </div>
     </div>
   );

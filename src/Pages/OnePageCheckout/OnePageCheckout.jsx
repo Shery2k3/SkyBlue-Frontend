@@ -9,20 +9,20 @@ import axiosInstance from "../../api/axiosConfig";
 import "./OnePageCheckOut.css";
 
 const items = [
-  {
-    title: "Shipping Method",
-  },
-  {
-    title: "Payment Information",
-  },
-  {
-    title: "Confirmation",
-  },
+  { title: "Shipping Method" },
+  { title: "Payment Information" },
+  { title: "Confirmation" },
+];
+
+const shippingMethods = [
+  { newShippingMethodId: 5, shippingMethod: "Pallet Shipping" },
+  { newShippingMethodId: 1, shippingMethod: "Delivery" },
+  { newShippingMethodId: 4, shippingMethod: "Pickup" },
 ];
 
 const OnePageCheckout = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [shippingMethod, setShippingMethod] = useState("Pickup");
+  const [shippingMethod, setShippingMethod] = useState(shippingMethods[2]);
   const [direction, setDirection] = useState("forward");
   const [products, setProducts] = useState([]);
   const [cartSummary, setCartSummary] = useState({
@@ -46,8 +46,6 @@ const OnePageCheckout = () => {
       });
     } catch (error) {
       console.error("Failed to load data:", error);
-    } finally {
-      setisLoading(false);
     }
   };
 
@@ -76,12 +74,19 @@ const OnePageCheckout = () => {
           <ShippingMethod
             selectedOption={shippingMethod}
             setSelectedOption={setShippingMethod}
+            shippingMethods={shippingMethods}
           />
         );
       case 1:
         return <PaymentInformation />;
       case 2:
-        return <Confirmation shippingMethod={shippingMethod} products={products} cartSummary={cartSummary} />;
+        return (
+          <Confirmation
+            shippingMethod={shippingMethod}
+            products={products}
+            cartSummary={cartSummary}
+          />
+        );
       default:
         return null;
     }

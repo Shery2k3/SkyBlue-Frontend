@@ -41,7 +41,7 @@ const Confirmation = ({ shippingMethod, products, cartSummary }) => {
               <strong>Address:</strong> Ontario, Canada
             </p>
             <p>
-              <strong>Payment Method:</strong> {shippingMethod}
+              <strong>Payment Method:</strong> {shippingMethod.shippingMethod}
             </p>
           </span>
         </div>
@@ -83,6 +83,7 @@ const Confirmation = ({ shippingMethod, products, cartSummary }) => {
         shipping={Shipping}
         tax={tax}
         discount={Discount}
+        shippingMethod={shippingMethod}
         total={total}
       />
     </div>

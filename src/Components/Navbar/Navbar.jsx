@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faHeart,
   faCartShopping,
   faUser,
   faCaretDown,
   faBars,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
+import Dropdown from "antd/es/dropdown";
+import Menu from "antd/es/menu";
 import LogoAccent from "/Logos/LogoAccent.png";
+import { useContext } from "react";
+import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import "./Navbar.css";
+
 
 const Navbar = () => {
   const location = useLocation();
@@ -18,6 +22,23 @@ const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
   const [isActive, setActive] = useState(false);
   const [startX, setStartX] = useState(0);
+  const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
+
+  const accountItems = [
+    {
+      key: "1",
+      label: <Link to="/user/account-info">Account Info</Link>,
+    },
+    {
+      key: "2",
+      label: <Link to="/user/orders">Orders</Link>,
+    },
+    {
+      key: "3",
+      label: <Link to="/login" onClick={logout}>Logout</Link>,
+    },
+  ];
 
   const activate = () => {
     setActive(!isActive);
@@ -42,7 +63,6 @@ const Navbar = () => {
       closeNav();
     }
   };
-
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
@@ -143,9 +163,7 @@ const Navbar = () => {
         <li>
           <Link
             className={`nav-items ${
-              location.pathname === "/all-products"
-                ? "nav-item-active"
-                : ""
+              location.pathname === "/all-products" ? "nav-item-active" : ""
             }`}
             onClick={() => {
               scrollToTop();
@@ -176,20 +194,24 @@ const Navbar = () => {
 
       <div className="icons">
         <Link className="cart-icon" to="/cart">
-        <FontAwesomeIcon icon={faCartShopping} /></Link>
-        <div className="user" onClick={toggleDropdown}>
-          <span className="user-icon">
-            <FontAwesomeIcon icon={faUser} />
-          </span>
-          <FontAwesomeIcon className="dropdown-icon" icon={faCaretDown} />
-        </div>
-        {dropdownVisible && (
-          <div className="dropdown-menu">
-            <Link to="/profile">Profile</Link>
-            <Link to="/orders">Orders</Link>
-            <Link to="/logout">Logout</Link>
-          </div>
-        )}
+          <FontAwesomeIcon icon={faCartShopping} />
+        </Link>
+        <Dropdown
+          overlay={<Menu items={accountItems} />}
+          placement="bottomRight"
+          arrow={{
+            pointAtCenter: true,
+          }}
+        >
+          <Link to="/user/account-info">
+            <div className="user">
+              <span className="user-icon">
+                <FontAwesomeIcon icon={faUser} />
+              </span>
+              <FontAwesomeIcon className="dropdown-icon" icon={faCaretDown} />
+            </div>
+          </Link>
+        </Dropdown>
       </div>
     </nav>
   );

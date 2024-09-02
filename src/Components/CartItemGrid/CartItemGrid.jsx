@@ -1,9 +1,28 @@
 import "./CartItemGrid.css";
 import CartItem from "../CartItem/CartItem";
 import CartInfo from "../CartInfo/CartInfo";
+import axiosInstance from "../../api/axiosConfig";
+import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 const CartItemGrid = ({ products, cartSummary, onUpdate, onRemove }) => {
   const { subtotal, shipping, tax, discount, total } = cartSummary;
+
+  const navigate = useNavigate();
+
+  const handleClearCart = async () => {
+    try {
+      await axiosInstance.delete(`/cart/remove-all`);
+      message.success({ content: "Cart Cleared!", key: "remove", duration: 2 });
+      navigate("/");
+    } catch (error) {
+      message.error({
+        content: "Failed to remove item. Please try again.",
+        key: "remove",
+        duration: 2,
+      });
+    }
+  };
 
   return (
     <>
@@ -18,7 +37,9 @@ const CartItemGrid = ({ products, cartSummary, onUpdate, onRemove }) => {
               onRemove={onRemove}
             />
           ))}
-          <span className="clear-button">Clear Cart</span>
+          <span className="clear-button" onClick={handleClearCart}>
+            Clear Cart
+          </span>
         </div>
         <CartInfo
           subtotal={subtotal}

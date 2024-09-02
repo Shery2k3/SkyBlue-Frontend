@@ -3,36 +3,74 @@ import axiosInstance from "../../api/axiosConfig";
 import { message } from "antd";
 import "./AccountInfo.css";
 
-const AccountInfo = ({ userInfo }) => {
+const AccountInfo = ({ isLoading, setIsLoading }) => {
   const [formData, setFormData] = useState({
     FirstName: "",
     LastName: "",
     Company: "",
     Address1: "",
+    Address2: "",
     ZipPostalCode: "",
     City: "",
     CountryId: "",
     StateProvinceId: "",
     PhoneNumber: "",
-    Email: "Noman@skybluewholesale.com", // Assuming this is provided by userInfo
+    Email: "Noman@skybluewholesale.com",
   });
 
+  const [countries, setCountries] = useState([
+    { Id: 1, Name: "United States" },
+    { Id: 2, Name: "Canada" },
+  ]);
+  const [states, setStates] = useState([]);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    setFormData({
-      FirstName: userInfo.FirstName || "",
-      LastName: userInfo.LastName || "",
-      Company: userInfo.Company || "",
-      Address1: userInfo.Address1 || "",
-      ZipPostalCode: userInfo.ZipPostalCode || "",
-      City: userInfo.City || "",
-      CountryId: userInfo.CountryId || "",
-      StateProvinceId: userInfo.StateProvinceId || "",
-      PhoneNumber: userInfo.PhoneNumber || "",
-      Email: userInfo.Email || "Noman@skybluewholesale.com",
-    });
-  }, [userInfo]);
+    const fetchData = async () => {
+      try {
+        const userInfoResponse = await axiosInstance.get("/customer/info");
+        const userInfo = userInfoResponse.data[0];
+        const statesResponse = await axiosInstance.get(`/customer/states/${userInfo.CountryId}`);
+
+        setFormData({
+          FirstName: userInfo.FirstName || "",
+          LastName: userInfo.LastName || "",
+          Company: userInfo.Company || "",
+          Address1: userInfo.Address1 || "",
+          Address2: userInfo.Address2 || "",
+          ZipPostalCode: userInfo.ZipPostalCode || "",
+          City: userInfo.City || "",
+          CountryId: userInfo.CountryId || "",
+          StateProvinceId: userInfo.StateProvinceId || "",
+          PhoneNumber: userInfo.PhoneNumber || "",
+          Email: userInfo.Email || "Noman@skybluewholesale.com",
+        });
+        setStates(statesResponse.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Failed to load data:", error);
+        message.error("Failed to load user information.");
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [setIsLoading]);
+
+  useEffect(() => {
+    const fetchStates = async () => {
+      if (!formData.CountryId) return;
+      try {
+        const response = await axiosInstance.get(`/customer/states/${formData.CountryId}`);
+        setStates(response.data);
+      } catch (error) {
+        console.error("Failed to load states:", error);
+        message.error("Failed to load states.");
+      }
+    };
+
+    fetchStates();
+  }, [formData.CountryId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,11 +85,14 @@ const AccountInfo = ({ userInfo }) => {
     if (!formData.FirstName) newErrors.FirstName = "First name is required";
     if (!formData.LastName) newErrors.LastName = "Last name is required";
     if (!formData.Address1) newErrors.Address1 = "Street address is required";
-    if (!formData.ZipPostalCode) newErrors.ZipPostalCode = "Zip / postal code is required";
+    if (!formData.ZipPostalCode)
+      newErrors.ZipPostalCode = "Zip / postal code is required";
     if (!formData.City) newErrors.City = "City is required";
     if (!formData.CountryId) newErrors.CountryId = "Country is required";
-    if (!formData.StateProvinceId) newErrors.StateProvinceId = "State / province is required";
-    if (!formData.PhoneNumber) newErrors.PhoneNumber = "Phone number is required";
+    if (!formData.StateProvinceId)
+      newErrors.StateProvinceId = "State / province is required";
+    if (!formData.PhoneNumber)
+      newErrors.PhoneNumber = "Phone number is required";
     if (!formData.Email) {
       newErrors.Email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.Email)) {
@@ -70,13 +111,17 @@ const AccountInfo = ({ userInfo }) => {
     }
 
     try {
-      const response = await axiosInstance.put("/customer/update-info", formData);
+      await axiosInstance.put("/customer/update-info", formData);
       message.success("Info Updated");
     } catch (error) {
       console.error("Error:", error);
       message.error("Failed to Update");
     }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Show a loading indicator if isLoading is true
+  }
 
   return (
     <div className="account-info">
@@ -93,6 +138,9 @@ const AccountInfo = ({ userInfo }) => {
               value={formData.FirstName}
               onChange={handleChange}
             />
+            {errors.FirstName && (
+              <span className="error">{errors.FirstName}</span>
+            )}
           </div>
           <div className="form-group">
             <label>Last name: *</label>
@@ -102,6 +150,9 @@ const AccountInfo = ({ userInfo }) => {
               value={formData.LastName}
               onChange={handleChange}
             />
+            {errors.LastName && (
+              <span className="error">{errors.LastName}</span>
+            )}
           </div>
         </div>
         <div className="form-group">
@@ -113,6 +164,7 @@ const AccountInfo = ({ userInfo }) => {
             onChange={handleChange}
             readOnly
           />
+          {errors.Email && <span className="error">{errors.Email}</span>}
         </div>
       </section>
 
@@ -139,10 +191,16 @@ const AccountInfo = ({ userInfo }) => {
             value={formData.Address1}
             onChange={handleChange}
           />
+          {errors.Address1 && <span className="error">{errors.Address1}</span>}
         </div>
         <div className="form-group">
           <label>Street address 2:</label>
-          <input type="text" name="Address2" value="" readOnly />
+          <input
+            type="text"
+            name="Address2"
+            value={formData.Address2}
+            onChange={handleChange}
+          />
         </div>
         <div className="form-groups-container">
           <div className="form-group">
@@ -153,6 +211,9 @@ const AccountInfo = ({ userInfo }) => {
               value={formData.ZipPostalCode}
               onChange={handleChange}
             />
+            {errors.ZipPostalCode && (
+              <span className="error">{errors.ZipPostalCode}</span>
+            )}
           </div>
           <div className="form-group">
             <label>City: *</label>
@@ -162,6 +223,7 @@ const AccountInfo = ({ userInfo }) => {
               value={formData.City}
               onChange={handleChange}
             />
+            {errors.City && <span className="error">{errors.City}</span>}
           </div>
         </div>
         <div className="form-groups-container">
@@ -172,9 +234,15 @@ const AccountInfo = ({ userInfo }) => {
               value={formData.CountryId}
               onChange={handleChange}
             >
-              <option value="2">Canada</option>
-              {/* Add more countries as needed */}
+              {countries.map((country) => (
+                <option key={country.Id} value={country.Id}>
+                  {country.Name}
+                </option>
+              ))}
             </select>
+            {errors.CountryId && (
+              <span className="error">{errors.CountryId}</span>
+            )}
           </div>
           <div className="form-group">
             <label>State / province: *</label>
@@ -183,29 +251,34 @@ const AccountInfo = ({ userInfo }) => {
               value={formData.StateProvinceId}
               onChange={handleChange}
             >
-              <option value="71">{userInfo.StateProvinceName}</option>
-              {/* Add more states as needed */}
+              {states.map((state) => (
+                <option key={state.Id} value={state.Id}>
+                  {state.Name}
+                </option>
+              ))}
             </select>
+            {errors.StateProvinceId && (
+              <span className="error">{errors.StateProvinceId}</span>
+            )}
           </div>
         </div>
-      </section>
-
-      <section className="form-section">
-        <h3>Your Contact Information</h3>
         <div className="form-group">
-          <label>Phone: *</label>
+          <label>Phone number: *</label>
           <input
             type="text"
             name="PhoneNumber"
             value={formData.PhoneNumber}
             onChange={handleChange}
           />
+          {errors.PhoneNumber && (
+            <span className="error">{errors.PhoneNumber}</span>
+          )}
         </div>
       </section>
 
-      <button type="button" className="save-button" onClick={handleSave}>
-        Save
-      </button>
+      <div className="actions-container">
+        <button onClick={handleSave}>Save</button>
+      </div>
     </div>
   );
 };

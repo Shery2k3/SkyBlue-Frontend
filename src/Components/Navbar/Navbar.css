@@ -104,6 +104,7 @@
 
 .user-icon {
   position: relative;
+  color: var(--dark);
   border: 2px solid var(--dark);
   border-radius: 50%;
   width: 32px;
@@ -114,6 +115,7 @@
 }
 
 .dropdown-icon {
+  color: var(--dark);
   margin-left: 2px;
 }
 

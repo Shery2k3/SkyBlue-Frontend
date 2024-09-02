@@ -2,7 +2,8 @@ import { useState } from "react";
 import axiosInstance from "../../api/axiosConfig";
 import { message } from "antd";
 
-const ChangePassword = () => {
+const ChangePassword = ({ setIsLoading }) => {
+  setIsLoading(false);
   const [formData, setFormData] = useState({
     currentPassword: "",
     newPassword: "",

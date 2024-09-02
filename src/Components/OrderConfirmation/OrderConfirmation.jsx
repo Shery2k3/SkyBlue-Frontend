@@ -1,7 +1,23 @@
-import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 import "./OrderConfirmation.css";
+import axiosInstance from "../../api/axiosConfig";
 
-const OrderConfirmation = ({ subTotal, shipping, tax, discount, total }) => {
+const OrderConfirmation = ({ subTotal, shipping, tax, discount, shippingMethod, total }) => {
+
+  const navigate = useNavigate()
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axiosInstance.post(`/checkout`, {
+        newShippingMethodId: shippingMethod.newShippingMethodId,
+      });
+      navigate("/")
+      message.success("Order Placed");
+    } catch (error) {
+      console.error("Error placing order:", error);
+    }
+  };
 
   return (
     <div className="Order-Confirmation">
@@ -25,7 +41,7 @@ const OrderConfirmation = ({ subTotal, shipping, tax, discount, total }) => {
         <span>Total:</span>
         <span>${total}</span>
       </div>
-      <button className="checkout-button">Confirm</button>
+      <button onClick={handleSubmit} className="checkout-button">Confirm</button>
     </div>
   );
 };
