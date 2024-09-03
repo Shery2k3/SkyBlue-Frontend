@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import Pagination from "../../Components/Pagination/Pagination";
-import searchImage from "../../../public/Images/search.png";
+import searchImage from "../../../public/Images/search.webp";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";

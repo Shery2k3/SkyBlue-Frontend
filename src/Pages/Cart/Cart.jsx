@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Layout from "../../Components/Layout/Layout";
 import { Link } from "react-router-dom";
-import emptyCart from "/Images/empty-cart.png";
+import emptyCart from "/Images/empty-cart.webp";
 import CartItemGrid from "../../Components/CartItemGrid/CartItemGrid";
 import axiosInstance from "../../api/axiosConfig";
 import "./Cart.css";
