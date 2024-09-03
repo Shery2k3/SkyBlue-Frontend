@@ -7,8 +7,8 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import "./ProductModal.css";
-import { Skeleton } from "antd";
-import { message } from "antd";
+import Skeleton from "antd/es/skeleton/";
+import message from "antd/es/message/";
 import axiosInstance from "../../api/axiosConfig";
 
 const ProductModal = ({ product, onClose }) => {

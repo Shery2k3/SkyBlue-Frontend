@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Skeleton } from "antd";
+import Skeleton from "antd/es/skeleton/";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./ProductCard.css";
 import { useModal } from "../../Context/ModalContext/ModalContext";

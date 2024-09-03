@@ -11,8 +11,8 @@ const Footer2 = lazy(() => import("../Footer/Footer2"));
 const AgeVerificationForms = lazy(() =>
   import("../AgeVerificationForm/AgeVerificationForm")
 );
-const ProductModal = lazy(() => import("../ProductModal/ProductModal"));
 
+import ProductModal from "../ProductModal/ProductModal";
 import { useModal } from "../../Context/ModalContext/ModalContext";
 import { useAgeVerification } from "../../Context/AuthContext/AgeVerificationContext";
 
@@ -77,9 +77,7 @@ const Layout = ({ pageTitle, children, style, isLoading }) => {
             </div>
           )}
           {modalProduct && (
-            <Suspense fallback={<Loader isActive={true} />}>
-              <ProductModal product={modalProduct} onClose={closeModal} />
-            </Suspense>
+            <ProductModal product={modalProduct} onClose={closeModal} />
           )}
         </>
       )}
