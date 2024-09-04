@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import API_BASE_URL from "../../constant";
+import { message } from "antd"; // Import message from antd
 import "./SignUpForm.css";
 import LogoAccent from "/Logos/LogoAccent.png";
 import { Link } from "react-router-dom";
@@ -13,6 +14,7 @@ const SignupForm = () => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -35,14 +37,21 @@ const SignupForm = () => {
         },
       });
 
-      if (response.status === 200) {
-        console.log("Signup successful:", response.data);
+      if (response.status === 201) {
+        message.success("Signup successful!");
+        reset();
         // Handle successful signup (e.g., navigate to login page)
+      } else if (response.status === 400) {
+        message.error("Email already present.");
       } else {
-        console.error("Signup failed with status code:", response.status);
+        message.error("Something went wrong.");
       }
     } catch (error) {
-      console.error("Error during signup:", error.response ? error.response.data : error.message);
+      if (error.response && error.response.status === 500) {
+        message.error("Something went wrong.");
+      } else {
+        message.error(error.message);
+      }
     }
   };
 
