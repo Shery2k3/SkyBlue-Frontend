@@ -1,5 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import API_BASE_URL from "../../constant";
 import "./SignUpForm.css";
 import LogoAccent from "/Logos/LogoAccent.png";
 import { Link } from "react-router-dom";
@@ -14,9 +16,34 @@ const SignupForm = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form submitted:", data);
-    // Your data submission logic here
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    for (const key in data) {
+      if (key === "documents") {
+        for (const file of data[key]) {
+          formData.append(key, file);
+        }
+      } else {
+        formData.append(key, data[key]);
+      }
+    }
+
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/signup`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 200) {
+        console.log("Signup successful:", response.data);
+        // Handle successful signup (e.g., navigate to login page)
+      } else {
+        console.error("Signup failed with status code:", response.status);
+      }
+    } catch (error) {
+      console.error("Error during signup:", error.response ? error.response.data : error.message);
+    }
   };
 
   // Watch password value to compare with confirm password
@@ -102,7 +129,8 @@ const SignupForm = () => {
               <input
                 type="file"
                 id="businessLicense"
-                {...register("businessLicense")}
+                {...register("documents")}
+                multiple
               />
               <FontAwesomeIcon
                 icon={faBox}
