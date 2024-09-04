@@ -1,138 +1,162 @@
-.age-verification-page .ageverification-wrapper {
+.ageverification-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  
-  min-height: 100vh;
-  background-image: linear-gradient(rgba(20, 85, 134, 0.9), rgba(5, 20, 32, 0.9)), url(/Background/login.jpg);
-  padding: 20px;
-  background-size: cover;
-  background-position: center;
 }
 
-.age-verification-page .ageverification-wrapper img {
+.ageverification-wrapper img {
   width: 200px;
   margin-bottom: 20px;
 }
 
-.age-verification-page .ageverification-wrapper h3 {
+.ageverification-wrapper h3 {
   font-family: var(--font-accent);
   color: var(--light);
   font-size: 24px;
   margin-bottom: 20px;
 }
 
-.age-verification-page .ageverification-wrapper p {
+.ageverification-wrapper p {
   text-align: center;
-  font-size: 15px;
+  font-size: 1rem;
   color: var(--light);
   margin-bottom: 20px;
   max-width: 750px;
+  font-family: var(--font-primary);
+  font-weight: 200;
+}
+
+.ageverification-wrapper span {
   font-family: var(--font-accent);
   font-weight: 1;
 }
 
-.age-verification-page .ageverification-wrapper span {
-  font-family: var(--font-accent);
-  font-weight: 1;
-}
-
-.age-verification-page .d-m-y-wrapper {
+.d-m-y-wrapper {
   display: flex;
   justify-content: space-evenly;
   margin-bottom: 20px;
 }
 
-.age-verification-page .d-m-y {
+.d-m-y {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.age-verification-page .d-m-y label {
+.d-m-y label {
   font-size: 20px;
   font-weight: 700;
   color: var(--light);
   margin-bottom: 2px;
 }
 
-.age-verification-page .d-m-y select {
+.d-m-y select {
   padding: 10px;
   width: 100%;
   border: 2px solid var(--light);
   border-radius: 8px;
   background-color: var(--light);
   font-family: var(--font-accent);
-  font-size: 20px;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--dark);
   text-align: center;
 }
-.age-verification-page .d-m-y select::-ms-expand {
+.d-m-y select::-ms-expand {
   display: none; /* Hides default arrow in Internet Explorer */
 }
 
-.age-verification-page .d-m-y option {
+.d-m-y option {
   background-color: var(--light);
   color: var(--dark);
   font-family: var(--font-accent);
   font-size: 16px; /* Adjusted font size */
 }
 
-.age-verification-page .av-form p {
+.av-form p {
   color: var(--light);
-  font-size: 15px;
+  font-size: 1rem;
   margin-bottom: 30px;
   margin-top: 30px;
 }
 
-.age-verification-page .av-button {
+.av-button {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
 }
 
-.age-verification-page button {
-  padding: 12px 30px;
+button {
+  padding: 12px;
   margin: 10px;
   width: 150px;
-  height: 45px;
   border-radius: 6px;
   font-family: var(--font-accent);
   font-weight: 700;
-  font-size: 20px;
+  font-size: 1rem;
   cursor: pointer;
   color: var(--light);
   transition: background-color 0.3s, color 0.3s;
 }
 
-.age-verification-page button:first-child {
+button:first-child {
   background-color: transparent;
   color: var(--light);
   border: 1px solid var(--light);
 }
 
-.age-verification-page button:first-child:hover {
+button:first-child:hover {
   background-color: var(--light);
   color: var(--dark);
 }
 
-.age-verification-page button:last-child {
-  background-color: rgb(39, 104, 53);
+button:last-child {
+  background-color: rgb(12, 151, 243);
   color: white;
   border: none;
 }
 
-.age-verification-page button:last-child:hover {
-  background-color: rgb(12, 151, 243);
+button:last-child:hover {
+  background-color: rgb(39, 104, 53);
 }
 
-@media (max-width: 579px) {
-  .age-verification-page .d-m-y-wrapper {
+@media (max-width: 580px) {
+  .age-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+  }
+  .d-m-y-wrapper {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
+    width: 80vw;
+  }
+
+  .d-m-y select {
+    padding: 6px;
+    font-size: 0.8rem;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  button {
+    width: 100px;
+  }
+
+  .ageverification-wrapper {
+    width: 90vw;
+  }
+
+  .ageverification-wrapper p {
+    font-size: 0.8rem;
+  }
+
+  .av-form p {
+    color: var(--light);
+    font-size: 0.8rem;
+    margin-top: 0;
+    margin-bottom: 15px;
   }
 }

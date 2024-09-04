@@ -15,7 +15,7 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
     CountryId: "",
     StateProvinceId: "",
     PhoneNumber: "",
-    Email: "Noman@skybluewholesale.com",
+    Email: "",
   });
 
   const [countries, setCountries] = useState([
@@ -43,7 +43,7 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
           CountryId: userInfo.CountryId || "",
           StateProvinceId: userInfo.StateProvinceId || "",
           PhoneNumber: userInfo.PhoneNumber || "",
-          Email: userInfo.Email || "Noman@skybluewholesale.com",
+          Email: userInfo.Email || "",
         });
         setStates(statesResponse.data);
         setIsLoading(false);

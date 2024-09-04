@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import './AgeVerificationForm.css';
-import { useNavigate } from 'react-router-dom';
-import { useAgeVerification } from '../../Context/AuthContext/AgeVerificationContext';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAgeVerification } from "../../Context/AuthContext/AgeVerificationContext";
+import VerifcationLayout from "../VerificationLayout/VerificationLayout";
+import { message } from "antd"; // Import Ant Design message
+import "./AgeVerificationForm.css";
 
 const AgeVerificationForm = () => {
   const navigate = useNavigate();
@@ -27,38 +29,45 @@ const AgeVerificationForm = () => {
       const age = today.getFullYear() - birthDate.getFullYear();
       const monthDiff = today.getMonth() - birthDate.getMonth();
       const dayDiff = today.getDate() - birthDate.getDate();
-  
+
       const isOldEnough =
         age > 18 ||
         (age === 18 && (monthDiff > 0 || (monthDiff === 0 && dayDiff >= 0)));
-  
+
       if (isOldEnough) {
         verifyAge();
-        navigate('/');
+        message.success("You are old enough!"); // Success message
+        navigate("/");
       } else {
-        alert("Access denied! You must be 18 or older.");
+        message.error("Access denied! You must be 18 or older."); // Error message
       }
     } else {
-      alert("Please select a valid date of birth.");
+      message.error("Please select a valid date of birth."); // Error message for missing fields
     }
   };
 
   return (
-    <div className='age-verification-page'>
-      <div className='ageverification-wrapper'>
-        <div><img src="./public/logos/logo.png" alt="logo" /></div> 
+    <VerifcationLayout isLoading={false}>
+      <div className="ageverification-wrapper">
+        <div>
+          <img src="./public/logos/logo.png" alt="logo" />
+        </div>
         <h3>Age Verification</h3>
         <div>
           <p>
-            This website requires you to be of legal smoking age. Are you of legal age?
-            Please enter your date of birth below.
+            This website requires you to be of legal smoking age. Are you of
+            legal age? Please enter your date of birth below.
           </p>
         </div>
-        <div className='av-form'>
-          <form onSubmit={handleSubmit}>
-            <div className='d-m-y-wrapper'>
-              <div className='d-m-y w'>
-                <label htmlFor="month">Month<span>(</span><span>MM</span><span>)</span></label>
+        <div className="av-form">
+          <form className="age-form" onSubmit={handleSubmit}>
+            <div className="d-m-y-wrapper">
+              <div className="d-m-y w">
+                <label htmlFor="month">
+                  Month<span>(</span>
+                  <span>MM</span>
+                  <span>)</span>
+                </label>
                 <select id="month" value={month} onChange={handleMonthChange}>
                   <option value="">Select Month</option>
                   {months.map((m) => (
@@ -68,8 +77,12 @@ const AgeVerificationForm = () => {
                   ))}
                 </select>
               </div>
-              <div className='d-m-y w'>
-                <label htmlFor="day">Day<span>(</span><span>DD</span><span>)</span></label>
+              <div className="d-m-y w">
+                <label htmlFor="day">
+                  Day<span>(</span>
+                  <span>DD</span>
+                  <span>)</span>
+                </label>
                 <select id="day" value={day} onChange={handleDayChange}>
                   <option value="">Select Day</option>
                   {days.map((d) => (
@@ -79,8 +92,12 @@ const AgeVerificationForm = () => {
                   ))}
                 </select>
               </div>
-              <div className='d-m-y w'>
-                <label htmlFor="year">Year<span>(</span><span>YYY</span><span>)</span></label>
+              <div className="d-m-y w">
+                <label htmlFor="year">
+                  Year<span>(</span>
+                  <span>YYY</span>
+                  <span>)</span>
+                </label>
                 <select id="year" value={year} onChange={handleYearChange}>
                   <option value="">Select Year</option>
                   {years.map((y) => (
@@ -92,18 +109,21 @@ const AgeVerificationForm = () => {
               </div>
             </div>
             <p>
-              By entering this site you hereby agree you have read our Terms of Service
-              and are in full compliance with it confirming you are a legal adult in your viewing Province.
+              By entering this site you hereby agree you have read our Terms of
+              Service and are in full compliance with it confirming you are a
+              legal adult in your viewing Province.
             </p>
-            <div className='av-button'>
-              <button type="button" onClick={() => alert("Exiting...")}>Exit</button>
+            <div className="av-button">
+              <button type="button" onClick={() => message.info("Exiting...")}>
+                Exit
+              </button>
               <button type="submit">Submit</button>
             </div>
           </form>
         </div>
       </div>
-    </div>
-  );  
+    </VerifcationLayout>
+  );
 };
 
 export default AgeVerificationForm;
