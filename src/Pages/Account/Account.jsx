@@ -2,6 +2,7 @@ import { useState } from "react";
 import Layout from "../../Components/Layout/Layout";
 import AccountOptions from "../../Components/AccountOptions/AccountOptions";
 import AccountInfo from "../../Components/AccountInfo/AccountInfo";
+import OrderHistory from "../../Components/OrderHistory/OrderHistory";
 import ChangePassword from "../../Components/ChangePassword/ChangePassword";
 import "./Account.css";
 
@@ -16,6 +17,7 @@ const Account = ({ page }) => {
           <AccountInfo isLoading={isLoading} setIsLoading={setisLoading} />
         )}
         {page === "password" && <ChangePassword setIsLoading={setisLoading} />}
+        {page === "orders" && <OrderHistory setIsLoading={setisLoading} />}
       </div>
     </Layout>
   );

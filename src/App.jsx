@@ -34,6 +34,7 @@ function App() {
             {/* Protected Routes */}
             <Route path="/" element={<ProtectedRoute element={Home} />} />
             <Route path="user/account-info" element={<ProtectedRoute element={Account} page="info" />} />
+            <Route path="user/orders" element={<ProtectedRoute element={Account} page="orders" />} />
             <Route path="user/change-password" element={<ProtectedRoute element={Account} page="password" />} />
             <Route path="new-arrivals" element={<ProtectedRoute element={NewArrivals} />} />
             <Route path="best-sellers" element={<ProtectedRoute element={BestSeller} />} />

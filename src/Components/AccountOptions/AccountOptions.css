@@ -38,7 +38,7 @@
   background-color: var(--accent);
 }
 
-.logout-button{
+.logout-button {
   cursor: pointer;
   background: transparent;
   border: none;
@@ -52,7 +52,7 @@
   font-weight: 800;
 }
 
-.logout-button:hover{
+.logout-button:hover {
   background-color: rgba(255, 60, 60, 0.405);
 }
 
@@ -72,11 +72,47 @@
     border-radius: 15px 15px 0 0;
   }
 
+  .account-options li:hover {
+    border-radius: 15px 15px 0 0;
+  }
+
   .account-options {
     flex-direction: row;
   }
 
-  .logout-button{
+  .logout-button {
     display: none;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .account-options {
+    justify-content: space-between;
+  }
+
+  .account-options-container {
+    margin: 0;
+  }
+  .account-options .account-link {
+    width: 100%;
+    padding: 1rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+}
+
+@media only screen and (max-width: 350px) {
+  .account-options {
+    justify-content: space-between;
+  }
+
+  .account-options-container {
+    margin: 0;
+  }
+  .account-options .account-link {
+    width: 100%;
+    padding: 1rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
   }
 }
