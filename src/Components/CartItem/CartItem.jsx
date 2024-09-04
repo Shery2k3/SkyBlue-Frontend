@@ -132,7 +132,8 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
           />
         </span>
         <span className="product-name">
-          <p>{product.Name}</p>
+          <p className="name">{product.Name}</p>
+          <span className="smallscreen-price">${price.toFixed(2)}</span>
         </span>
       </div>
       <div className="controller-container">
@@ -178,7 +179,7 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
             <FontAwesomeIcon icon={faPlus} />
           </span>
         </div>
-        <span className="price">${price.toFixed(2)}</span>
+        <span className="bigscreen-price">${price.toFixed(2)}</span>
         <FontAwesomeIcon
           className="remove-item"
           icon={faTrash}

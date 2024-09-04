@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import Skeleton from "antd/es/skeleton/";
 import axiosInstance from "../../api/axiosConfig";
 import { useModal } from "../../Context/ModalContext/ModalContext";
 
@@ -27,6 +28,7 @@ const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [suggestedProducts, setSuggestedProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const { openModal } = useModal();
@@ -60,7 +62,9 @@ const SearchBar = () => {
       if (debouncedSearchTerm) {
         try {
           const response = await axiosInstance.get(
-            `/product/search/${encodeURIComponent(selectedCategory.Id)}?term=${debouncedSearchTerm.trim()}&page=1&size=6`
+            `/product/search/${encodeURIComponent(
+              selectedCategory.Id
+            )}?term=${debouncedSearchTerm.trim()}&page=1&size=6`
           );
           if (response.data.data.length > 0) {
             setSuggestedProducts(response.data.data);
@@ -80,7 +84,12 @@ const SearchBar = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target) && suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target)
+      ) {
         setIsDropdownVisible(false);
         setSuggestedProducts([]);
       }
@@ -103,7 +112,7 @@ const SearchBar = () => {
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
-  };  
+  };
 
   const handleSearchClick = () => {
     if (searchTerm.trim() !== "") {
@@ -121,6 +130,10 @@ const SearchBar = () => {
     }
   };
 
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
+
   const handleClick = (product) => () => {
     openModal(product);
     setSuggestedProducts([]);
@@ -132,9 +145,7 @@ const SearchBar = () => {
         <div className="category-dropdown" ref={dropdownRef}>
           <button className="category-dropbtn" onClick={handleButtonClick}>
             {selectedCategory.Name}
-            <span
-              className={`drop-down-icon`}
-            >
+            <span className={`drop-down-icon`}>
               <FontAwesomeIcon icon={faCaretDown} />
             </span>
           </button>
@@ -169,13 +180,22 @@ const SearchBar = () => {
         />
       </div>
       <div
-        className={`search-suggestions ${suggestedProducts.length > 0 ? "show" : ""}`}
+        className={`search-suggestions ${
+          suggestedProducts.length > 0 ? "show" : ""
+        }`}
         ref={suggestionsRef}
       >
         {suggestedProducts.map((product) => (
           <span key={product.Id} onClick={handleClick(product)}>
             <div className="image-container">
-              <img src={product.Images[0]} alt={product.Name} className="product-image"/>
+              {isLoading && <Skeleton.Image active />}
+              <img
+                src={product.Images[0]}
+                alt={product.Name}
+                className="product-image"
+                onLoad={handleImageLoad}
+                style={{ display: isLoading ? "none" : "block" }}
+              />
             </div>
             {product.Name}
           </span>

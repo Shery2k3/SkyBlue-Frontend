@@ -8,7 +8,7 @@ import axiosInstance from "../../api/axiosConfig"; // Import the configured Axio
 
 const Category = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [category, setCategory] = useState()
+  const [category, setCategory] = useState("category")
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const { categoryId } = useParams();
@@ -31,6 +31,7 @@ const Category = () => {
         const response = await axiosInstance.get(
           `/product/category/${categoryId}?page=${currentPage}&size=18`
         );
+        console.log(response.data)
         setCategory(response.data.categoryName);
         setProducts(response.data.data);
         setTotalPages(response.data.totalPages);

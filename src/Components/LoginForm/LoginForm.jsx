@@ -76,7 +76,7 @@ const LoginForm = () => {
           <div className="input-box">
             <label htmlFor="loginemail">Your Email</label>
             <input
-              type="text"
+              type="email"
               placeholder="example@gmail.com"
               id="loginemail"
               name="loginemail"
@@ -107,7 +107,7 @@ const LoginForm = () => {
               />
               <p className="remember-me">Remember me</p>
             </label>
-            <Link to="/forget-password">Forget password?</Link>
+            <Link to="/forget-password" className="forget-password">Forget password?</Link>
           </div>
           {alert.visible && (
       <Alert

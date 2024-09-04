@@ -28,7 +28,7 @@ const Category = () => {
 
   return (
     <div className="category-container">
-      <h2>Categories</h2>
+      <h2>Top Categories</h2>
       <div className="category-menu">
         {categories.map((category) => (
           <span key={category.Id} onClick={() => handleCategoryClick(category)}>

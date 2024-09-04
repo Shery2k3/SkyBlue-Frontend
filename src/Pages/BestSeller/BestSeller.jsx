@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
+import Category from "../../Components/Category/Category";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import axiosInstance from "../../api/axiosConfig";
 
@@ -24,6 +25,7 @@ const BestSeller = () => {
 
   return (
     <Layout pageTitle="Best Seller" style="style1" isLoading={isLoading}>
+      <Category />
       <ProductGrid category="Best Sellers" products={products} />
     </Layout>
   );

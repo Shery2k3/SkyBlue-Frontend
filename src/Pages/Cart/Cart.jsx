@@ -14,7 +14,7 @@ const Cart = () => {
     subtotal: 0,
     Shipping: 0,
     tax: 0,
-    Discount: 1.19,
+    discount: 1.19,
     total: 0,
   });
 
@@ -27,7 +27,7 @@ const Cart = () => {
         subtotal: response.data.totalPrice,
         Shipping: 0,
         tax: response.data.taxAmount,
-        Discount: 1.19,
+        discount: 1.19,
         total: response.data.finalPrice - 1.19,
       });
       setisLoading(false);

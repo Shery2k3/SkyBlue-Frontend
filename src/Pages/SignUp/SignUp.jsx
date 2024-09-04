@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import SignupForm from "../../Components/SignUpForm/SignUpForm";
-import VerifcationLayout from "../../Components/VerificationLayout/VerificationLayout";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 
 const SignUp = () => {
@@ -36,11 +35,8 @@ const SignUp = () => {
       navigate("/");
     }
   }, [contextToken, navigate]);
- 
 
-  return (
-      <SignupForm/>
-  );
+  return <SignupForm />;
 };
 
 export default SignUp;

@@ -84,7 +84,7 @@ const Confirmation = ({ shippingMethod, products, cartSummary }) => {
         tax={tax}
         discount={Discount}
         shippingMethod={shippingMethod}
-        total={total}
+        total={total.toFixed(2)}
       />
     </div>
   );
