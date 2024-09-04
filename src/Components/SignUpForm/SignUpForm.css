@@ -306,3 +306,11 @@
   color: var(--secondary);
   text-decoration: underline;
 }
+/* SignUpForm.css */
+
+/* Add this CSS rule for error messages */
+.error-message {
+  color: red;
+  font-size: 0.875rem; /* Adjust font size if needed */
+  margin-top: 0.25rem; /* Space between input and error message */
+}

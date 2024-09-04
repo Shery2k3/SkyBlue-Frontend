@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import "./SignUpForm.css";
 import LogoAccent from "/Logos/LogoAccent.png";
 import { Link } from "react-router-dom";
@@ -6,36 +7,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBox } from "@fortawesome/free-solid-svg-icons";
 
 const SignupForm = () => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    companyName: "",
-    storeAddress: "",
-    businessLicense: null,
-    streetAddress1: "",
-    streetAddress2: "",
-    zipCode: "",
-    city: "",
-    country: "",
-    state: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: files ? files[0] : value,
-    }));
+  const onSubmit = (data) => {
+    console.log("Form submitted:", data);
+    // Your data submission logic here
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-  };
+  // Watch password value to compare with confirm password
+  const password = watch("password");
 
   return (
     <div className="bg-signup">
@@ -44,7 +29,7 @@ const SignupForm = () => {
           <img src={LogoAccent} alt="Company Logo" />
         </div>
         <div className="inner-wrapper-signup">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <h2 className="form-heading">Register Your Account</h2>
 
             <div className="linebreak">
@@ -57,33 +42,33 @@ const SignupForm = () => {
               <input
                 type="text"
                 id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
+                {...register("firstName", { required: "First name is required" })}
               />
+              {errors.firstName && <span className="error-message">{errors.firstName.message}</span>}
             </div>
             <div className="input-box">
               <label htmlFor="lastName">Last Name</label>
               <input
                 type="text"
                 id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
+                {...register("lastName", { required: "Last name is required" })}
               />
+              {errors.lastName && <span className="error-message">{errors.lastName.message}</span>}
             </div>
             <div className="input-box">
               <label htmlFor="email">Email</label>
               <input
                 type="email"
                 id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    message: "Enter a valid email address",
+                  },
+                })}
               />
+              {errors.email && <span className="error-message">{errors.email.message}</span>}
             </div>
 
             <div className="linebreak">
@@ -96,22 +81,18 @@ const SignupForm = () => {
               <input
                 type="text"
                 id="companyName"
-                name="companyName"
-                value={formData.companyName}
-                onChange={handleChange}
-                required
+                {...register("companyName", { required: "Company name is required" })}
               />
+              {errors.companyName && <span className="error-message">{errors.companyName.message}</span>}
             </div>
             <div className="input-box">
               <label htmlFor="storeAddress">Store Address</label>
               <input
                 type="text"
                 id="storeAddress"
-                name="storeAddress"
-                value={formData.storeAddress}
-                onChange={handleChange}
-                required
+                {...register("storeAddress", { required: "Store address is required" })}
               />
+              {errors.storeAddress && <span className="error-message">{errors.storeAddress.message}</span>}
             </div>
 
             <label htmlFor="businessLicense">
@@ -121,8 +102,7 @@ const SignupForm = () => {
               <input
                 type="file"
                 id="businessLicense"
-                name="businessLicense"
-                onChange={handleChange}
+                {...register("businessLicense")}
               />
               <FontAwesomeIcon
                 icon={faBox}
@@ -142,20 +122,18 @@ const SignupForm = () => {
               <input
                 type="text"
                 id="streetAddress1"
-                name="streetAddress1"
-                value={formData.streetAddress1}
-                onChange={handleChange}
-                required
+                {...register("streetAddress1", {
+                  required: "Street address is required",
+                })}
               />
+              {errors.streetAddress1 && <span className="error-message">{errors.streetAddress1.message}</span>}
             </div>
             <div className="input-box">
               <label htmlFor="streetAddress2">Street Address 2</label>
               <input
                 type="text"
                 id="streetAddress2"
-                name="streetAddress2"
-                value={formData.streetAddress2}
-                onChange={handleChange}
+                {...register("streetAddress2")}
               />
             </div>
             <div className="input-box">
@@ -163,44 +141,36 @@ const SignupForm = () => {
               <input
                 type="text"
                 id="zipCode"
-                name="zipCode"
-                value={formData.zipCode}
-                onChange={handleChange}
-                required
+                {...register("zipCode", { required: "Zip code is required" })}
               />
+              {errors.zipCode && <span className="error-message">{errors.zipCode.message}</span>}
             </div>
             <div className="input-box">
               <label htmlFor="city">City</label>
               <input
                 type="text"
                 id="city"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                required
+                {...register("city", { required: "City is required" })}
               />
+              {errors.city && <span className="error-message">{errors.city.message}</span>}
             </div>
             <div className="input-box">
               <label htmlFor="country">Country</label>
               <input
                 type="text"
                 id="country"
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-                required
+                {...register("country", { required: "Country is required" })}
               />
+              {errors.country && <span className="error-message">{errors.country.message}</span>}
             </div>
             <div className="input-box">
               <label htmlFor="state">State / Province</label>
               <input
                 type="text"
                 id="state"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                required
+                {...register("state", { required: "State is required" })}
               />
+              {errors.state && <span className="error-message">{errors.state.message}</span>}
             </div>
 
             <div className="linebreak">
@@ -213,11 +183,9 @@ const SignupForm = () => {
               <input
                 type="tel"
                 id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
+                {...register("phone", { required: "Phone number is required" })}
               />
+              {errors.phone && <span className="error-message">{errors.phone.message}</span>}
             </div>
 
             <div className="linebreak">
@@ -230,22 +198,28 @@ const SignupForm = () => {
               <input
                 type="password"
                 id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters long",
+                  },
+                })}
               />
+              {errors.password && <span className="error-message">{errors.password.message}</span>}
             </div>
             <div className="input-box">
               <label htmlFor="confirmPassword">Confirm Password</label>
               <input
                 type="password"
                 id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
+                {...register("confirmPassword", {
+                  required: "Please confirm your password",
+                  validate: (value) =>
+                    value === password || "Passwords do not match",
+                })}
               />
+              {errors.confirmPassword && <span className="error-message">{errors.confirmPassword.message}</span>}
             </div>
 
             <button type="submit" className="submit-button">
@@ -259,7 +233,7 @@ const SignupForm = () => {
           </div>
           <div className="register_link">
             <p>
-              Already had An Account?{" "}
+              Already have an Account?{" "}
               <Link to="/login" className="link-of-signup">
                 Sign in
               </Link>
