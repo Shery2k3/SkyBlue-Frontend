@@ -34,22 +34,20 @@ const Navbar = () => {
     },
     {
       key: "3",
-      label: <Link to="/login" onClick={logout}>Logout</Link>,
+      label: (
+        <Link to="/login" onClick={logout}>
+          Logout
+        </Link>
+      ),
     },
   ];
 
   const activate = () => {
     setActive(!isActive);
-    if (!isActive) {
-      document.body.classList.add("no-scroll");
-    } else {
-      document.body.classList.remove("no-scroll");
-    }
   };
 
   const closeNav = () => {
     setActive(false);
-    document.body.classList.remove("no-scroll");
   };
 
   const handleTouchStart = (e) => {
@@ -95,12 +93,17 @@ const Navbar = () => {
 
   return (
     <nav className={`navbar ${isSticky ? "sticky" : ""}`}>
+      <FontAwesomeIcon icon={faBars} onClick={activate} className="menu" />
       <Link to="/">
         <img
           src={LogoAccent}
           alt="Logo"
           className={isSticky ? "small-logo" : ""}
         />
+      </Link>
+
+      <Link to="/cart">
+        <FontAwesomeIcon icon={faCartShopping} className="menu" />
       </Link>
 
       <ul
@@ -186,9 +189,21 @@ const Navbar = () => {
             Contact
           </Link>
         </li>
+        <li>
+          <Link
+            className={`nav-items responsive ${
+              location.pathname === "/user/account-info" ? "nav-item-active" : ""
+            }`}
+            onClick={() => {
+              scrollToTop();
+              handleLinkClick();
+            }}
+            to="/user/account-info"
+          >
+            My Account
+          </Link>
+        </li>
       </ul>
-
-      <FontAwesomeIcon icon={faBars} onClick={activate} className="menu" />
 
       <div className="icons">
         <Link className="cart-icon" to="/cart">

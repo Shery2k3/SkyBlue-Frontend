@@ -277,7 +277,7 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
       </section>
 
       <div className="actions-container">
-        <button onClick={handleSave}>Save</button>
+        <button className="save-button" onClick={handleSave}>Save</button>
       </div>
     </div>
   );
