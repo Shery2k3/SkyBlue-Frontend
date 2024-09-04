@@ -8,6 +8,9 @@ import LogoAccent from "/Logos/LogoAccent.png";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBox } from "@fortawesome/free-solid-svg-icons";
+import { Upload, Button } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+
 
 const SignupForm = () => {
   const {
@@ -135,19 +138,21 @@ const SignupForm = () => {
               Business license or Corporation Paper
             </label>
             <div className="input-box-1">
-              <input
-                type="file"
-                id="businessLicense"
-                {...register("documents")}
-                multiple
-              />
-              <FontAwesomeIcon
-                icon={faBox}
-                size="3x"
-                style={{ color: "#00273E" }}
-              />
-              <p>Click or drag file to this area to upload</p>
-            </div>
+  <div className="upload-icon">
+    <Upload
+      {...register("documents")}
+      listType="picture-card"
+      beforeUpload={() => false}
+      multiple
+    >
+      <Button icon={<UploadOutlined />} className="upload-btn">
+        
+      </Button>
+    </Upload>
+  </div>
+  <p className="drag-text">Click or drag file to this area to upload</p>
+</div>
+
 
             <div className="linebreak">
               <h3>
