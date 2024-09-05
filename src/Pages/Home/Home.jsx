@@ -15,10 +15,6 @@ const Home = () => {
   const [allProducts, setAllProducts] = useState([])
   const { token } = useContext(AuthContext);
 
-  useEffect(()=>{
-    console.log(token)
-  },[token])
-
   useEffect(() => {
     const fetchData = async () => {
       try {
