@@ -12,16 +12,34 @@ const Home = () => {
   const [isLoading, setisLoading] = useState(true);
   const [bestSellers, setBestSellers] = useState([]);
   const [newArrival, setNewArrival] = useState([]);
-  const [allProducts, setAllProducts] = useState([])
+  const [allProducts, setAllProducts] = useState([]);
   const { token } = useContext(AuthContext);
+
+  // Retry logic helper function
+  const retryRequest = async (axiosCall, retries = 3) => {
+    let attempt = 0;
+    while (attempt < retries) {
+      try {
+        const response = await axiosCall();
+        return response;
+      } catch (error) {
+        attempt++;
+        if (error.response && error.response.status === 401 && attempt < retries) {
+          console.warn(`Retrying request, attempt: ${attempt}`);
+        } else {
+          throw error; 
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [bestSellersResult, newArrivalResult, allProducts] = await Promise.allSettled([
-          axiosInstance.get(`/product/bestseller`),
-          axiosInstance.get(`/product/newarrivals`),
-          axiosInstance.get(`/product/category/-1?page=1&size=12`),
+        const [bestSellersResult, newArrivalResult, allProductsResult] = await Promise.allSettled([
+          retryRequest(() => axiosInstance.get(`/product/bestseller`)),
+          retryRequest(() => axiosInstance.get(`/product/newarrivals`)),
+          retryRequest(() => axiosInstance.get(`/product/category/-1?page=1&size=12`)),
         ]);
 
         if (bestSellersResult.status === "fulfilled") {
@@ -42,12 +60,12 @@ const Home = () => {
           );
         }
 
-        if (allProducts.status === "fulfilled") {
-          setAllProducts(allProducts.value.data.data);
+        if (allProductsResult.status === "fulfilled") {
+          setAllProducts(allProductsResult.value.data.data);
         } else {
           console.error(
             "Failed to load All Products:",
-            allProducts.reason
+            allProductsResult.reason
           );
         }
 
