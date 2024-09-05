@@ -4,6 +4,8 @@ import Layout from "../../Components/Layout/Layout";
 import Category from "../../Components/Category/Category";
 import ProductSlider from "../../Components/ProductSlider/ProductSlider";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
+import { useContext } from "react";
+import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import axiosInstance from "../../api/axiosConfig"; // Import the Axios instance
 
 const Home = () => {
@@ -11,6 +13,11 @@ const Home = () => {
   const [bestSellers, setBestSellers] = useState([]);
   const [newArrival, setNewArrival] = useState([]);
   const [allProducts, setAllProducts] = useState([])
+  const { token } = useContext(AuthContext);
+
+  useEffect(()=>{
+    console.log(token)
+  },[token])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +63,7 @@ const Home = () => {
     };
 
     fetchData();
-  }, []);
+  }, [token]);
 
   return (
     <Layout pageTitle="Home" style="style1" isLoading={isLoading}>

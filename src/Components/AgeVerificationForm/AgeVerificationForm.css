@@ -31,26 +31,26 @@
   font-weight: 1;
 }
 
-.d-m-y-wrapper {
+.ageverification-wrapper .d-m-y-wrapper {
   display: flex;
   justify-content: space-evenly;
   margin-bottom: 20px;
 }
 
-.d-m-y {
+.ageverification-wrapper .d-m-y {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.d-m-y label {
+.ageverification-wrapper .d-m-y label {
   font-size: 20px;
   font-weight: 700;
   color: var(--light);
   margin-bottom: 2px;
 }
 
-.d-m-y select {
+.ageverification-wrapper .d-m-y select {
   padding: 10px;
   width: 100%;
   border: 2px solid var(--light);
@@ -62,32 +62,32 @@
   color: var(--dark);
   text-align: center;
 }
-.d-m-y select::-ms-expand {
+.ageverification-wrapper .d-m-y select::-ms-expand {
   display: none; /* Hides default arrow in Internet Explorer */
 }
 
-.d-m-y option {
+.ageverification-wrapper .d-m-y option {
   background-color: var(--light);
   color: var(--dark);
   font-family: var(--font-accent);
-  font-size: 16px; /* Adjusted font size */
+  font-size: 16px;
 }
 
-.av-form p {
+.ageverification-wrapper .av-form p {
   color: var(--light);
   font-size: 1rem;
   margin-bottom: 30px;
   margin-top: 30px;
 }
 
-.av-button {
+.ageverification-wrapper .av-button {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
 }
 
-button {
+.ageverification-wrapper button {
   padding: 12px;
   margin: 10px;
   width: 150px;
@@ -100,48 +100,49 @@ button {
   transition: background-color 0.3s, color 0.3s;
 }
 
-button:first-child {
+.ageverification-wrapper button:first-child {
   background-color: transparent;
   color: var(--light);
   border: 1px solid var(--light);
 }
 
-button:first-child:hover {
+.ageverification-wrapper button:first-child:hover {
   background-color: var(--light);
   color: var(--dark);
 }
 
-button:last-child {
+.ageverification-wrapper button:last-child {
   background-color: rgb(12, 151, 243);
   color: white;
   border: none;
 }
 
-button:last-child:hover {
+.ageverification-wrapper button:last-child:hover {
   background-color: rgb(39, 104, 53);
 }
 
 @media (max-width: 580px) {
-  .age-form{
+  .ageverification-wrapper .age-form{
     display: flex;
     flex-direction: column;
     align-items: center;  
   }
-  .d-m-y-wrapper {
+
+  .ageverification-wrapper .d-m-y-wrapper {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
     width: 80vw;
   }
 
-  .d-m-y select {
+  .ageverification-wrapper .d-m-y select {
     padding: 6px;
     font-size: 0.8rem;
     text-align: center;
     margin-bottom: 10px;
   }
 
-  button {
+  .ageverification-wrapper button {
     width: 100px;
   }
 
@@ -153,7 +154,7 @@ button:last-child:hover {
     font-size: 0.8rem;
   }
 
-  .av-form p {
+  .ageverification-wrapper .av-form p {
     color: var(--light);
     font-size: 0.8rem;
     margin-top: 0;
