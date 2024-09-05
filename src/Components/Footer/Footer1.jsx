@@ -85,12 +85,12 @@ const Footer1 = () => {
             <h2 className="footer1-heading">OUR SOCIALS</h2>
             <div className="footer1-socials">
               <a
-                href="https://www.facebook.com/profile.php?id=61550104945269"
+                href="/"
                 target="_"
               >
                 <FontAwesomeIcon icon={faFacebookF} className="footer1-social" />
               </a>
-              <a href="https://www.instagram.com/m_fast_food/" target="_">
+              <a href="/" target="_">
                 <FontAwesomeIcon icon={faInstagram} className="footer1-social" />
               </a>
               <FontAwesomeIcon icon={faXTwitter} className="footer1-social" />
