@@ -6,7 +6,7 @@ const PaymentInformation = () => {
       <h3>Payment Information</h3>
       <span className="address">
         <p>
-          Sky Blue Enterprises
+          Sky Blue Wholesale
           <br />
           1300 Kamato rd, unit 8 & 9,
           <br />
