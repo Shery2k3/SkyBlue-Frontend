@@ -26,6 +26,7 @@ const ReturnPolicy = lazy(() => import("./Pages/Information/ReturnPolicy"));
 const TermsConditions = lazy(() =>
   import("./Pages/Information/TermsConditions")
 );
+const OrderPlaced = lazy(()=> import("./Components/NotFound/OrderPlaced"))
 
 function App() {
   return (
@@ -80,6 +81,10 @@ function App() {
             <Route
               path="onepagecheckout"
               element={<ProtectedRoute element={OnePageCheckout} />}
+            />
+            <Route
+              path="orderplaced"
+              element={<ProtectedRoute element={OrderPlaced} />}
             />
             <Route
               path="privacy-policy"

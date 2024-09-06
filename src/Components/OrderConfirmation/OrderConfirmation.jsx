@@ -12,7 +12,7 @@ const OrderConfirmation = ({ subTotal, shipping, tax, discount, shippingMethod, 
       const response = await axiosInstance.post(`/checkout`, {
         newShippingMethodId: shippingMethod.newShippingMethodId,
       });
-      navigate("/")
+      navigate("/orderplaced", { state: { orderPlaced: true } });
       message.success("Order Placed");
     } catch (error) {
       console.error("Error placing order:", error);

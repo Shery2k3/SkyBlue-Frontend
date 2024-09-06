@@ -26,6 +26,8 @@ const Footer2 = () => {
       window.location.href = `tel:${phoneNumber}`;
     } else if (contactType === "whatsapp") {
       window.open(`https://wa.me/${phoneNumber}`, "_blank");
+    } else if (contactType === "location") {
+      window.open(`https://www.google.com/maps/dir//SkyBlue+Wholesale+Ltd.+1300+Kamato+Rd+%238%269+Mississauga,+ON+L4W+2N2+Canada/@43.6489946,-79.6447795,14.25z/data=!4m8!4m7!1m0!1m5!1m1!1s0x882b38b822595eef:0xc6a638e8c0217d16!2m2!1d-79.6384887!2d43.642971?entry=ttu&g_ep=EgoyMDI0MDkwNC4wIKXMDSoASAFQAw%3D%3D`, "_blank");
     }
   };
 
@@ -58,7 +60,7 @@ const Footer2 = () => {
           <div className="footer2-get-in-touch">
             <div>
               <h2 className="footer2-heading">GET IN TOUCH</h2>
-              <span onClick={() => handleContactClick("phone")}>
+              <span onClick={() => handleContactClick("location")}>
                 <FontAwesomeIcon icon={faLocationDot} className="footer2-icon" />{" "}
                 <p>1300 Kamato Rd Unit 8 &  <br /> Mississauga, Ontario L4W 2N2</p>
               </span>
@@ -83,7 +85,7 @@ const Footer2 = () => {
               >
                 <FontAwesomeIcon icon={faFacebookF} className="footer2-social" />
               </a>
-              <a href="/" target="_">
+              <a href="https://www.instagram.com/skybluewholesaleltd" target="_">
                 <FontAwesomeIcon icon={faInstagram} className="footer2-social" />
               </a>
               <FontAwesomeIcon icon={faXTwitter} className="footer2-social" />

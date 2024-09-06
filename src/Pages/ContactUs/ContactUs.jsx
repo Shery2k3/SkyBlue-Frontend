@@ -10,7 +10,7 @@ const ContactUs = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setisLoading(false);
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
