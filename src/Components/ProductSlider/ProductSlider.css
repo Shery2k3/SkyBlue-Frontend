@@ -33,6 +33,7 @@
 }
 
 .product-slider .slider-item {
+    padding-bottom: 10px;
     display: flex !important;
     align-items: center;
     justify-content: center;
