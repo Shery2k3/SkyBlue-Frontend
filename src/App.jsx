@@ -18,7 +18,14 @@ const Cart = lazy(() => import("./Pages/Cart/Cart"));
 const Login = lazy(() => import("./Pages/Login/Login"));
 const SignUp = lazy(() => import("./Pages/SignUp/SignUp"));
 const Category = lazy(() => import("./Pages/Category/Category"));
-const OnePageCheckout = lazy(() => import("./Pages/OnePageCheckout/OnePageCheckout"));
+const OnePageCheckout = lazy(() =>
+  import("./Pages/OnePageCheckout/OnePageCheckout")
+);
+const PrivacyPolicy = lazy(() => import("./Pages/Information/PrivacyPolicy"));
+const ReturnPolicy = lazy(() => import("./Pages/Information/ReturnPolicy"));
+const TermsConditions = lazy(() =>
+  import("./Pages/Information/TermsConditions")
+);
 
 function App() {
   return (
@@ -33,17 +40,59 @@ function App() {
 
             {/* Protected Routes */}
             <Route path="/" element={<ProtectedRoute element={Home} />} />
-            <Route path="user/account-info" element={<ProtectedRoute element={Account} page="info" />} />
-            <Route path="user/orders" element={<ProtectedRoute element={Account} page="orders" />} />
-            <Route path="user/change-password" element={<ProtectedRoute element={Account} page="password" />} />
-            <Route path="new-arrivals" element={<ProtectedRoute element={NewArrivals} />} />
-            <Route path="best-sellers" element={<ProtectedRoute element={BestSeller} />} />
-            <Route path="all-products" element={<ProtectedRoute element={AllProducts} />} />
-            <Route path="search" element={<ProtectedRoute element={Search} />} />
-            <Route path="contact-us" element={<ProtectedRoute element={ContactUs} />} />
+            <Route
+              path="user/account-info"
+              element={<ProtectedRoute element={Account} page="info" />}
+            />
+            <Route
+              path="user/orders"
+              element={<ProtectedRoute element={Account} page="orders" />}
+            />
+            <Route
+              path="user/change-password"
+              element={<ProtectedRoute element={Account} page="password" />}
+            />
+            <Route
+              path="new-arrivals"
+              element={<ProtectedRoute element={NewArrivals} />}
+            />
+            <Route
+              path="best-sellers"
+              element={<ProtectedRoute element={BestSeller} />}
+            />
+            <Route
+              path="all-products"
+              element={<ProtectedRoute element={AllProducts} />}
+            />
+            <Route
+              path="search"
+              element={<ProtectedRoute element={Search} />}
+            />
+            <Route
+              path="contact-us"
+              element={<ProtectedRoute element={ContactUs} />}
+            />
             <Route path="cart" element={<ProtectedRoute element={Cart} />} />
-            <Route path="category/:categoryId" element={<ProtectedRoute element={Category} />} />
-            <Route path="onepagecheckout" element={<ProtectedRoute element={OnePageCheckout} />} />
+            <Route
+              path="category/:categoryId"
+              element={<ProtectedRoute element={Category} />}
+            />
+            <Route
+              path="onepagecheckout"
+              element={<ProtectedRoute element={OnePageCheckout} />}
+            />
+            <Route
+              path="privacy-policy"
+              element={<ProtectedRoute element={PrivacyPolicy} />}
+            />
+            <Route
+              path="return-policy"
+              element={<ProtectedRoute element={ReturnPolicy} />}
+            />
+            <Route
+              path="terms-and-conditions"
+              element={<ProtectedRoute element={TermsConditions} />}
+            />
 
             {/* Catch-all for non-existent routes */}
             <Route path="*" element={<NotFound />} />

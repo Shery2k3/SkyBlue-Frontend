@@ -43,13 +43,13 @@ const Footer2 = () => {
           <div className="footer2-quick-links">
             <h2 className="footer2-heading">INFORMATION</h2>
             <span>
-              <Link className="footer2-link" onClick={scrollToTop} to="/">
-                Refunds policy
+              <Link className="footer2-link" onClick={scrollToTop} to="/return-policy">
+                Return policy
               </Link>
-              <Link className="footer2-link" onClick={scrollToTop} to="/">
+              <Link className="footer2-link" onClick={scrollToTop} to="/privacy-policy">
                 Privacy policy
               </Link>
-              <Link className="footer2-link" onClick={scrollToTop} to="/">
+              <Link className="footer2-link" onClick={scrollToTop} to="/terms-and-conditions">
                 Terms & Conditions
               </Link>
             </span>
