@@ -2,9 +2,8 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import SubBanner from "/Images/sub-banner.webp";
 import Banner1 from "/Images/banner1.webp";
-import Banner2 from "/Images/banner2.webp"
+import Banner2 from "/Images/banner2.webp";
 
 function Banner() {
   const settings = {
@@ -21,29 +20,16 @@ function Banner() {
   };
 
   return (
-    <div className="banners-container">
-      <div className="banner">
-        <div className="slider-container">
-          <Slider {...settings}>
-            <div className="banner-image-container">
-              <img
-                className="banner-image"
-                src={Banner1}
-                alt="banner 1"
-              />
-            </div>
-            <div>
-              <img
-                className="banner-image"
-                src={Banner2}
-                alt="banner 2"
-              />
-            </div>
-          </Slider>
-        </div>
-      </div>
-      <div className="sub-banner">
-        <img src={SubBanner} alt="" />
+    <div className="banner">
+      <div className="slider-container">
+        <Slider {...settings}>
+          <div className="banner-image-container">
+            <img className="banner-image" src={Banner1} alt="banner 1" />
+          </div>
+          <div>
+            <img className="banner-image" src={Banner2} alt="banner 2" />
+          </div>
+        </Slider>
       </div>
     </div>
   );

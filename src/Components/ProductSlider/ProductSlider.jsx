@@ -35,21 +35,14 @@ const ProductSlider = ({ category, products }) => {
         },
       },
       {
-        breakpoint: 1340,
+        breakpoint: 1200,
         settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
+          slidesToShow: 4,
+          slidesToScroll: 4,
         },
       },
       {
-        breakpoint: 1060,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 867,
+        breakpoint: 1120,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 3,
@@ -76,18 +69,6 @@ const ProductSlider = ({ category, products }) => {
     <div className="product-slider">
       <div className="slider-header">
         <h2>{category}</h2>
-        <div className="slider-controller">
-          <FontAwesomeIcon
-            className="slider-controller-button"
-            icon={faArrowLeft}
-            onClick={() => sliderRef.current.slickPrev()}
-          />
-          <FontAwesomeIcon
-            className="slider-controller-button"
-            icon={faArrowRight}
-            onClick={() => sliderRef.current.slickNext()}
-          />
-        </div>
       </div>
       <div className="slider-container">
         {products.length>0 && <Slider ref={sliderRef} {...settings}>

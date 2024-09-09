@@ -6,7 +6,8 @@ import ProductSlider from "../../Components/ProductSlider/ProductSlider";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import { useContext } from "react";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
-import axiosInstance from "../../api/axiosConfig"; // Import the Axios instance
+import axiosInstance from "../../api/axiosConfig";
+import Banner from "../../Components/Banner/Banner";
 
 const Home = () => {
   const [isLoading, setisLoading] = useState(true);
@@ -24,10 +25,14 @@ const Home = () => {
         return response;
       } catch (error) {
         attempt++;
-        if (error.response && error.response.status === 401 && attempt < retries) {
+        if (
+          error.response &&
+          error.response.status === 401 &&
+          attempt < retries
+        ) {
           console.warn(`Retrying request, attempt: ${attempt}`);
         } else {
-          throw error; 
+          throw error;
         }
       }
     }
@@ -36,11 +41,14 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [bestSellersResult, newArrivalResult, allProductsResult] = await Promise.allSettled([
-          retryRequest(() => axiosInstance.get(`/product/bestseller`)),
-          retryRequest(() => axiosInstance.get(`/product/newarrivals`)),
-          retryRequest(() => axiosInstance.get(`/product/category/-1?page=1&size=12`)),
-        ]);
+        const [bestSellersResult, newArrivalResult, allProductsResult] =
+          await Promise.allSettled([
+            retryRequest(() => axiosInstance.get(`/product/bestseller?size=10`)),
+            retryRequest(() => axiosInstance.get(`/product/newarrivals?size=10`)),
+            retryRequest(() =>
+              axiosInstance.get(`/product/category/-1?page=1&size=12`)
+            ),
+          ]);
 
         if (bestSellersResult.status === "fulfilled") {
           setBestSellers(bestSellersResult.value.data);
@@ -82,6 +90,7 @@ const Home = () => {
   return (
     <Layout pageTitle="Home" style="style1" isLoading={isLoading}>
       <>
+        <Banner />
         <Category />
         <ProductSlider category="New Arrivals" products={newArrival} />
         <ProductSlider category="Best Sellers" products={bestSellers} />

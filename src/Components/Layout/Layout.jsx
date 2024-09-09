@@ -2,12 +2,10 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import Loader from "../Loader/Loader";
 
 // Lazy load components
-const Sidebar = lazy(() => import("../SideBar/Sidebar"));
-const Navbar = lazy(() => import("../Navbar/Navbar"));
+import Navbar from "../Navbar/Navbar";
+import NavMenu from "../NavMenu/NavMenu";
 const Header = lazy(() => import("../Header/Header"));
-const Banner = lazy(() => import("../Banner/Banner"));
 const Footer1 = lazy(() => import("../Footer/Footer1"));
-const Footer2 = lazy(() => import("../Footer/Footer2"));
 const AgeVerificationForms = lazy(() =>
   import("../AgeVerificationForm/AgeVerificationForm")
 );
@@ -45,37 +43,16 @@ const Layout = ({ pageTitle, children, style, isLoading }) => {
         </Suspense>
       ) : (
         <>
-          {style === "style1" ? (
-            <div className="layout1">
-              <Suspense fallback={<Loader isActive={true} />}>
-                {isMobile ? <Navbar /> : <Sidebar />}
-                <div className="content-style1">
-                  <Header />
-                  <Banner />
-                  {children}
-                </div>
-                {isMobile ? (
-                  <Suspense fallback={<Loader isActive={true} />}>
-                    <Footer1 />
-                  </Suspense>
-                ) : (
-                  <Suspense fallback={<Loader isActive={true} />}>
-                    <Footer2 />
-                  </Suspense>
-                )}
-              </Suspense>
-            </div>
-          ) : (
-            <div className="layout2">
-              <Suspense fallback={<Loader isActive={true} />}>
-                <Navbar />
-              </Suspense>
-              <div className="content-style2">{children}</div>
-              <Suspense fallback={<Loader isActive={true} />}>
-                <Footer1 />
-              </Suspense>
-            </div>
-          )}
+          <div className="layout">
+          <Header />
+          <Navbar />
+          <NavMenu />
+            <div className="content">{children}</div>
+            <Suspense fallback={<Loader isActive={true} />}>
+              <Footer1 />
+            </Suspense>
+          </div>
+
           {modalProduct && (
             <ProductModal product={modalProduct} onClose={closeModal} />
           )}

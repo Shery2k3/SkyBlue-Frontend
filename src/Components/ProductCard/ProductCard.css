@@ -3,7 +3,7 @@
     height: 330px;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(17, 151, 231, 0.2);
+    box-shadow: rgba(17, 151, 231, 0.2) 0px 3px 8px;
     background-color: #fff;
     text-align: center;
     position: relative;
