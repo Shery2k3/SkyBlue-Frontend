@@ -1,5 +1,5 @@
 .cart-page{
-    margin: 4rem 0;
+    margin: 110px 0;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -8,6 +8,7 @@
 
 .cart-page img{
     width: 300px;
+    margin-top: 73px;
     margin-bottom: 3rem;
 }
 

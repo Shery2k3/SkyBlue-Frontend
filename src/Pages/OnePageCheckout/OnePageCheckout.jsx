@@ -1,5 +1,6 @@
 import { useEffect, useState, lazy, Suspense } from "react";
 import Layout from "../../Components/Layout/Layout";
+import NavbarFixed from "../../Components/Navbar/NavbarFixed";
 import { Steps } from "antd";
 const ShippingMethod = lazy(() =>
   import("../../Components/CheckoutComponents/ShippingMethod/ShippingMethod")
@@ -110,6 +111,7 @@ const OnePageCheckout = () => {
 
   return (
     <Layout pageTitle="One Page Checkout" isLoading={false}>
+      <NavbarFixed />
       <div className="onepagecheckout">
         <Steps current={currentStep} items={items} />
 

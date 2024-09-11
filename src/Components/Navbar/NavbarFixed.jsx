@@ -1,30 +1,29 @@
-import SearchBar from "../Search/SearchBar";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LogoAccent from "/Logos/LogoAccent.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNav } from "../../Context/NavContext/NavContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCartShopping,
   faChevronDown,
   faBars,
+  faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 
 
-const Header = () => {
+const NavbarFixed = () => {
   const { isNavOpen, toggleNav } = useNav();
 
   return (
-    <div className="header">
-      <div className="header-left">
-        <Link to="/">
-          <img src={LogoAccent} alt="logo" className="logo" />
-        </Link>
-        <FontAwesomeIcon icon={faBars} className="menu" onClick={toggleNav} />
+    <nav className="navbar visible">
+      <FontAwesomeIcon icon={faBars} className="menu" onClick={toggleNav}/>
+      <Link to="/">
+        <img src={LogoAccent} alt="logo" className="logo" />
+      </Link>
+      <div className="nav-item-container">
         <ul className="items">
           <li>
             <Link to="/">Home</Link>
           </li>
-          
           <li className="shop-menu">
             <Link to="/all-products">
               Shop{" "}
@@ -47,7 +46,6 @@ const Header = () => {
               </Link>
             </div>
           </li>
-
           <li>
             <Link to="/contact-us">Contact</Link>
           </li>
@@ -55,16 +53,13 @@ const Header = () => {
             <Link to="/user/account-info">My Account</Link>
           </li>
         </ul>
-      </div>
 
-      <div className="header-right">
-        <SearchBar />
-        <Link to="/cart">
-          <FontAwesomeIcon className="shoping-cart" icon={faCartShopping} />
+        <Link to="/cart" className="cart">
+          <FontAwesomeIcon icon={faCartShopping} />
         </Link>
       </div>
-    </div>
+    </nav>
   );
 };
 
-export default Header;
+export default NavbarFixed;

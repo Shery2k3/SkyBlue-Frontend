@@ -1,6 +1,7 @@
 // src/pages/Home.js
 import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
+import Header from "../../Components/Header/Header";
 import Category from "../../Components/Category/Category";
 import ProductSlider from "../../Components/ProductSlider/ProductSlider";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
@@ -43,8 +44,12 @@ const Home = () => {
       try {
         const [bestSellersResult, newArrivalResult, allProductsResult] =
           await Promise.allSettled([
-            retryRequest(() => axiosInstance.get(`/product/bestseller?size=10`)),
-            retryRequest(() => axiosInstance.get(`/product/newarrivals?size=10`)),
+            retryRequest(() =>
+              axiosInstance.get(`/product/bestseller?size=10`)
+            ),
+            retryRequest(() =>
+              axiosInstance.get(`/product/newarrivals?size=10`)
+            ),
             retryRequest(() =>
               axiosInstance.get(`/product/category/-1?page=1&size=12`)
             ),
@@ -90,6 +95,7 @@ const Home = () => {
   return (
     <Layout pageTitle="Home" style="style1" isLoading={isLoading}>
       <>
+        <Header />
         <Banner />
         <Category />
         <ProductSlider category="New Arrivals" products={newArrival} />

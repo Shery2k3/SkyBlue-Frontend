@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
+import NavbarFixed from "../../Components/Navbar/NavbarFixed";
 import "./Information.css";
 
 const ReturnPolicy = () => {
@@ -15,6 +16,7 @@ const ReturnPolicy = () => {
 
   return (
     <Layout pageTitle="Return Policy" isLoading={isLoading}>
+      <NavbarFixed />
       <div className="return-policy">
         <h1 className="main-heading">Returns Policy</h1>
         <section>

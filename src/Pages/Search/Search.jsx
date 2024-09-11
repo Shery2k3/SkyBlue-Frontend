@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
+import Header from "../../Components/Header/Header";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import Pagination from "../../Components/Pagination/Pagination";
 import searchImage from "../../../public/Images/search.webp";
@@ -75,6 +76,7 @@ const Search = () => {
       style="style1"
       isLoading={isLoading}
     >
+      <Header />
       {products.length > 0 ? (
         <>
           <ProductGrid

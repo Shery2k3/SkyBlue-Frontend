@@ -16,12 +16,17 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: var(--font-primary);
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
   background-color: var(--light);
+}
+
+body.scroll-lock {
+  overflow: hidden;
+  padding-right: 12px;
 }
 
 /* Custom Scroll bar */
@@ -214,15 +219,7 @@ body {
 
 /* Layout Setting */
 .content {
-  min-height: calc(100vh - 397.49px);
-  padding: 0px 20px;
-}
-
-@media (max-width: 867px) {
-  .content {
-    margin: 0px 10px 0 10px;
-    padding: 15px 0 0 0;
-  }
+  min-height: calc(100vh - 441px);
 }
 
 /* Loader */
@@ -377,7 +374,7 @@ body {
   justify-content: space-between;
   padding: 5px 20px;
   box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
-  z-index: 10;
+  z-index: 9;
   transition: top 0.5s ease-in-out;
 }
 
@@ -446,6 +443,53 @@ body {
 
 .navbar .items li a span {
   font-size: 1rem;
+}
+
+.navbar .nav-dropdown-content {
+  width: 130px;
+  position: absolute;
+  left: 50%; 
+  transform: translateX(-50%);
+  background-color: var(--accent-light);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+  z-index: 3;
+}
+
+/* Show dropdown on hover */
+.navbar .shop-menu:hover .nav-dropdown-content {
+  opacity: 1;
+  max-height: 234px;
+}
+
+
+.navbar a.nav-drop-down-item {
+  padding: 10px 10px;
+  color: var(--dark);
+  background-color: var(--accent-light);
+  font-size: 16px !important;
+  font-family: var(--font-accent);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  transition: background-color 0.3s ease;
+  text-align: center;
+  height: 100%; 
+}
+
+.navbar .nav-drop-down-item:hover {
+  background-color: var(--accent); 
+}
+
+.navbar .shop-menu {
+  position: relative; 
 }
 
 .navbar .menu {
@@ -518,7 +562,7 @@ body {
   transition: color 0.3s ease-in-out; /* For smooth text color transition */
 }
 
-.header .items li a::after {
+.header .items > li > a::after {
   content: "";
   position: absolute;
   left: 0;
@@ -530,12 +574,59 @@ body {
 }
 
 /* On hover, the underline will appear */
-.header .items li a:hover::after {
+.header .items > li > a:hover::after {
   width: 100%; /* The underline expands to cover the full width of the text */
 }
 
-.header .items li a:hover {
+.header .items > li > a:hover {
   color: var(--accent-dark); /* Optional: Change the text color on hover */
+}
+
+.header .nav-dropdown-content {
+  width: 130px;
+  position: absolute;
+  left: 50%; 
+  transform: translateX(-50%);
+  background-color: var(--accent-light);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+  z-index: 3;
+}
+
+/* Show dropdown on hover */
+.header .shop-menu:hover .nav-dropdown-content {
+  opacity: 1;
+  max-height: 234px;
+}
+
+
+.header a.nav-drop-down-item {
+  padding: 10px 15px;
+  color: var(--dark);
+  background-color: var(--accent-light);
+  font-size: 16px !important;
+  font-family: var(--font-accent);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  transition: background-color 0.3s ease;
+  text-align: center;
+  height: 100%; 
+}
+
+.header .nav-drop-down-item:hover {
+  background-color: var(--accent); 
+}
+
+.header .shop-menu {
+  position: relative; 
 }
 
 .header .items li a span {
@@ -789,12 +880,10 @@ body {
 
 .banner-image {
   width: 100%;
-  border-radius: 15px;
 }
 
 .sub-banner img {
   width: calc(100% + 10px);
-  border-radius: 15px;
 }
 
 .banner .slick-dots {

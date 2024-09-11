@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
+import NavbarFixed from "../../Components/Navbar/NavbarFixed";
 import ContactUsGrid from "../../Components/ContactUsGrid/ContactUsGrid";
 import ContactForm from "../../Components/ContactForm/ContactForm";
 import Map from "../../Components/Map/Map";
@@ -17,6 +18,7 @@ const ContactUs = () => {
 
   return (
     <Layout pageTitle="Contact Us" isLoading={isLoading}>
+      <NavbarFixed />
       <ContactUsGrid />
       <ContactForm />
       <Map />

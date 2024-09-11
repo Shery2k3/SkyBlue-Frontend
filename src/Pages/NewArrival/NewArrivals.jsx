@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Category from "../../Components/Category/Category";
 import Layout from "../../Components/Layout/Layout";
+import Header from "../../Components/Header/Header";
+import Banner from "../../Components/Banner/Banner";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import axiosInstance from "../../api/axiosConfig";
 
@@ -27,7 +28,8 @@ const NewArrivals = () => {
 
   return (
     <Layout pageTitle="New Arrivals" style="style1" isLoading={isLoading}>
-      <Category />
+      <Header />
+      <Banner />
       <ProductGrid category="New Arrivals" products={products} />
     </Layout>
   );

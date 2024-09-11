@@ -1,5 +1,4 @@
 .category-container {
-  display: none;
   margin: 1rem 0 3rem 0;
 }
 
@@ -33,12 +32,6 @@
 
 .category-menu span:hover {
   background-color: var(--accent);
-}
-
-@media (max-width: 868px) {
-  .category-container {
-    display: block;
-  }
 }
 
 @media (max-width: 620px) {

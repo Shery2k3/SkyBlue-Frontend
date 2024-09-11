@@ -4,7 +4,6 @@ import Loader from "../Loader/Loader";
 // Lazy load components
 import Navbar from "../Navbar/Navbar";
 import NavMenu from "../NavMenu/NavMenu";
-const Header = lazy(() => import("../Header/Header"));
 const Footer1 = lazy(() => import("../Footer/Footer1"));
 const AgeVerificationForms = lazy(() =>
   import("../AgeVerificationForm/AgeVerificationForm")
@@ -44,7 +43,6 @@ const Layout = ({ pageTitle, children, style, isLoading }) => {
       ) : (
         <>
           <div className="layout">
-          <Header />
           <Navbar />
           <NavMenu />
             <div className="content">{children}</div>

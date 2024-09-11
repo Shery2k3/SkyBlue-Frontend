@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Dropdown } from "antd";
 import LogoAccent from "/Logos/LogoAccent.png";
 import { useNav } from "../../Context/NavContext/NavContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -54,28 +53,33 @@ const Navbar = () => {
           <li>
             <Link to="/">Home</Link>
           </li>
-          <li>
-            <Dropdown
-              menu={{ items }}
-              placement="bottom"
-              arrow={{
-                pointAtCenter: true,
-              }}
-            >
-              <Link to="/all-products">
-                Shop{" "}
-                <span>
-                  {" "}
-                  <FontAwesomeIcon icon={faChevronDown} />
-                </span>
+          <li className="shop-menu">
+            <Link to="/all-products">
+              Shop{" "}
+              <span>
+                <FontAwesomeIcon icon={faChevronDown} />
+              </span>
+            </Link>
+            <div className="nav-dropdown-content">
+              <Link to="/all-products" className="nav-drop-down-item">
+                All Products
               </Link>
-            </Dropdown>
+              <Link to="/best-sellers" className="nav-drop-down-item">
+                Best Sellers
+              </Link>
+              <Link to="/new-arrivals" className="nav-drop-down-item">
+                New Arrivals
+              </Link>
+              <Link to="/categories" className="nav-drop-down-item">
+                Categories
+              </Link>
+            </div>
           </li>
           <li>
             <Link to="/contact-us">Contact</Link>
           </li>
           <li>
-            <Link to="/">My Account</Link>
+            <Link to="/user/account-info">My Account</Link>
           </li>
         </ul>
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
+import NavbarFixed from "../../Components/Navbar/NavbarFixed";
 import "./Information.css";
 
 const TermsConditions = () => {
@@ -15,6 +16,7 @@ const TermsConditions = () => {
 
   return (
     <Layout pageTitle="Terms & Conditions" isLoading={isLoading}>
+      <NavbarFixed />
       <div className="return-policy">
         <h1 className="main-heading">Terms & Conditions</h1>
         <section>

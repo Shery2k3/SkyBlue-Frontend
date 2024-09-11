@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "../../Components/Layout/Layout";
+import NavbarFixed from "../../Components/Navbar/NavbarFixed";
 import AccountOptions from "../../Components/AccountOptions/AccountOptions";
 import AccountInfo from "../../Components/AccountInfo/AccountInfo";
 import OrderHistory from "../../Components/OrderHistory/OrderHistory";
@@ -11,6 +12,7 @@ const Account = ({ page }) => {
 
   return (
     <Layout pageTitle="Account" isLoading={isLoading}>
+      <NavbarFixed />
       <div className="accountPage">
         <AccountOptions />
         {page === "info" && (

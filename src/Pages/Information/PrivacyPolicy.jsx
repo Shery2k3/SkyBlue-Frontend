@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
+import NavbarFixed from "../../Components/Navbar/NavbarFixed";
 import "./Information.css";
 
 const PrivacyPolicy = () => {
@@ -15,6 +16,7 @@ const PrivacyPolicy = () => {
 
   return (
     <Layout pageTitle="Privacy Policy" isLoading={isLoading}>
+      <NavbarFixed />
       <div className="return-policy">
         <h1 className="main-heading"> Privacy Policy</h1>
         <section>

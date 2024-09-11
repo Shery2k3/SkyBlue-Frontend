@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../../Components/Layout/Layout";
+import NavbarFixed from "../../Components/Navbar/NavbarFixed";
 import { Link } from "react-router-dom";
 import emptyCart from "/Images/empty-cart.webp";
 import CartItemGrid from "../../Components/CartItemGrid/CartItemGrid";
@@ -51,6 +52,7 @@ const Cart = () => {
 
   return (
     <Layout pageTitle="Cart" isLoading={isLoading}>
+      <NavbarFixed />
       {products.length === 0 ? (
         <div className="cart-page">
           <img src={emptyCart} alt="" />

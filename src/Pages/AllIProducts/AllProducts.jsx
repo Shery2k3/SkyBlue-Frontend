@@ -1,8 +1,9 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
+import Header from "../../Components/Header/Header";
+import Banner from "../../Components/Banner/Banner";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
-import Category from "../../Components/Category/Category";
 import Pagination from "../../Components/Pagination/Pagination";
 import axiosInstance from "../../api/axiosConfig"; 
 
@@ -46,7 +47,8 @@ const AllProducts = () => {
 
   return (
     <Layout pageTitle="All Products" style="style1" isLoading={isLoading}>
-      <Category />
+      <Header />
+      <Banner />
       <ProductGrid category="All Products" products={products} />
       <Pagination
         currentPage={currentPage}
