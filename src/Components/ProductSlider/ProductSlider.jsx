@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import ProductCard from "../../Components/ProductCard/ProductCard";
 import Slider from "react-slick";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,7 +8,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const ProductSlider = ({ category, products }) => {
-  const sliderRef = useRef(null); 
+  const sliderRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   const settings = {
     dots: true,
@@ -65,19 +66,47 @@ const ProductSlider = ({ category, products }) => {
     ],
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            console.log("agya me", category)
+            setIsVisible(true);
+            observer.disconnect(); // Stop observing once the element is in view
+          }
+        });
+      },
+      { threshold: 0.25 } // Trigger when 10% of the slider is visible
+    );
+
+    if (sliderRef.current) {
+      observer.observe(sliderRef.current);
+    }
+
+    return () => {
+      if (sliderRef.current) observer.unobserve(sliderRef.current);
+    };
+  }, []);
+
   return (
-    <div className="product-slider">
+    <div
+      ref={sliderRef}
+      className={`product-slider fade-up ${isVisible ? "active" : ""}`}
+    >
       <div className="slider-header">
         <h2>{category}</h2>
       </div>
       <div className="slider-container">
-        {products.length>0 && <Slider ref={sliderRef} {...settings}>
+        {products.length > 0 && (
+          <Slider ref={sliderRef} {...settings}>
             {products.map((product, index) => (
               <div className="slider-item" key={index}>
-                <ProductCard key={index} product={product} />
+                <ProductCard product={product} />
               </div>
             ))}
-          </Slider>}
+          </Slider>
+        )}
       </div>
     </div>
   );
