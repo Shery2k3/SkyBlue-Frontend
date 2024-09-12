@@ -29,6 +29,13 @@ body.scroll-lock {
   padding-right: 12px;
 }
 
+@media (max-width: 668px){
+  body.scroll-lock {
+    overflow: hidden;
+    padding: 0;
+  }
+}
+
 /* Custom Scroll bar */
 
 ::-webkit-scrollbar-track {
@@ -882,10 +889,6 @@ body.scroll-lock {
   width: 100%;
 }
 
-.sub-banner img {
-  width: calc(100% + 10px);
-}
-
 .banner .slick-dots {
   bottom: 10px;
   left: 50%;
@@ -893,10 +896,6 @@ body.scroll-lock {
 }
 
 @media (max-width: 668px) {
-  .sub-banner {
-    display: none;
-  }
-
   .banner {
     width: 100%;
   }

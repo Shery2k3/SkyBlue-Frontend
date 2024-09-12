@@ -2,13 +2,15 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
 import Header from "../../Components/Header/Header";
+import Banner from "../../Components/Banner/Banner";
+import SubBanners from "../../Components/SubBanners/SubBanners";
 import Category from "../../Components/Category/Category";
 import ProductSlider from "../../Components/ProductSlider/ProductSlider";
+import About from "../../Components/About/About";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import { useContext } from "react";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import axiosInstance from "../../api/axiosConfig";
-import Banner from "../../Components/Banner/Banner";
 
 const Home = () => {
   const [isLoading, setisLoading] = useState(true);
@@ -97,8 +99,10 @@ const Home = () => {
       <>
         <Header />
         <Banner />
+        <SubBanners />
         <Category />
         <ProductSlider category="New Arrivals" products={newArrival} />
+        <About />
         <ProductSlider category="Best Sellers" products={bestSellers} />
         <ProductGrid category="Exclusive Products" products={allProducts} />
       </>

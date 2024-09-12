@@ -67,18 +67,20 @@ const ProductSlider = ({ category, products }) => {
   };
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
+    let observerTimeout;
+    const observer = new IntersectionObserver((entries) => {
+      clearTimeout(observerTimeout);
+      observerTimeout = setTimeout(() => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            console.log("agya me", category)
-            setIsVisible(true);
-            observer.disconnect(); // Stop observing once the element is in view
+            requestAnimationFrame(() => {
+              setIsVisible(true);
+            });
+            observer.disconnect();
           }
         });
-      },
-      { threshold: 0.25 } // Trigger when 10% of the slider is visible
-    );
+      }, 100);
+    }, { threshold: 0.25 });
 
     if (sliderRef.current) {
       observer.observe(sliderRef.current);

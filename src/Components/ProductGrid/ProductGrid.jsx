@@ -7,17 +7,20 @@ const ProductGrid = ({ category, products }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
+    let observerTimeout;
+    const observer = new IntersectionObserver((entries) => {
+      clearTimeout(observerTimeout);
+      observerTimeout = setTimeout(() => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.disconnect(); // Stop observing once the element is in view
+            requestAnimationFrame(() => {
+              setIsVisible(true);
+            });
+            observer.disconnect();
           }
         });
-      },
-      { threshold: 0.1 } // Trigger when 10% of the grid is visible
-    );
+      }, 100);
+    }, { threshold: 0.1 });
 
     if (gridRef.current) {
       observer.observe(gridRef.current);

@@ -1,3 +1,7 @@
+.product-grid-container {
+  will-change: opacity, transform;
+}
+
 .product-grid-container.fade-up {
   opacity: 0;
   transform: translateY(75px);
@@ -7,6 +11,13 @@
 .product-grid-container.fade-up.active {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-grid-container {
+    animation: none;
+    transition: none;
+  }
 }
 
 .product-grid {
