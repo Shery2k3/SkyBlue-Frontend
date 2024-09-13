@@ -1,3 +1,25 @@
+@keyframes slideUpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Initial state of the container before animation */
+.about-container.hidden {
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+/* Apply animation when the class is added */
+.about-container.animate {
+  animation: slideUpFadeIn 1s ease-out forwards;
+}
+
 .about-container {
   margin: 6.5rem 0 6rem 0;
   position: relative;
@@ -6,7 +28,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-image: url(/Background/candies.webp);
+  background-image: url(/Background/background.webp);
   background-size: cover;
   background-position: center;
 }

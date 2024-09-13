@@ -1,9 +1,27 @@
 import { Link } from "react-router-dom";
 import "./About.css";
+import { useEffect } from "react";
 
 const About = () => {
+  useEffect(() => {
+    const handleScroll = () => {
+      const aboutContainer = document.querySelector(".about-container");
+      const rect = aboutContainer.getBoundingClientRect();
+      const isInView = rect.top < window.innerHeight && rect.bottom >= 0;
+
+      if (isInView) {
+        aboutContainer.classList.add("animate");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Check on initial render
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="about-container">
+    <div className="about-container hidden">
       <div className="about">
         <h2>SkyBlue Wholesale</h2>
         <h3>

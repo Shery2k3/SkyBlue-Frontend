@@ -1,23 +1,5 @@
 .product-grid-container {
-  will-change: opacity, transform;
-}
-
-.product-grid-container.fade-up {
-  opacity: 0;
-  transform: translateY(75px);
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-}
-
-.product-grid-container.fade-up.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .product-grid-container {
-    animation: none;
-    transition: none;
-  }
+  margin: 1rem 10px 3rem 10px;
 }
 
 .product-grid {
@@ -36,6 +18,9 @@
   color: var(--dark);
 }
 
-.product-grid-container {
-  margin: 1rem 10px 3rem 10px;
+@media (prefers-reduced-motion: reduce) {
+  .product-grid-container {
+    animation: none;
+    transition: none;
+  }
 }

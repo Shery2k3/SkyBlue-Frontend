@@ -1,26 +1,4 @@
 .product-slider {
-  will-change: opacity, transform;
-}
-
-.product-slider.fade-up {
-  opacity: 0;
-  transform: translateY(75px);
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-}
-
-.product-slider.fade-up.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .product-slider {
-    animation: none;
-    transition: none;
-  }
-}
-
-.product-slider {
   min-height: 374px;
   margin: 1.5rem 0rem 3rem 0rem;
 }

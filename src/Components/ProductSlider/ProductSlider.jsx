@@ -1,15 +1,12 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef } from "react";
 import ProductCard from "../../Components/ProductCard/ProductCard";
 import Slider from "react-slick";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import "./ProductSlider.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const ProductSlider = ({ category, products }) => {
   const sliderRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
 
   const settings = {
     dots: true,
@@ -66,36 +63,8 @@ const ProductSlider = ({ category, products }) => {
     ],
   };
 
-  useEffect(() => {
-    let observerTimeout;
-    const observer = new IntersectionObserver((entries) => {
-      clearTimeout(observerTimeout);
-      observerTimeout = setTimeout(() => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            requestAnimationFrame(() => {
-              setIsVisible(true);
-            });
-            observer.disconnect();
-          }
-        });
-      }, 100);
-    }, { threshold: 0.25 });
-
-    if (sliderRef.current) {
-      observer.observe(sliderRef.current);
-    }
-
-    return () => {
-      if (sliderRef.current) observer.unobserve(sliderRef.current);
-    };
-  }, []);
-
   return (
-    <div
-      ref={sliderRef}
-      className={`product-slider fade-up ${isVisible ? "active" : ""}`}
-    >
+    <div className="product-slider">
       <div className="slider-header">
         <h2>{category}</h2>
       </div>
