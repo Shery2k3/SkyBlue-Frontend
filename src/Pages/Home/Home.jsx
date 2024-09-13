@@ -35,6 +35,7 @@ const Home = () => {
               axiosInstance.get(`/product/category/-1?page=1&size=12`)
             ),
           ]);
+          console.log("home")
         if (bestSellersResult.status === "fulfilled") {
           setBestSellers(bestSellersResult.value.data);
         } else {

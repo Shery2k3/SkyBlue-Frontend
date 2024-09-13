@@ -19,6 +19,7 @@ const useRetryRequest = () => {
         if (error.response) {
           if (error.response.status === 403) {
             logout();
+            navigate('/login');
             console.error(`Forbidden access: ${error.response.status}`);
             throw new Error(`Forbidden access: ${error.response.status}`);
           }
@@ -32,6 +33,7 @@ const useRetryRequest = () => {
         if (attempt >= retries) {
           console.error(`Failed after ${retries} attempts`);
           logout();
+          navigate('/login');
           throw error;
         }
         console.warn(`Retrying request, attempt: ${attempt}`);

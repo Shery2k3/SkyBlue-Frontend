@@ -5,17 +5,19 @@ import Header from "../../Components/Header/Header";
 import Banner from "../../Components/Banner/Banner";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import Pagination from "../../Components/Pagination/Pagination";
-import axiosInstance from "../../api/axiosConfig"; 
+import axiosInstance from "../../api/axiosConfig";
+import useRetryRequest from "../../api/useRetryRequest";
 
 const AllProducts = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [category, setCategory] = useState()
+  const [category, setCategory] = useState();
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
 
   const [searchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page")) || 1;
   const navigate = useNavigate();
+  const retryRequest = useRetryRequest();
 
   const handlePageChange = (pageNumber) => {
     navigate(`?page=${pageNumber}`);
@@ -27,10 +29,11 @@ const AllProducts = () => {
       behavior: "smooth",
     });
     setIsLoading(true);
+
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(
-          `/product/category/-1?page=${currentPage}&size=18`
+        const response = await retryRequest(() =>
+          axiosInstance.get(`/product/category/-1?page=${currentPage}&size=18`)
         );
         setCategory(response.data.categoryName);
         setProducts(response.data.data);
@@ -43,7 +46,7 @@ const AllProducts = () => {
     };
 
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, retryRequest]);
 
   return (
     <Layout pageTitle="All Products" style="style1" isLoading={isLoading}>

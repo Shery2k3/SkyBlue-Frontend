@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../api/axiosConfig";
+import useRetryRequest from "../../api/useRetryRequest"; // Import the retry hook
 import { message } from "antd";
 import "./AccountInfo.css";
 
@@ -25,12 +26,18 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
   const [states, setStates] = useState([]);
   const [errors, setErrors] = useState({});
 
+  const retryRequest = useRetryRequest(); // Use retryRequest
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userInfoResponse = await axiosInstance.get("/customer/info");
+        const userInfoResponse = await retryRequest(() =>
+          axiosInstance.get("/customer/info")
+        );
         const userInfo = userInfoResponse.data[0];
-        const statesResponse = await axiosInstance.get(`/customer/states/${userInfo.CountryId}`);
+        const statesResponse = await retryRequest(() =>
+          axiosInstance.get(`/customer/states/${userInfo.CountryId}`)
+        );
 
         setFormData({
           FirstName: userInfo.FirstName || "",
@@ -55,13 +62,15 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
     };
 
     fetchData();
-  }, [setIsLoading]);
+  }, [retryRequest, setIsLoading]);
 
   useEffect(() => {
     const fetchStates = async () => {
       if (!formData.CountryId) return;
       try {
-        const response = await axiosInstance.get(`/customer/states/${formData.CountryId}`);
+        const response = await retryRequest(() =>
+          axiosInstance.get(`/customer/states/${formData.CountryId}`)
+        );
         setStates(response.data);
       } catch (error) {
         console.error("Failed to load states:", error);
@@ -70,7 +79,7 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
     };
 
     fetchStates();
-  }, [formData.CountryId]);
+  }, [formData.CountryId, retryRequest]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -111,7 +120,7 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
     }
 
     try {
-      await axiosInstance.put("/customer/update-info", formData);
+      await retryRequest(() => axiosInstance.put("/customer/update-info", formData));
       message.success("Info Updated");
     } catch (error) {
       console.error("Error:", error);
@@ -276,8 +285,10 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
         </div>
       </section>
 
-      <div className="actions-container">
-        <button className="save-button" onClick={handleSave}>Save</button>
+      <div className="form-submit-container">
+        <button className="btn-submit" onClick={handleSave}>
+          Save
+        </button>
       </div>
     </div>
   );

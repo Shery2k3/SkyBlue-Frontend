@@ -9,10 +9,11 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import axiosInstance from "../../api/axiosConfig";
+import useRetryRequest from "../../api/useRetryRequest"; // Import the retry hook
 import "./Search.css";
 
 const Search = () => {
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,6 +23,7 @@ const Search = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const retryRequest = useRetryRequest(); // Use the retry hook
 
   const handlePageChange = (pageNumber) => {
     navigate(
@@ -30,7 +32,7 @@ const Search = () => {
   };
 
   useEffect(() => {
-    setisLoading(true);
+    setIsLoading(true);
 
     window.scrollTo({
       top: 0,
@@ -55,20 +57,22 @@ const Search = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(
-          `/product/search/${category}?term=${term}&page=${page}&size=${size}`
+        const response = await retryRequest(() =>
+          axiosInstance.get(
+            `/product/search/${category}?term=${term}&page=${page}&size=${size}`
+          )
         );
         setProducts(response.data.data);
         setTotalPages(response.data.totalPages);
-        setisLoading(false);
       } catch (error) {
         console.error("Failed to load data:", error);
-        setisLoading(false);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [location.search]);
+  }, [location.search, retryRequest]);
 
   return (
     <Layout
@@ -91,7 +95,7 @@ const Search = () => {
         </>
       ) : (
         <div className="no-result">
-          <img src={searchImage} alt="" />
+          <img src={searchImage} alt="No results" />
           <p>No products were found that matched your criteria.</p>
           <Link to="/" className="back-button">
             <FontAwesomeIcon icon={faArrowLeft} className="left" />

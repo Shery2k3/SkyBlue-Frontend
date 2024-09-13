@@ -4,12 +4,13 @@ import NavbarFixed from "../../Components/Navbar/NavbarFixed";
 import { Link } from "react-router-dom";
 import emptyCart from "/Images/empty-cart.webp";
 import CartItemGrid from "../../Components/CartItemGrid/CartItemGrid";
+import useRetryRequest from "../../api/useRetryRequest";
 import axiosInstance from "../../api/axiosConfig";
 import "./Cart.css";
 
 const Cart = () => {
-  const [isLoading, setisLoading] = useState(true);
-  const [isFetching, setFetching] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFetching, setFetching] = useState(false);
   const [products, setProducts] = useState([]);
   const [cartSummary, setCartSummary] = useState({
     subtotal: 0,
@@ -18,11 +19,12 @@ const Cart = () => {
     discount: 1.19,
     total: 0,
   });
+  const retryRequest = useRetryRequest(); // Use the custom hook
 
   const fetchCartData = async () => {
-    setFetching(true)
+    setFetching(true);
     try {
-      const response = await axiosInstance.get("/cart/items");
+      const response = await retryRequest(() => axiosInstance.get("/cart/items"));
       setProducts(response.data.cartItems);
       setCartSummary({
         subtotal: response.data.totalPrice,
@@ -31,16 +33,18 @@ const Cart = () => {
         discount: 1.19,
         total: response.data.finalPrice - 1.19,
       });
-      setisLoading(false);
-      setFetching(false)
+      setIsLoading(false);
+      setFetching(false);
     } catch (error) {
       console.error("Failed to load data:", error);
+      setIsLoading(false);
+      setFetching(false);
     }
   };
 
   useEffect(() => {
     fetchCartData();
-  }, []);
+  }, [retryRequest]);
 
   const handleUpdate = () => {
     fetchCartData();

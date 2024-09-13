@@ -4,6 +4,7 @@ import Layout from "../../Components/Layout/Layout";
 import Header from "../../Components/Header/Header";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import Pagination from "../../Components/Pagination/Pagination";
+import useRetryRequest from "../../api/useRetryRequest"; // Import the custom hook
 import axiosInstance from "../../api/axiosConfig"; // Import the configured Axios instance
 
 const Category = () => {
@@ -15,6 +16,7 @@ const Category = () => {
   const [searchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page")) || 1;
   const navigate = useNavigate();
+  const retryRequest = useRetryRequest(); // Use the custom hook
 
   const handlePageChange = (pageNumber) => {
     navigate(`?page=${pageNumber}`);
@@ -26,10 +28,11 @@ const Category = () => {
       behavior: "smooth",
     });
     setIsLoading(true);
+
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(
-          `/product/category/${categoryId}?page=${currentPage}&size=18`
+        const response = await retryRequest(() =>
+          axiosInstance.get(`/product/category/${categoryId}?page=${currentPage}&size=18`)
         );
         console.log(response.data);
         setCategory(response.data.categoryName);
@@ -43,7 +46,7 @@ const Category = () => {
     };
 
     fetchData();
-  }, [categoryId, currentPage]);
+  }, [categoryId, currentPage, retryRequest]);
 
   return (
     <Layout pageTitle={category} style="style1" isLoading={isLoading}>

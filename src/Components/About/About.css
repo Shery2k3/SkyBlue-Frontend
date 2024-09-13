@@ -1,25 +1,10 @@
-@keyframes slideUpFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Initial state of the container before animation */
+/* Remove animation keyframes and related CSS */
 .about-container.hidden {
   opacity: 0;
   transform: translateY(50px);
 }
 
-/* Apply animation when the class is added */
-.about-container.animate {
-  animation: slideUpFadeIn 1s ease-out forwards;
-}
-
+/* Apply normal state styles */
 .about-container {
   margin: 6.5rem 0 6rem 0;
   position: relative;
@@ -33,11 +18,11 @@
   background-position: center;
 }
 
-.about-container h2{
+.about-container h2 {
   margin-bottom: 10px;
 }
 
-.about-container h3{
+.about-container h3 {
   font-weight: 600;
   margin: auto;
 }
@@ -73,23 +58,13 @@
   box-shadow: rgba(33, 35, 38, 0.25) 0px 10px 10px -10px;
 }
 
-
 .about-container .shop-now-button:hover {
   background: #5db3e9;
 }
 
-
 @media only screen and (max-width: 768px) {
   .about-container h3, .about-container p {
     width: 90%;
-  }
-
-  .about-container p {
-    color: #666666;
-    font-family: "Poppins", Sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
-    margin: 20px auto 50px auto;
   }
 }
 

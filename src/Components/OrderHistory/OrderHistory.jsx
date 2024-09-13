@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "../../api/axiosConfig";
-import { Table, ConfigProvider } from "antd";
+import useRetryRequest from "../../api/useRetryRequest"; // Import the retry hook
+import { Table, ConfigProvider, message } from "antd";
 import "./OrderHistory.css";
 
 // Define the columns for the Ant Design Table
@@ -39,12 +40,15 @@ const columns = [
 
 const OrderHistory = ({ setIsLoading }) => {
   const [orders, setOrders] = useState([]);
+  const retryRequest = useRetryRequest(); // Use the retry hook
 
   useEffect(() => {
     setIsLoading(true);
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/customer/orders");
+        const response = await retryRequest(() =>
+          axiosInstance.get("/customer/orders")
+        );
         console.log(response);
         const transformedData = response.data.data.map((order) => ({
           key: order.Id,
@@ -58,12 +62,13 @@ const OrderHistory = ({ setIsLoading }) => {
         setIsLoading(false);
       } catch (error) {
         console.error("Failed to load data:", error);
+        message.error("Failed to load order history.");
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [setIsLoading]);
+  }, [retryRequest, setIsLoading]);
 
   return (
     <div className="orders-container">
@@ -72,7 +77,7 @@ const OrderHistory = ({ setIsLoading }) => {
           components: {
             Table: {
               headerBg: "#87CEEB",
-              rowHoverBg: "#E4F7FF"
+              rowHoverBg: "#E4F7FF",
             },
           },
         }}

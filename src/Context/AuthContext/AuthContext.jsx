@@ -12,11 +12,13 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", jwtToken);
     }
     setToken(jwtToken);
+    setupInterceptors(jwtToken); // Setup interceptors with the new token
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);
+    setupInterceptors(null); // Clear interceptors when logging out
   };
 
   // Setup interceptors when the token changes
