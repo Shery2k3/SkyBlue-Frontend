@@ -15,6 +15,7 @@ const BestSeller = () => {
         const response = await axiosInstance.get("/product/bestseller?size=12");
         setProducts(response.data);
         setisLoading(false);
+        console.log('api hitting')
       } catch (error) {
         console.error("Failed to load data:", error);
         setisLoading(false);
