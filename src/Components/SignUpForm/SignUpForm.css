@@ -279,3 +279,34 @@
   font-size: 0.875rem; /* Adjust font size if needed */
   margin-top: 0.25rem; /* Space between input and error message */
 }
+
+
+
+
+/* Styling the Country Dropdown */
+#country {
+  width: 100%;               /* Full width to match other input fields */
+  padding: 10px;             /* Add padding inside the dropdown */
+  border: 1px solid #00273e; /* Match your accent color */
+  border-radius: 10px;        /* Rounded corners */
+  font-size: 16px;           /* Font size for readability */
+  background-color: #f1fbff; /* Light background color */
+  color: #00273e;            /* Dark text color */
+  outline: none;             /* Remove the default outline */
+  transition: border-color 0.3s ease; /* Smooth transition on focus */
+}
+
+/* Add a hover effect */
+#country:hover {
+  border-color: #47B1F2;     /* Change border color on hover */
+}
+
+/* Change border color on focus */
+#country:focus {
+  border-color: #00273E;     /* Darker border on focus */
+}
+
+/* Styling for error state */
+#country.error {
+  border-color: red;         /* Red border for validation error */
+}

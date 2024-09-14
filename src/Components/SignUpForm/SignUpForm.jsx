@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import API_BASE_URL from "../../constant";
@@ -6,11 +6,8 @@ import { message } from "antd"; // Import message from antd
 import "./SignUpForm.css";
 import LogoAccent from "/Logos/LogoAccent.png";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBox } from "@fortawesome/free-solid-svg-icons";
 import { Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-
 
 const SignupForm = () => {
   const {
@@ -18,15 +15,32 @@ const SignupForm = () => {
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
+
+  const [countries, setCountries] = useState([]); // State to store country list
+  const [fileList, setFileList] = useState([]); // State to manage uploaded files
+
+  useEffect(() => {
+    // Fetch countries from API
+    const fetchCountries = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/customer/countries`);
+        setCountries(response.data); // Store fetched countries in state
+      } catch (error) {
+        message.error("Failed to load countries");
+      }
+    };
+    fetchCountries();
+  }, []);
 
   const onSubmit = async (data) => {
     const formData = new FormData();
     for (const key in data) {
       if (key === "documents") {
         for (const file of data[key]) {
-          formData.append(key, file);
+          formData.append("documents", file); // Append the file list
         }
       } else {
         formData.append(key, data[key]);
@@ -43,7 +57,6 @@ const SignupForm = () => {
       if (response.status === 201) {
         message.success("Signup successful!");
         reset();
-        // Handle successful signup (e.g., navigate to login page)
       } else if (response.status === 400) {
         message.error("Email already present.");
       } else {
@@ -60,6 +73,12 @@ const SignupForm = () => {
 
   // Watch password value to compare with confirm password
   const password = watch("password");
+
+  // Handle file changes for the Upload component
+  const handleFileChange = ({ fileList }) => {
+    setFileList(fileList);
+    setValue("documents", fileList.map(file => file.originFileObj)); // Manually set the files in react-hook-form
+  };
 
   return (
     <div className="bg-signup">
@@ -138,71 +157,33 @@ const SignupForm = () => {
               Business license or Corporation Paper
             </label>
             <div className="input-box-1">
-  <div className="upload-icon">
-    <Upload
-      {...register("documents")}
-      listType="picture-card"
-      beforeUpload={() => false}
-      multiple
-    >
-      <Button icon={<UploadOutlined />} className="upload-btn">
-        
-      </Button>
-    </Upload>
-  </div>
-  <p className="drag-text">Click or drag file to this area to upload</p>
-</div>
+              <div className="upload-icon">
+                <Upload
+                  fileList={fileList} // Set fileList state
+                  onChange={handleFileChange} // Handle file change
+                  beforeUpload={() => false} // Disable auto upload
+                  multiple
+                >
+                  <Button icon={<UploadOutlined />} className="upload-btn"></Button>
+                </Upload>
+              </div>
+              <p className="drag-text">Click or drag file to this area to upload</p>
+            </div>
 
-
-            <div className="linebreak">
-              <h3>
-                <span>Your Address</span>
-              </h3>
-            </div>
-            <div className="input-box">
-              <label htmlFor="streetAddress1">Street Address</label>
-              <input
-                type="text"
-                id="streetAddress1"
-                {...register("streetAddress1", {
-                  required: "Street address is required",
-                })}
-              />
-              {errors.streetAddress1 && <span className="error-message">{errors.streetAddress1.message}</span>}
-            </div>
-            <div className="input-box">
-              <label htmlFor="streetAddress2">Street Address 2</label>
-              <input
-                type="text"
-                id="streetAddress2"
-                {...register("streetAddress2")}
-              />
-            </div>
-            <div className="input-box">
-              <label htmlFor="zipCode">Zip / Postal Code</label>
-              <input
-                type="text"
-                id="zipCode"
-                {...register("zipCode", { required: "Zip code is required" })}
-              />
-              {errors.zipCode && <span className="error-message">{errors.zipCode.message}</span>}
-            </div>
-            <div className="input-box">
-              <label htmlFor="city">City</label>
-              <input
-                type="text"
-                id="city"
-                {...register("city", { required: "City is required" })}
-              />
-              {errors.city && <span className="error-message">{errors.city.message}</span>}
-            </div>
+            {/* Country dropdown */}
             <div className="input-box">
               <label htmlFor="country">Country</label>
-              <input
-                type="text"
+              <select
                 id="country"
                 {...register("country", { required: "Country is required" })}
-              />
+              >
+                <option value="">Select Country</option>
+                {countries.map((country) => (
+                  <option key={country.Id} value={country.Name}>
+                    {country.Name}
+                  </option>
+                ))}
+              </select>
               {errors.country && <span className="error-message">{errors.country.message}</span>}
             </div>
             <div className="input-box">
@@ -261,26 +242,22 @@ const SignupForm = () => {
                     value === password || "Passwords do not match",
                 })}
               />
-              {errors.confirmPassword && <span className="error-message">{errors.confirmPassword.message}</span>}
+              {errors.confirmPassword && (
+                <span className="error-message">{errors.confirmPassword.message}</span>
+              )}
             </div>
 
-            <button type="submit" className="submit-button">
-              Register
-            </button>
+            <div className="input-box">
+              <button type="submit" className="submit-button">
+                Register
+              </button>
+            </div>
+            <div className="form-footer">
+              <p>
+                Already have an account? <Link to="/login">Login here</Link>
+              </p>
+            </div>
           </form>
-          <div className="linebreak">
-            <h3>
-              <span>Or</span>
-            </h3>
-          </div>
-          <div className="register_link">
-            <p>
-              Already have an Account?{" "}
-              <Link to="/login" className="link-of-signup">
-                Sign in
-              </Link>
-            </p>
-          </div>
         </div>
       </div>
     </div>
