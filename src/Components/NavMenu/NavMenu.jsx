@@ -66,8 +66,8 @@ const NavMenu = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/best-seller" onClick={toggleNav}>
-                  Best Seller
+                <Link to="/best-sellers" onClick={toggleNav}>
+                  Best Sellers
                 </Link>
               </li>
               <li>

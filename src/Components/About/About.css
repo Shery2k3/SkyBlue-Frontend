@@ -19,11 +19,17 @@
 }
 
 .about-container h2 {
-  margin-bottom: 10px;
+  font-family: var(--font-accent);
+  color: var(--dark);
+  font-size: 3rem;
+  margin: 0 15px 1.5rem 15px;
 }
 
 .about-container h3 {
-  font-weight: 600;
+  font-family: var(--font-accent);
+  color: var(--dark);
+  font-size: 1.5rem;
+  font-weight: 500;
   margin: auto;
 }
 
@@ -49,22 +55,28 @@
 .about-container .shop-now-button {
   color: var(--dark);
   text-decoration: none;
-  background: var(--secondary);
+  background: var(--temp-blue);
   font-family: var(--font-primary);
   font-size: 1.1rem;
   font-weight: 600;
-  padding: 10px 15px;
-  border-radius: 25px;
+  padding: 15px 30px;
+  border-radius: 100px;
   box-shadow: rgba(33, 35, 38, 0.25) 0px 10px 10px -10px;
 }
 
 .about-container .shop-now-button:hover {
-  background: #5db3e9;
+  background: #19a6fe;
 }
 
 @media only screen and (max-width: 768px) {
+
+
   .about-container h3, .about-container p {
     width: 90%;
+  }
+
+  .about-container p {
+    font-size: 1rem;
   }
 }
 
@@ -74,5 +86,24 @@
     width: 95%;
     padding: 50px 0;
     background: #e6f8ffed;
+  }
+
+  .about-container h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-container h3 {
+    font-size: 1rem;
+  }
+
+  .about-container p {
+    font-size: 0.8rem;
+    margin: 20px auto 30px auto;
+  }
+
+  .about-container .shop-now-button {
+    font-size: 1rem;
+    padding: 7.5px 15px;
   }
 }

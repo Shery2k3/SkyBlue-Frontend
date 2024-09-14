@@ -5,7 +5,7 @@ import {
   faEnvelope,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
-import "./ContactUsGrid.css"
+import "./ContactUsGrid.css";
 
 const ContactUsGrid = () => {
   return (
@@ -15,14 +15,48 @@ const ContactUsGrid = () => {
         <span className="grid-item">
           <FontAwesomeIcon icon={faPhone} />
           <span>
-            <p>416-841-9595</p>
-            <p>647-522-7419</p>
+            <span className="sub-text">For order related inquiries:</span>{" "}
+            +16473545465
           </span>
         </span>
         <span className="grid-item">
-          <FontAwesomeIcon icon={faFax} />
-          <span>905-625-5389</span>
+          <FontAwesomeIcon icon={faPhone} />
+          <span>
+            <span className="sub-text">For delivery related inquiries:</span>{" "}
+            +16473545465
+          </span>
         </span>
+        <span className="grid-item">
+          <FontAwesomeIcon icon={faPhone} />
+          <span>
+            <span className="sub-text">For pallets shipping inquiries:</span>{" "}
+            +14169515320
+          </span>
+        </span>
+        <span className="grid-item">
+          <FontAwesomeIcon icon={faPhone} />
+          <span>
+            <span className="sub-text">For sales related inquiries:</span>{" "}
+            +14169515320
+          </span>
+        </span>
+        <span className="grid-item">
+          <FontAwesomeIcon icon={faPhone} />
+          <span>
+            <span className="sub-text">
+              For customer service related inquiries:
+            </span>{" "}
+            905 625 2583
+          </span>
+        </span>
+        <span className="grid-item">
+          <FontAwesomeIcon icon={faPhone} />
+          <span>
+            <span className="sub-text">For price issue or any complains:</span>{" "}
+            647 482 2582
+          </span>
+        </span>
+
         <span className="grid-item">
           <FontAwesomeIcon icon={faEnvelope} />
           <span>sales@skybluewholesale.com</span>

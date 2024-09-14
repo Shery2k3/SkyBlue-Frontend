@@ -286,7 +286,7 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
       </section>
 
       <div className="form-submit-container">
-        <button className="btn-submit" onClick={handleSave}>
+        <button className="save-button" onClick={handleSave}>
           Save
         </button>
       </div>

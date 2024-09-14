@@ -226,7 +226,7 @@ body.scroll-lock {
 
 /* Layout Setting */
 .content {
-  min-height: calc(100vh - 441px);
+  min-height: calc(100vh - 425px);
 }
 
 /* Loader */

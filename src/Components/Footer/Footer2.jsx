@@ -66,7 +66,7 @@ const Footer2 = () => {
               </span>
               <span onClick={() => handleContactClick("phone")}>
                 <FontAwesomeIcon icon={faPhone} className="footer2-icon" />{" "}
-                <p>416-841-9595 <br />647-522-7419</p>
+                <p>905-625-2583</p>
               </span>
               <span onClick={() => handleContactClick("email")}>
                 <FontAwesomeIcon icon={faEnvelope} className="footer2-icon" />{" "}

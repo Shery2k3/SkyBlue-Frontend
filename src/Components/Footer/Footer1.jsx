@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 
 const Footer1 = () => {
   const emailAddress = "sales@skybluewholesale.com";
-  const phoneNumber = "416-841-9595";
+  const phoneNumber = "905-625-2583";
 
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -73,7 +73,7 @@ const Footer1 = () => {
               </span>
               <span onClick={() => handleContactClick("phone")}>
                 <FontAwesomeIcon icon={faPhone} className="footer1-icon" />{" "}
-                <p>416-841-9595 <br />647-522-7419</p>
+                <p>905-625-2583</p>
               </span>
               <span onClick={() => handleContactClick("email")}>
                 <FontAwesomeIcon icon={faEnvelope} className="footer1-icon" />{" "}

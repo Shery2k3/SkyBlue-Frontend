@@ -17,7 +17,7 @@
 .contact-us-grid {
   width: 80vw;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr); /* Set 2 columns */
   gap: 10px;
 }
 
@@ -33,14 +33,20 @@
   gap: 12px;
 }
 
-.contact-us .grid-item:nth-child(4) {
-  grid-column: span 3;
+/* Make the last two items take full width */
+.contact-us .grid-item:nth-child(7),
+.contact-us .grid-item:nth-child(8) {
+  grid-column: span 2; /* Make the last two items take full width */
 }
 
-.contact-us .grid-item span {
+.contact-us .grid-item>span {
   font-family: var(--font-primary);
   font-size: 1rem;
   font-weight: 600;
+}
+
+.contact-us .grid-item>span .sub-text {
+  font-weight: 400;
 }
 
 .contact-us .grid-item p {
@@ -53,6 +59,7 @@
   .contact-us .grid-item {
     font-size: 25px;
   }
+
   .contact-us .grid-item span {
     font-size: 0.8rem;
   }
@@ -80,7 +87,9 @@
     width: 100%;
   }
 
-  .contact-us .grid-item:nth-child(4) {
-    grid-column: unset; /* Reset the span to default */
+  /* Reset the spans for responsive view */
+  .contact-us .grid-item:nth-child(7),
+  .contact-us .grid-item:nth-child(8) {
+    grid-column: unset;
   }
 }

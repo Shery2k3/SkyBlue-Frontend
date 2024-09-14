@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAgeVerification } from "../../Context/AuthContext/AgeVerificationContext";
 import VerifcationLayout from "../VerificationLayout/VerificationLayout";
 import { message } from "antd"; // Import Ant Design message
+import logo from "/Logos/logo.png";
 import "./AgeVerificationForm.css";
 
 const AgeVerificationForm = () => {
@@ -50,7 +51,7 @@ const AgeVerificationForm = () => {
     <VerifcationLayout isLoading={false}>
       <div className="ageverification-wrapper">
         <div>
-          <img src="./public/logos/logo.png" alt="logo" />
+          <img src={logo} alt="logo" />
         </div>
         <h3>Age Verification</h3>
         <div>

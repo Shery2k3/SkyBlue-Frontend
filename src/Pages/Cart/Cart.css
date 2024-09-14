@@ -31,9 +31,9 @@
     padding: 10px 15px;
     border-radius: 25px;
     font-weight: 700;
+    margin-bottom: 30px;
 }
 
 .cart-page .return-home:hover{
     background-color: var(--secondary);
-
 }
