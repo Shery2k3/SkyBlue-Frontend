@@ -8,6 +8,7 @@ import Loader from "./Components/Loader/Loader";
 
 // Dynamically import components
 const Home = lazy(() => import("./Pages/Home/Home"));
+const Categories = lazy(() => import("./Pages/Categories/Categories"))
 const Account = lazy(() => import("./Pages/Account/Account"));
 const NewArrivals = lazy(() => import("./Pages/NewArrival/NewArrivals"));
 const BestSeller = lazy(() => import("./Pages/BestSeller/BestSeller"));
@@ -49,6 +50,7 @@ function App() {
 
             {/* Protected Routes */}
             <Route path="/" element={<ProtectedRoute element={Home} />} />
+            <Route path="/categories" element={<ProtectedRoute element={Categories} />} />
             <Route
               path="user/account-info"
               element={<ProtectedRoute element={Account} page="info" />}
