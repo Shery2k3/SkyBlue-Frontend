@@ -41,7 +41,6 @@ const ChangePassword = ({ setIsLoading }) => {
         currentPassword,
         newPassword,
       });
-      console.log(response);
       message.success("Password Updated");
     } catch (error) {
       console.error("Error:", error);

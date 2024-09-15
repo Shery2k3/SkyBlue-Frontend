@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./SubBanners.css";
 import product1 from "/Images/product1.png";
 import product2 from "/Images/product2.png";
@@ -36,9 +37,8 @@ const SubBanners = () => {
     >
       <div className="sub-banner">
         <span className="product-detail">
-          <h2>Best Seller</h2>
-          <p>Product Name</p>
-          <button>Shop Now</button>
+          <h2>Vapes and<br />Accessories</h2>
+          <Link to="/category/319?page=1" className="button">Shop Now</Link>
         </span>
         <span className="product-image-container">
           <img src={product1} alt="product-image" className="product-image" />
@@ -46,9 +46,8 @@ const SubBanners = () => {
       </div>
       <div className="sub-banner">
         <span className="product-detail">
-          <h2>Best Seller</h2>
-          <p>Product Name</p>
-          <button>Shop Now</button>
+          <h2>Range of<br />Beverages</h2>
+          <Link to="/category/189?page=1" className="button">Shop Now</Link>
         </span>
         <span className="product-image-container">
           <img src={product2} alt="product-image" className="product-image" />

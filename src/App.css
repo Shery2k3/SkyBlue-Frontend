@@ -2,6 +2,7 @@
 
 :root {
   --accent: #87ceeb;
+  --heading-color: #0075c2;
   --temp-blue: #08a5e3;
   --dark: #00273e;
   --light: #fdffff;
@@ -226,7 +227,7 @@ body.scroll-lock {
 
 /* Layout Setting */
 .content {
-  min-height: calc(100vh - 425px);
+  min-height: calc(100vh - 315px);
 }
 
 /* Loader */

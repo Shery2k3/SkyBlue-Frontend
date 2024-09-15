@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import "./ShippingMethod.css";
 
-const ShippingMethod = ({ selectedOption, setSelectedOption, shippingMethods }) => {
+const ShippingMethod = ({
+  selectedOption,
+  setSelectedOption,
+  shippingMethods,
+}) => {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
@@ -9,7 +13,9 @@ const ShippingMethod = ({ selectedOption, setSelectedOption, shippingMethods }) 
   }, [shippingMethods]);
 
   const handleOptionChange = (e) => {
-    const selectedMethod = options.find(option => option.shippingMethod === e.target.value);
+    const selectedMethod = options.find(
+      (option) => option.shippingMethod === e.target.value
+    );
     setSelectedOption(selectedMethod);
   };
 
@@ -18,14 +24,22 @@ const ShippingMethod = ({ selectedOption, setSelectedOption, shippingMethods }) 
       <h3>Select Shipping Method</h3>
       <div className="options">
         {options.map((method) => (
-          <label key={method.newShippingMethodId} className={`option ${selectedOption === method ? "active" : ""}`}>
+          <label
+            key={method.newShippingMethodId}
+            className={`option ${selectedOption === method ? "active" : ""}`}
+          >
             <input
               type="radio"
               value={method.shippingMethod}
               checked={selectedOption === method}
               onChange={handleOptionChange}
             />
-            {method.shippingMethod} ($0.00)
+            {method.shippingMethod}
+            <span className="shipping-method-price">
+              {method.newShippingMethodId === 1
+                ? "(Delivery charges vary by area and will be added to the invoice.)"
+                : "($0.00)"}
+            </span>
           </label>
         ))}
       </div>

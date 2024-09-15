@@ -49,7 +49,6 @@ const OrderHistory = ({ setIsLoading }) => {
         const response = await retryRequest(() =>
           axiosInstance.get("/customer/orders")
         );
-        console.log(response);
         const transformedData = response.data.data.map((order) => ({
           key: order.Id,
           date: new Date(order.CreatedOnUtc).toLocaleDateString(),

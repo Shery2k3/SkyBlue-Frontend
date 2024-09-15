@@ -1,4 +1,6 @@
 import { useEffect, useState, lazy, Suspense } from "react";
+import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 import Layout from "../../Components/Layout/Layout";
 import NavbarFixed from "../../Components/Navbar/NavbarFixed";
 import { Steps } from "antd";
@@ -24,14 +26,15 @@ const items = [
 ];
 
 const shippingMethods = [
-  { newShippingMethodId: 5, shippingMethod: "Pallet Shipping" },
-  { newShippingMethodId: 1, shippingMethod: "Delivery" },
   { newShippingMethodId: 4, shippingMethod: "Pickup" },
+  { newShippingMethodId: 1, shippingMethod: "Delivery" },
+  { newShippingMethodId: 5, shippingMethod: "Pallet Shipping" },
 ];
 
 const OnePageCheckout = () => {
+  const [isLoading, setIsLoading] = useState(true)
   const [currentStep, setCurrentStep] = useState(0);
-  const [shippingMethod, setShippingMethod] = useState(shippingMethods[2]);
+  const [shippingMethod, setShippingMethod] = useState(shippingMethods[0]);
   const [direction, setDirection] = useState("forward");
   const [products, setProducts] = useState([]);
   const [cartSummary, setCartSummary] = useState({
@@ -41,6 +44,9 @@ const OnePageCheckout = () => {
     Discount: 1.19,
     total: 0,
   });
+
+  const navigate = useNavigate()
+
 
   const fetchCartData = async () => {
     try {
@@ -55,8 +61,17 @@ const OnePageCheckout = () => {
       });
     } catch (error) {
       console.error("Failed to load data:", error);
+    } finally{
+      setIsLoading(false)
     }
   };
+
+  useEffect(() => {
+    if (!isLoading && products.length === 0) {
+      message.info("No items in the cart.");
+      navigate("/"); 
+    }
+  }, [products, isLoading, navigate]);
 
   useEffect(() => {
     fetchCartData();
@@ -110,7 +125,7 @@ const OnePageCheckout = () => {
   };
 
   return (
-    <Layout pageTitle="One Page Checkout" isLoading={false}>
+    <Layout pageTitle="One Page Checkout" isLoading={isLoading}>
       <NavbarFixed />
       <div className="onepagecheckout">
         <Steps current={currentStep} items={items} />

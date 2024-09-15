@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams, Link } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
 import Header from "../../Components/Header/Header";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import Pagination from "../../Components/Pagination/Pagination";
 import useRetryRequest from "../../api/useRetryRequest"; // Import the custom hook
 import axiosInstance from "../../api/axiosConfig"; // Import the configured Axios instance
+import "./Category.css"
 
 const Category = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,9 +33,10 @@ const Category = () => {
     const fetchData = async () => {
       try {
         const response = await retryRequest(() =>
-          axiosInstance.get(`/product/category/${categoryId}?page=${currentPage}&size=18`)
+          axiosInstance.get(
+            `/product/category/${categoryId}?page=${currentPage}&size=18`
+          )
         );
-        console.log(response.data);
         setCategory(response.data.categoryName);
         setProducts(response.data.data);
         setTotalPages(response.data.totalPages);
@@ -51,12 +53,22 @@ const Category = () => {
   return (
     <Layout pageTitle={category} style="style1" isLoading={isLoading}>
       <Header />
-      <ProductGrid category={category} products={products} />
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        handlePageChange={handlePageChange}
-      />
+      {products.length > 0 ? (
+        <>
+          <ProductGrid category={category} products={products} />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        </>
+      ) : (
+        <div className="empty-category">
+          <h2>Oops! It's Empty</h2>
+          <p>There are no products listed under this category yet.</p>
+          <Link to="/categories">Check Other Categories</Link>
+        </div>
+      )}
     </Layout>
   );
 };

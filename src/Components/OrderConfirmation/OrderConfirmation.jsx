@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
 import "./OrderConfirmation.css";
@@ -5,17 +6,28 @@ import axiosInstance from "../../api/axiosConfig";
 
 const OrderConfirmation = ({ subTotal, shipping, tax, discount, shippingMethod, total }) => {
 
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    if (loading) return; // Prevent multiple requests if already loading
+
+    setLoading(true);
+    const loadingMessage = message.loading("Placing order...", 0); // Show loading message
+
     try {
       const response = await axiosInstance.post(`/checkout`, {
         newShippingMethodId: shippingMethod.newShippingMethodId,
       });
       navigate("/orderplaced", { state: { orderPlaced: true } });
+      loadingMessage(); // Clear the loading message
       message.success("Order Placed");
     } catch (error) {
       console.error("Error placing order:", error);
+      loadingMessage(); // Clear the loading message
+      message.error("Failed to place order. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,7 +53,13 @@ const OrderConfirmation = ({ subTotal, shipping, tax, discount, shippingMethod, 
         <span>Total:</span>
         <span>${total}</span>
       </div>
-      <button onClick={handleSubmit} className="checkout-button">Confirm</button>
+      <button 
+        onClick={handleSubmit} 
+        className="checkout-button" 
+        disabled={loading}
+      >
+        {loading ? "Processing..." : "Confirm"}
+      </button>
     </div>
   );
 };
