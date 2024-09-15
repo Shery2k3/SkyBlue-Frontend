@@ -200,7 +200,7 @@ const SignupForm = () => {
               >
                 <option value="">Select Country</option>
                 {countries.map((country) => (
-                  <option key={country.Id} value={country.Name}>
+                  <option key={country.Id} value={country.Id}>
                     {country.Name}
                   </option>
                 ))}
@@ -218,7 +218,7 @@ const SignupForm = () => {
                 <option value="">Select State</option>
                 <option value={null}>None</option>
                 {states.map((state) => (
-                  <option key={state.Id} value={state.Name}>
+                  <option key={state.Id} value={state.Id}>
                     {state.Name}
                   </option>
                 ))}
