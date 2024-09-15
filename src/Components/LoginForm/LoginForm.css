@@ -10,8 +10,8 @@
 
 /* Inner Wrapper */
 .inner-wrapper-login {
-  padding-left: 70px;
-  padding-right: 70px;
+  padding-left: 55px;
+  padding-right: 55px;
   padding-bottom: 30px;
   padding-top: 0px;
 }
@@ -216,9 +216,13 @@
 }
 
 @media (max-width: 355px) {
+  .wrapper-login {
+    width: 95vw;
+  }
+  
   .inner-wrapper-login {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
     padding-bottom: 30px;
     padding-top: 0px;
   }

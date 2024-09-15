@@ -16,6 +16,11 @@ const Search = lazy(() => import("./Pages/Search/Search"));
 const ContactUs = lazy(() => import("./Pages/ContactUs/ContactUs"));
 const Cart = lazy(() => import("./Pages/Cart/Cart"));
 const Login = lazy(() => import("./Pages/Login/Login"));
+const ForgetPassword = lazy(() =>
+  import("./Pages/ForgetPassword/ForgetPassword")
+);
+const Success = lazy(() => import("./Pages/ForgetPassword/Success"));
+const ResetPassword = lazy(() => import("./Pages/ResetPassword/ResetPassword"));
 const SignUp = lazy(() => import("./Pages/SignUp/SignUp"));
 const Category = lazy(() => import("./Pages/Category/Category"));
 const OnePageCheckout = lazy(() =>
@@ -26,7 +31,7 @@ const ReturnPolicy = lazy(() => import("./Pages/Information/ReturnPolicy"));
 const TermsConditions = lazy(() =>
   import("./Pages/Information/TermsConditions")
 );
-const OrderPlaced = lazy(()=> import("./Components/NotFound/OrderPlaced"))
+const OrderPlaced = lazy(() => import("./Components/NotFound/OrderPlaced"));
 
 function App() {
   return (
@@ -37,6 +42,9 @@ function App() {
           <Routes>
             {/* Public Routes */}
             <Route path="login" element={<Login />} />
+            <Route path="forget-password" element={<ForgetPassword />} />
+            <Route path="forget-password/success" element={<Success />} />
+            <Route path="reset-password" element={<ResetPassword />} />
             <Route path="signup" element={<SignUp />} />
 
             {/* Protected Routes */}
