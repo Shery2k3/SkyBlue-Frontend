@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import API_BASE_URL from "../../constant";
-import { message } from "antd"; // Import message from antd
+import { message } from "antd";
 import "./SignUpForm.css";
 import LogoAccent from "/Logos/LogoAccent.png";
 import { Link } from "react-router-dom";
@@ -19,15 +19,16 @@ const SignupForm = () => {
     formState: { errors },
   } = useForm();
 
-  const [countries, setCountries] = useState([]); // State to store country list
-  const [fileList, setFileList] = useState([]); // State to manage uploaded files
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
+  const [selectedCountryId, setSelectedCountryId] = useState(null);
+  const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
-    // Fetch countries from API
     const fetchCountries = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/customer/countries`);
-        setCountries(response.data); // Store fetched countries in state
+        setCountries(response.data);
       } catch (error) {
         message.error("Failed to load countries");
       }
@@ -35,17 +36,35 @@ const SignupForm = () => {
     fetchCountries();
   }, []);
 
+  useEffect(() => {
+    if (selectedCountryId) {
+      const fetchStates = async () => {
+        try {
+          const response = await axios.get(`${API_BASE_URL}/customer/states/${selectedCountryId}`);
+          setStates(response.data);
+        } catch (error) {
+          message.error("Failed to load states");
+        }
+      };
+      fetchStates();
+    }
+  }, [selectedCountryId]);
+
   const onSubmit = async (data) => {
+    console.log("Form data before conversion:", data);
+
     const formData = new FormData();
     for (const key in data) {
       if (key === "documents") {
         for (const file of data[key]) {
-          formData.append("documents", file); // Append the file list
+          formData.append("documents", file);
         }
       } else {
         formData.append(key, data[key]);
       }
     }
+
+    console.log("FormData object:", formData);
 
     try {
       const response = await axios.post(`${API_BASE_URL}/auth/signup`, formData, {
@@ -63,21 +82,21 @@ const SignupForm = () => {
         message.error("Something went wrong.");
       }
     } catch (error) {
-      if (error.response && error.response.status === 500) {
-        message.error("Something went wrong.");
-      } else {
-        message.error(error.message);
-      }
+      message.error("Something went wrong.");
     }
   };
 
-  // Watch password value to compare with confirm password
+  const handleCountryChange = (e) => {
+    const selectedCountry = e.target.value;
+    const countryId = countries.find(country => country.Name === selectedCountry)?.Id;
+    setSelectedCountryId(countryId);
+  };
+
   const password = watch("password");
 
-  // Handle file changes for the Upload component
   const handleFileChange = ({ fileList }) => {
     setFileList(fileList);
-    setValue("documents", fileList.map(file => file.originFileObj)); // Manually set the files in react-hook-form
+    setValue("documents", fileList.map(file => file.originFileObj));
   };
 
   return (
@@ -91,9 +110,7 @@ const SignupForm = () => {
             <h2 className="form-heading">Register Your Account</h2>
 
             <div className="linebreak">
-              <h3>
-                <span>Your Personal Details</span>
-              </h3>
+              <h3><span>Your Personal Details</span></h3>
             </div>
             <div className="input-box">
               <label htmlFor="firstName">First Name</label>
@@ -101,6 +118,7 @@ const SignupForm = () => {
                 type="text"
                 id="firstName"
                 {...register("firstName", { required: "First name is required" })}
+                autoComplete="given-name"
               />
               {errors.firstName && <span className="error-message">{errors.firstName.message}</span>}
             </div>
@@ -110,6 +128,7 @@ const SignupForm = () => {
                 type="text"
                 id="lastName"
                 {...register("lastName", { required: "Last name is required" })}
+                autoComplete="family-name"
               />
               {errors.lastName && <span className="error-message">{errors.lastName.message}</span>}
             </div>
@@ -125,14 +144,13 @@ const SignupForm = () => {
                     message: "Enter a valid email address",
                   },
                 })}
+                autoComplete="email"
               />
               {errors.email && <span className="error-message">{errors.email.message}</span>}
             </div>
 
             <div className="linebreak">
-              <h3>
-                <span>Company Details</span>
-              </h3>
+              <h3><span>Company Details</span></h3>
             </div>
             <div className="input-box">
               <label htmlFor="companyName">Company Name</label>
@@ -140,6 +158,7 @@ const SignupForm = () => {
                 type="text"
                 id="companyName"
                 {...register("companyName", { required: "Company name is required" })}
+                autoComplete="organization"
               />
               {errors.companyName && <span className="error-message">{errors.companyName.message}</span>}
             </div>
@@ -149,6 +168,7 @@ const SignupForm = () => {
                 type="text"
                 id="storeAddress"
                 {...register("storeAddress", { required: "Store address is required" })}
+                autoComplete="address"
               />
               {errors.storeAddress && <span className="error-message">{errors.storeAddress.message}</span>}
             </div>
@@ -159,9 +179,9 @@ const SignupForm = () => {
             <div className="input-box-1">
               <div className="upload-icon">
                 <Upload
-                  fileList={fileList} // Set fileList state
-                  onChange={handleFileChange} // Handle file change
-                  beforeUpload={() => false} // Disable auto upload
+                  fileList={fileList}
+                  onChange={handleFileChange}
+                  beforeUpload={() => false}
                   multiple
                 >
                   <Button icon={<UploadOutlined />} className="upload-btn"></Button>
@@ -170,36 +190,44 @@ const SignupForm = () => {
               <p className="drag-text">Click or drag file to this area to upload</p>
             </div>
 
-            {/* Country dropdown */}
             <div className="input-box">
               <label htmlFor="country">Country</label>
               <select
                 id="country"
                 {...register("country", { required: "Country is required" })}
+                onChange={handleCountryChange}
+                autoComplete="country"
               >
                 <option value="">Select Country</option>
                 {countries.map((country) => (
-                  <option key={country.Id} value={country.Name}>
+                  <option key={country.Id} value={country.Id}>
                     {country.Name}
                   </option>
                 ))}
               </select>
               {errors.country && <span className="error-message">{errors.country.message}</span>}
             </div>
+
             <div className="input-box">
               <label htmlFor="state">State / Province</label>
-              <input
-                type="text"
+              <select
                 id="state"
-                {...register("state", { required: "State is required" })}
-              />
+                {...register("state", { required: "State is required if not showing then select none" })}
+                autoComplete="state"
+              >
+                <option value="">Select State</option>
+                <option value={null}>None</option>
+                {states.map((state) => (
+                  <option key={state.Id} value={state.Id}>
+                    {state.Name}
+                  </option>
+                ))}
+              </select>
               {errors.state && <span className="error-message">{errors.state.message}</span>}
             </div>
 
             <div className="linebreak">
-              <h3>
-                <span>Your Contact Information</span>
-              </h3>
+              <h3><span>Your Contact Information</span></h3>
             </div>
             <div className="input-box">
               <label htmlFor="phone">Phone</label>
@@ -207,14 +235,13 @@ const SignupForm = () => {
                 type="tel"
                 id="phone"
                 {...register("phone", { required: "Phone number is required" })}
+                autoComplete="tel"
               />
               {errors.phone && <span className="error-message">{errors.phone.message}</span>}
             </div>
 
             <div className="linebreak">
-              <h3>
-                <span>Password</span>
-              </h3>
+              <h3><span>Password</span></h3>
             </div>
             <div className="input-box">
               <label htmlFor="password">Password</label>
@@ -228,6 +255,7 @@ const SignupForm = () => {
                     message: "Password must be at least 6 characters long",
                   },
                 })}
+                autoComplete="new-password"
               />
               {errors.password && <span className="error-message">{errors.password.message}</span>}
             </div>
@@ -241,21 +269,20 @@ const SignupForm = () => {
                   validate: (value) =>
                     value === password || "Passwords do not match",
                 })}
+                autoComplete="new-password"
               />
               {errors.confirmPassword && (
-                <span className="error-message">{errors.confirmPassword.message}</span>
+                <span className="error-message">
+                  {errors.confirmPassword.message}
+                </span>
               )}
             </div>
 
             <div className="input-box">
-              <button type="submit" className="submit-button">
-                Register
-              </button>
+              <button type="submit" className="submit-button">Register</button>
             </div>
             <div className="form-footer">
-              <p>
-                Already have an account? <Link to="/login">Login here</Link>
-              </p>
+              <p>Already have an account? <Link to="/login">Login here</Link></p>
             </div>
           </form>
         </div>
