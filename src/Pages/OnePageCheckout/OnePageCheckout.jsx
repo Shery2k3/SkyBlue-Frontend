@@ -25,6 +25,11 @@ const items = [
   { title: "Confirmation" },
 ];
 
+const countries = [
+  { Id: 1, Name: "United States" },
+  { Id: 2, Name: "Canada" },
+];
+
 const shippingMethods = [
   { newShippingMethodId: 4, shippingMethod: "Pickup" },
   { newShippingMethodId: 1, shippingMethod: "Delivery" },
@@ -32,7 +37,7 @@ const shippingMethods = [
 ];
 
 const OnePageCheckout = () => {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
   const [shippingMethod, setShippingMethod] = useState(shippingMethods[0]);
   const [direction, setDirection] = useState("forward");
@@ -45,36 +50,86 @@ const OnePageCheckout = () => {
     total: 0,
   });
 
-  const navigate = useNavigate()
+  const [formData, setFormData] = useState({
+    Name: "",
+    Company: "",
+    Address1: "",
+    Address2: "",
+    ZipPostalCode: "",
+    City: "",
+    Country: "",
+    State: "",
+    PhoneNumber: "",
+    Email: "",
+  });
 
+  const countries = [
+    { Id: 1, Name: "United States" },
+    { Id: 2, Name: "Canada" },
+  ];
 
-  const fetchCartData = async () => {
+  const [states, setStates] = useState([]);
+
+  const navigate = useNavigate();
+
+  // Function to fetch both cart and user data in parallel
+  const fetchDataInParallel = async () => {
     try {
-      const response = await axiosInstance.get("/cart/items");
-      setProducts(response.data.cartItems);
+      const [cartResponse, userInfoResponse] = await Promise.all([
+        axiosInstance.get("/cart/items"),
+        axiosInstance.get("/customer/info"),
+      ]);
+
+      // Set cart data
+      const cartItems = cartResponse.data.cartItems;
+      setProducts(cartItems);
       setCartSummary({
-        subtotal: response.data.totalPrice,
+        subtotal: cartResponse.data.totalPrice,
         Shipping: 0,
-        tax: response.data.taxAmount,
+        tax: cartResponse.data.taxAmount,
         Discount: 1.19,
-        total: response.data.finalPrice - 1.19,
+        total: cartResponse.data.finalPrice - 1.19,
       });
+
+      // Set user info data
+      const userInfo = userInfoResponse.data[0];
+
+      // Find the country name based on the CountryId
+      const selectedCountry = countries.find(
+        (country) => country.Id === userInfo.CountryId
+      );
+
+      // Fetch the state information based on StateProvinceId
+      const stateResponse = await axiosInstance.get(
+        `/customer/states/${userInfo.CountryId}`
+      );
+
+      const selectedState = stateResponse.data.find(
+        (State) => State.Id === userInfo.StateProvinceId
+      );
+
+      setFormData({
+        Name: `${userInfo.FirstName || ""} ${userInfo.LastName || ""}`.trim(),
+        Address: `${userInfo.Address1 || ""}${userInfo.Address2 ? ", " + userInfo.Address2 : ""}${userInfo.City ? ", " + userInfo.City : ""}${selectedState.Name ? ", " + selectedState.Name : ""}${userInfo.ZipPostalCode ? " " + userInfo.ZipPostalCode : ""}${selectedCountry.Name ? ",\n" + selectedCountry.Name : ""}`.trim(),
+        PhoneNumber: userInfo.PhoneNumber || "",
+        Email: userInfo.Email || ""
+      });
+
+      if (cartItems.length === 0) {
+        message.info("No items in the cart.");
+        navigate("/");
+      }
     } catch (error) {
       console.error("Failed to load data:", error);
-    } finally{
-      setIsLoading(false)
+      message.error("Failed to load data.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!isLoading && products.length === 0) {
-      message.info("No items in the cart.");
-      navigate("/"); 
-    }
-  }, [products, isLoading, navigate]);
-
-  useEffect(() => {
-    fetchCartData();
+    fetchDataInParallel();
+    console.log(formData);
   }, []);
 
   const nextStep = () => {
@@ -113,6 +168,7 @@ const OnePageCheckout = () => {
         return (
           <Suspense fallback={<div>Loading...</div>}>
             <Confirmation
+              userInfo={formData}
               shippingMethod={shippingMethod}
               products={products}
               cartSummary={cartSummary}

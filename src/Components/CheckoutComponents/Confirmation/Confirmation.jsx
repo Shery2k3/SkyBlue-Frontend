@@ -1,7 +1,7 @@
 import "./Confirmation.css";
 import OrderConfirmation from "../../OrderConfirmation/OrderConfirmation";
 
-const Confirmation = ({ shippingMethod, products, cartSummary }) => {
+const Confirmation = ({ shippingMethod, products, cartSummary, userInfo }) => {
   const { subtotal, Shipping, tax, Discount, total } = cartSummary;
 
   return (
@@ -29,16 +29,16 @@ const Confirmation = ({ shippingMethod, products, cartSummary }) => {
           <h3>Shipping Address</h3>
           <span>
             <p>
-              <strong>Name:</strong> Noman
+              <strong>Name:</strong> {userInfo.Name}
             </p>
             <p>
-              <strong>Email:</strong> Noman@skybluewholesale.com
+              <strong>Email:</strong> {userInfo.Email}
             </p>
             <p>
-              <strong>Phone:</strong> 6475227419
+              <strong>Phone:</strong> {userInfo.PhoneNumber}
             </p>
             <p>
-              <strong>Address:</strong> Ontario, Canada
+              <strong>Address:</strong> {userInfo.Address} 
             </p>
             <p>
               <strong>Payment Method:</strong> {shippingMethod.shippingMethod}

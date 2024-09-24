@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
+import Notice from "../../Components/Notice/Notice";
 import Header from "../../Components/Header/Header";
 import Banner from "../../Components/Banner/Banner";
 import SubBanners from "../../Components/SubBanners/SubBanners";
@@ -17,8 +18,17 @@ const Home = () => {
   const [bestSellers, setBestSellers] = useState([]);
   const [newArrival, setNewArrival] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
+  const [showNotice, setShowNotice] = useState(false);
   const navigate = useNavigate();
   const retryRequest = useRetryRequest();
+
+  useEffect(() => {
+    const hasSeenNotice = sessionStorage.getItem("hasSeenNotice");
+    if (!hasSeenNotice) {
+      setShowNotice(true);
+      sessionStorage.setItem("hasSeenNotice", "true");
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,23 +45,32 @@ const Home = () => {
               axiosInstance.get(`/product/category/-1?page=1&size=12`)
             ),
           ]);
-          
+
         if (bestSellersResult.status === "fulfilled") {
           setBestSellers(bestSellersResult.value.data);
         } else {
-          console.error("Failed to load bestsellers:", bestSellersResult.reason);
+          console.error(
+            "Failed to load bestsellers:",
+            bestSellersResult.reason
+          );
         }
 
         if (newArrivalResult.status === "fulfilled") {
           setNewArrival(newArrivalResult.value.data);
         } else {
-          console.error("Failed to load new arrivals:", newArrivalResult.reason);
+          console.error(
+            "Failed to load new arrivals:",
+            newArrivalResult.reason
+          );
         }
 
         if (allProductsResult.status === "fulfilled") {
           setAllProducts(allProductsResult.value.data.data);
         } else {
-          console.error("Failed to load All Products:", allProductsResult.reason);
+          console.error(
+            "Failed to load All Products:",
+            allProductsResult.reason
+          );
         }
 
         setIsLoading(false);
@@ -64,9 +83,14 @@ const Home = () => {
     fetchData();
   }, [navigate, retryRequest]);
 
+  const handleCloseNotice = () => {
+    setShowNotice(false);
+  };
+
   return (
     <Layout pageTitle="Home" style="style1" isLoading={isLoading}>
       <>
+        {showNotice && <Notice onClose={handleCloseNotice} />}
         <Header />
         <Banner />
         <SubBanners />
