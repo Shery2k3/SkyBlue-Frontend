@@ -41,6 +41,7 @@ const SignupForm = () => {
       const fetchStates = async () => {
         try {
           const response = await axios.get(`${API_BASE_URL}/customer/states/${selectedCountryId}`);
+          console.log('Fetching states')
           setStates(response.data);
         } catch (error) {
           message.error("Failed to load states");
@@ -87,9 +88,8 @@ const SignupForm = () => {
   };
 
   const handleCountryChange = (e) => {
-    const selectedCountry = e.target.value;
-    const countryId = countries.find(country => country.Name === selectedCountry)?.Id;
-    setSelectedCountryId(countryId);
+    const selectedCountryId = e.target.value;
+    setSelectedCountryId(selectedCountryId);
   };
 
   const password = watch("password");
