@@ -6,6 +6,8 @@ import LogoAccent from "/Logos/LogoAccent.png";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import { Alert } from "antd";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -16,11 +18,12 @@ const LoginForm = () => {
   const [alert, setAlert] = useState({
     visible: false,
     message: "",
-    type: "error", // Could be "success", "info", "warning", or "error"
+    type: "error",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useContext(AuthContext);
-  const navigate = useNavigate(); // Use useNavigate instead of useHistory
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -28,6 +31,10 @@ const LoginForm = () => {
       ...prevState,
       [name]: type === "checkbox" ? checked : value,
     }));
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (e) => {
@@ -42,7 +49,7 @@ const LoginForm = () => {
       if (response.status === 200) {
         const { token } = response.data;
         login(token, formData.rememberMe);
-        navigate("/"); // Navigate to a protected route
+        navigate("/");
       } else {
         console.error("Login failed with status code:", response.status);
         setAlert({
@@ -62,15 +69,11 @@ const LoginForm = () => {
   };
 
   return (
-    
     <div className="wrapper-login">
-     
       <div className="logo">
         <img src={LogoAccent} alt="Company Logo" />
       </div>
       <div className="inner-wrapper-login">
-         
-        
         <form onSubmit={handleSubmit}>
           <h2 className="form-heading">Welcome, Please Sign In!</h2>
           <div className="input-box">
@@ -87,15 +90,29 @@ const LoginForm = () => {
           </div>
           <div className="input-box">
             <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              placeholder="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+            <div style={{ position: 'relative' }}>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <span
+                onClick={togglePasswordVisibility}
+                style={{
+                  position: 'absolute',
+                  right: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  cursor: 'pointer',
+                }}
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </span>
+            </div>
           </div>
           <div className="remember-forget">
             <label>
@@ -110,14 +127,14 @@ const LoginForm = () => {
             <Link to="/forget-password" className="forget-password">Forget password?</Link>
           </div>
           {alert.visible && (
-      <Alert
-        message={alert.message}
-        type={alert.type}
-        closable
-        onClose={() => setAlert({ ...alert, visible: false })}
-        style={{ marginBottom: 16 }}
-      />
-    )} 
+            <Alert
+              message={alert.message}
+              type={alert.type}
+              closable
+              onClose={() => setAlert({ ...alert, visible: false })}
+              style={{ marginBottom: 16 }}
+            />
+          )}
           <button type="submit" className="submit-button">
             Log in
           </button>
