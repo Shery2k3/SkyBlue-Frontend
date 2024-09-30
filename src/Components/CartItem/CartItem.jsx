@@ -4,9 +4,11 @@ import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import axiosInstance from "../../api/axiosConfig";
 import { debounce } from "lodash";
 import { message } from "antd";
+import { useModal } from "../../Context/ModalContext/ModalContext";
 import "./CartItem.css";
 
 const CartItem = ({ product, onUpdate, onRemove }) => {
+  const [unitPrice, setUnitPrice] = useState(product.Price)
   const [tempQuantity, setQuantity] = useState(product.Quantity);
   const [price, setPrice] = useState(product.Price * product.Quantity);
   const [MinimumQuantity, setMinimumQuantity] = useState(
@@ -17,7 +19,8 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
     (_, i) => (i + 1) * MinimumQuantity
   );
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [isUserInteraction, setUserInteraction] = useState(false);  
+  const [isUserInteraction, setUserInteraction] = useState(false); 
+  const { openModal } = useModal(); 
 
   const dropdownRef = useRef(null);
   const dropdownContainerRef = useRef(null);
@@ -121,6 +124,10 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
     debouncedRemoveItem(); // Use the debounced function
   };
 
+  const handleClick = () => {
+    openModal(product);
+  };
+
   return (
     <div className="cart-item">
       <div className="product-data">
@@ -129,10 +136,11 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
             src={product.images}
             alt="product-image"
             className="product-image"
+            onClick={handleClick}
           />
         </span>
         <span className="product-name">
-          <p className="name">{product.Name}</p>
+          <p onClick={handleClick} className="name">{product.Name}</p>
           <span className="smallscreen-price">${price.toFixed(2)}</span>
         </span>
       </div>

@@ -1,8 +1,11 @@
 import "./Confirmation.css";
 import OrderConfirmation from "../../OrderConfirmation/OrderConfirmation";
+import { useModal } from "../../../Context/ModalContext/ModalContext";
 
 const Confirmation = ({ shippingMethod, products, cartSummary, userInfo }) => {
   const { subtotal, Shipping, tax, Discount, total } = cartSummary;
+
+  const { openModal } = useModal();
 
   return (
     <div className="confirmation">
@@ -38,7 +41,7 @@ const Confirmation = ({ shippingMethod, products, cartSummary, userInfo }) => {
               <strong>Phone:</strong> {userInfo.PhoneNumber}
             </p>
             <p>
-              <strong>Address:</strong> {userInfo.Address} 
+              <strong>Address:</strong> {userInfo.Address}
             </p>
             <p>
               <strong>Payment Method:</strong> {shippingMethod.shippingMethod}
@@ -61,7 +64,11 @@ const Confirmation = ({ shippingMethod, products, cartSummary, userInfo }) => {
             {products.map((product, index) => (
               <tr key={index}>
                 <td>
-                  <span className="image-container">
+                  <span
+                    className="image-container"
+                    onClick={() => openModal(product)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <img
                       src={product.images}
                       alt={product.Name}
@@ -69,7 +76,12 @@ const Confirmation = ({ shippingMethod, products, cartSummary, userInfo }) => {
                     />
                   </span>
                 </td>
-                <td>{product.Name}</td>
+                <td
+                  onClick={() => openModal(product)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {product.Name}
+                </td>
                 <td>${product.Price.toFixed(2)}</td>
                 <td>{product.Quantity}</td>
                 <td>${(product.Price * product.Quantity).toFixed(2)}</td>

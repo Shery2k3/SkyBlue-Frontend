@@ -28,7 +28,10 @@ const Footer1 = () => {
     } else if (contactType === "whatsapp") {
       window.open(`https://wa.me/${phoneNumber}`, "_blank");
     } else if (contactType === "location") {
-      window.open(`https://www.google.com/maps/dir//SkyBlue+Wholesale+Ltd.+1300+Kamato+Rd+%238%269+Mississauga,+ON+L4W+2N2+Canada/@43.6489946,-79.6447795,14.25z/data=!4m8!4m7!1m0!1m5!1m1!1s0x882b38b822595eef:0xc6a638e8c0217d16!2m2!1d-79.6384887!2d43.642971?entry=ttu&g_ep=EgoyMDI0MDkwNC4wIKXMDSoASAFQAw%3D%3D`, "_blank");
+      window.open(
+        `https://www.google.com/maps/dir//SkyBlue+Wholesale+Ltd.+1300+Kamato+Rd+%238%269+Mississauga,+ON+L4W+2N2+Canada/@43.6489946,-79.6447795,14.25z/data=!4m8!4m7!1m0!1m5!1m1!1s0x882b38b822595eef:0xc6a638e8c0217d16!2m2!1d-79.6384887!2d43.642971?entry=ttu&g_ep=EgoyMDI0MDkwNC4wIKXMDSoASAFQAw%3D%3D`,
+        "_blank"
+      );
     }
   };
 
@@ -52,13 +55,25 @@ const Footer1 = () => {
           <div className="footer1-quick-links">
             <h2 className="footer1-heading">INFORMATION</h2>
             <span>
-              <Link className="footer1-link" onClick={scrollToTop} to="/return-policy">
+              <Link
+                className="footer1-link"
+                onClick={scrollToTop}
+                to="/return-policy"
+              >
                 Return policy
               </Link>
-              <Link className="footer1-link" onClick={scrollToTop} to="/privacy-policy">
+              <Link
+                className="footer1-link"
+                onClick={scrollToTop}
+                to="/privacy-policy"
+              >
                 Privacy policy
               </Link>
-              <Link className="footer1-link" onClick={scrollToTop} to="/terms-and-conditions">
+              <Link
+                className="footer1-link"
+                onClick={scrollToTop}
+                to="/terms-and-conditions"
+              >
                 Terms & Conditions
               </Link>
             </span>
@@ -68,8 +83,13 @@ const Footer1 = () => {
             <div>
               <h2 className="footer1-heading">GET IN TOUCH</h2>
               <span onClick={() => handleContactClick("location")}>
-                <FontAwesomeIcon icon={faLocationDot} className="footer1-icon" />{" "}
-                <p>1300 Kamato Rd Unit 8 &  <br /> Mississauga, Ontario L4W 2N2</p>
+                <FontAwesomeIcon
+                  icon={faLocationDot}
+                  className="footer1-icon"
+                />{" "}
+                <p>
+                  1300 Kamato Rd Unit 8 & <br /> Mississauga, Ontario L4W 2N2
+                </p>
               </span>
               <span onClick={() => handleContactClick("phone")}>
                 <FontAwesomeIcon icon={faPhone} className="footer1-icon" />{" "}
@@ -79,21 +99,26 @@ const Footer1 = () => {
                 <FontAwesomeIcon icon={faEnvelope} className="footer1-icon" />{" "}
                 <p>sales@skybluewholesale.com</p>
               </span>
-             
             </div>
           </div>
 
           <div className="footer1-socials-section">
             <h2 className="footer1-heading">OUR SOCIALS</h2>
             <div className="footer1-socials">
+              <a href="/" target="_">
+                <FontAwesomeIcon
+                  icon={faFacebookF}
+                  className="footer1-social"
+                />
+              </a>
               <a
-                href="/"
+                href="https://www.instagram.com/skybluewholesaleltd"
                 target="_"
               >
-                <FontAwesomeIcon icon={faFacebookF} className="footer1-social" />
-              </a>
-              <a href="https://www.instagram.com/skybluewholesaleltd" target="_">
-                <FontAwesomeIcon icon={faInstagram} className="footer1-social" />
+                <FontAwesomeIcon
+                  icon={faInstagram}
+                  className="footer1-social"
+                />
               </a>
               <FontAwesomeIcon icon={faXTwitter} className="footer1-social" />
               <FontAwesomeIcon
@@ -112,7 +137,11 @@ const Footer1 = () => {
           <span>
             <p>Powered by: </p>
             <a href="https://bytesyncstudio.com/" target="_blank">
-              <img className="footer1-bytesync" src={bytesync} alt="bytesync logo" />
+              <img
+                className="footer1-bytesync"
+                src={bytesync}
+                alt="bytesync logo"
+              />
             </a>
           </span>
         </div>

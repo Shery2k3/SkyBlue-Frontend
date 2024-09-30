@@ -6,12 +6,13 @@ import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import Pagination from "../../Components/Pagination/Pagination";
 import useRetryRequest from "../../api/useRetryRequest"; // Import the custom hook
 import axiosInstance from "../../api/axiosConfig"; // Import the configured Axios instance
-import "./Category.css"
+import "./Category.css";
 
 const Category = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [category, setCategory] = useState("category");
   const [products, setProducts] = useState([]);
+  const [childProducts, setChildProducts] = useState([]); // Add state for child products
   const [totalPages, setTotalPages] = useState(0);
   const { categoryId } = useParams();
   const [searchParams] = useSearchParams();
@@ -32,14 +33,20 @@ const Category = () => {
 
     const fetchData = async () => {
       try {
-        const response = await retryRequest(() =>
-          axiosInstance.get(
-            `/product/category/${categoryId}?page=${currentPage}&size=18`
-          )
+        // Use Promise.all to call both APIs simultaneously
+        const [categoryResponse, childCategoryResponse] = await retryRequest(() =>
+          Promise.all([
+            axiosInstance.get(`/product/category/${categoryId}?page=${currentPage}&size=18`),
+            axiosInstance.get(`/product/category/child/${categoryId}`)
+          ])
         );
-        setCategory(response.data.categoryName);
-        setProducts(response.data.data);
-        setTotalPages(response.data.totalPages);
+        
+        // Update the state with the responses
+        setCategory(categoryResponse.data.categoryName);
+        setProducts(categoryResponse.data.data);
+        setTotalPages(categoryResponse.data.totalPages);
+        setChildProducts(childCategoryResponse.data); // Set child products
+        
       } catch (error) {
         console.error("Failed to load data:", error);
       } finally {
@@ -55,7 +62,7 @@ const Category = () => {
       <Header />
       {products.length > 0 ? (
         <>
-          <ProductGrid category={category} products={products} />
+          <ProductGrid category={category} products={products} subCategory={childProducts} />
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

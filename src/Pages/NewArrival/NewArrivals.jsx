@@ -31,7 +31,6 @@ const NewArrivals = () => {
   return (
     <Layout pageTitle="New Arrivals" style="style1" isLoading={isLoading}>
       <Header />
-      <Banner />
       <ProductGrid category="New Arrivals" products={products} />
     </Layout>
   );

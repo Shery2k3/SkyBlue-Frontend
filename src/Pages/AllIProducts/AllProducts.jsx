@@ -51,7 +51,6 @@ const AllProducts = () => {
   return (
     <Layout pageTitle="All Products" style="style1" isLoading={isLoading}>
       <Header />
-      <Banner />
       <ProductGrid category="All Products" products={products} />
       <Pagination
         currentPage={currentPage}

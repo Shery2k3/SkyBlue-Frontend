@@ -912,7 +912,6 @@ body.scroll-lock {
   background: var(--dark);
   font-weight: 550;
   color: var(--light);
-  border-top: 2px solid var(--light);
 }
 
 .footer1-heading {

@@ -7,13 +7,15 @@ import { useModal } from "../../Context/ModalContext/ModalContext";
 
 const ProductCard = ({ product }) => {
   const { openModal } = useModal();
-  const { Images, Name, Price } = product.data || product;
+  const { Images, Name, Price, Stock } = product.data || product;
   const [isLoading, setIsLoading] = useState(true);
 
   const shortenedName = Name.length > 36 ? `${Name.substring(0, 36)}...` : Name;
 
   const handleClick = () => {
-    openModal(product);
+    if (Stock > 0) {
+      openModal(product);
+    }
   };
 
   const handleImageLoad = () => {
@@ -23,7 +25,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className="product-card" onClick={handleClick}>
       <div className="product-image-container">
-      {isLoading && <Skeleton.Image active />}
+        {isLoading && <Skeleton.Image active />}
         <img
           src={Images[0]}
           alt="Product"
@@ -31,6 +33,11 @@ const ProductCard = ({ product }) => {
           onLoad={handleImageLoad}
           style={{ display: isLoading ? "none" : "block" }}
         />
+        {Stock === 0 && (
+          <div className="out-of-stock-overlay">
+            <p>Out of Stock</p>
+          </div>
+        )}
       </div>
       <hr className="card-seperator" />
       <div className="product-detail">

@@ -12,7 +12,7 @@ import message from "antd/es/message/";
 import axiosInstance from "../../api/axiosConfig";
 
 const ProductModal = ({ product, onClose }) => {
-  const { Id, Images, Name, Price, Stock, OrderMinimumQuantity } =
+  const { Id, Images = [product.images], Name, Price, Stock, OrderMinimumQuantity } =
     product.data || product;
   const [quantity, setQuantity] = useState(OrderMinimumQuantity || 1);
   const quantities = Array.from(

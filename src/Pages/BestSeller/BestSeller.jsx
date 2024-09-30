@@ -31,7 +31,6 @@ const BestSeller = () => {
   return (
     <Layout pageTitle="Best Seller" style="style1" isLoading={isLoading}>
       <Header />
-      <Banner />
       <ProductGrid category="Best Sellers" products={products} />
     </Layout>
   );

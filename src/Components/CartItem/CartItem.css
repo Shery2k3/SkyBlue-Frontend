@@ -34,12 +34,14 @@
 }
 
 .cart-item .product-image {
+  cursor: pointer;
   width: 75%;
   height: 75%;
   object-fit: contain;
 }
 
 .cart-item .product-name {
+  cursor: pointer;
   font-family: var(--font-accent);
   font-weight: 600;
 }
@@ -101,6 +103,21 @@
   cursor: pointer;
 }
 
+@media only screen and (max-width: 1024px){
+  .cart-item .quantity-dropdown{
+    font-size: 0.8rem;
+  }
+
+  .cart-item .quantity{
+    font-size: 0.8rem;
+  }
+
+  .bigscreen-price{
+    min-width: 65px;
+    font-size: 0.8rem;
+  }
+}
+
 @media only screen and (max-width: 840px) {
   .cart-item .product-image-container {
     min-width: 60px;
@@ -122,6 +139,8 @@
   .cart-item .product-name {
     font-size: 0.8rem;
   }
+
+
 
   .cart-item .controller-container {
     gap: 15px;

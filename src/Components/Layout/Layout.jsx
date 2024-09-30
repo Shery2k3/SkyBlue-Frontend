@@ -4,6 +4,7 @@ import Loader from "../Loader/Loader";
 // Lazy load components
 import Navbar from "../Navbar/Navbar";
 import NavMenu from "../NavMenu/NavMenu";
+import Newsletter from "../Newsletter/Newsletter";
 const Footer1 = lazy(() => import("../Footer/Footer1"));
 const AgeVerificationForms = lazy(() =>
   import("../AgeVerificationForm/AgeVerificationForm")
@@ -43,9 +44,10 @@ const Layout = ({ pageTitle, children, style, isLoading }) => {
       ) : (
         <>
           <div className="layout">
-          <Navbar />
-          <NavMenu />
+            <Navbar />
+            <NavMenu />
             <div className="content">{children}</div>
+            <Newsletter />
             <Suspense fallback={<Loader isActive={true} />}>
               <Footer1 />
             </Suspense>
