@@ -1,8 +1,7 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
 import Header from "../../Components/Header/Header";
-import Banner from "../../Components/Banner/Banner";
+import { useNavigate, useParams, useSearchParams, Link } from "react-router-dom";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import Pagination from "../../Components/Pagination/Pagination";
 import axiosInstance from "../../api/axiosConfig";
@@ -13,14 +12,15 @@ const AllProducts = () => {
   const [category, setCategory] = useState();
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
-
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page")) || 1;
+  const sortBy = searchParams.get("sortBy") || "name_asc";
+  const pageSize = searchParams.get("pageSize") || 12;
   const navigate = useNavigate();
   const retryRequest = useRetryRequest();
 
   const handlePageChange = (pageNumber) => {
-    navigate(`?page=${pageNumber}`);
+    setSearchParams({ page: pageNumber, sortBy, pageSize }); 
   };
 
   useEffect(() => {
@@ -33,8 +33,9 @@ const AllProducts = () => {
     const fetchData = async () => {
       try {
         const response = await retryRequest(() =>
-          axiosInstance.get(`/product/category/-1?page=${currentPage}&size=18`)
+          axiosInstance.get(`/product/category/-1?page=${currentPage}&size=${pageSize}&sortBy=${sortBy}`)
         );
+        console.log(response)
         setCategory(response.data.categoryName);
         setProducts(response.data.data);
         setTotalPages(response.data.totalPages);
@@ -46,12 +47,27 @@ const AllProducts = () => {
     };
 
     fetchData();
-  }, [currentPage, retryRequest]);
+  }, [currentPage, currentPage, sortBy, pageSize, retryRequest]);
+
+  const handleSortChange = (value) => {
+    setSearchParams({ page: currentPage, sortBy: value, pageSize: pageSize }); // Update sortBy in the URL
+  };
+
+  const handleDisplayChange = (value) => {
+    setSearchParams({page: 1, sortBy: sortBy, pageSize: value})
+  }
 
   return (
     <Layout pageTitle="All Products" style="style1" isLoading={isLoading}>
       <Header />
-      <ProductGrid category="All Products" products={products} />
+      <ProductGrid
+        category="All Products"
+        products={products}
+        sortby={sortBy}
+        handleSortChange={handleSortChange} // Pass the sorting handler
+        pageSize={pageSize}
+        handleDisplayChange={handleDisplayChange}
+      />
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

@@ -59,6 +59,8 @@ body.scroll-lock {
   background-color: #0686b9;
 }
 
+
+
 /* for login */
 .imagebg {
   position: relative;
@@ -380,7 +382,7 @@ body.scroll-lock {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 20px;
+  padding: 5px 35px 5px 25px;
   box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
   z-index: 9;
   transition: top 0.5s ease-in-out;
@@ -414,10 +416,11 @@ body.scroll-lock {
 }
 
 .navbar .items li {
+  cursor: pointer;
   list-style: none;
 }
 
-.navbar .items li a {
+.navbar .items li a, .navbar .items li p {
   position: relative; /* Required for ::after positioning */
   font-family: var(--font-accent);
   font-size: 18px;
@@ -430,7 +433,7 @@ body.scroll-lock {
   transition: color 0.3s ease-in-out;
 }
 
-.navbar .items li a::after {
+.navbar .items li a::after, .navbar .items li p::after{
   content: "";
   position: absolute;
   left: 0;
@@ -441,7 +444,7 @@ body.scroll-lock {
   transition: width 0.3s ease-in-out;
 }
 
-.navbar .items li a:hover::after {
+.navbar .items li a:hover::after, .navbar .items li p:hover::after {
   width: 100%;
 }
 
@@ -506,13 +509,46 @@ body.scroll-lock {
   display: none;
 }
 
-.navbar .cart {
+.navbar .cart-options{
+  display: flex;
+  gap: 1.25rem;
+}
+
+.navbar .heart {
   font-size: 1.25rem;
   color: var(--dark);
 }
 
-@media (max-width: 786px) {
+.navbar .cart {
+  font-size: 1.25rem;
+  color: var(--dark);
+  position: relative;
+}
+
+
+.navbar .cart .cart-count{
+  position: absolute;
+  top: -5px;
+  left: 60%;
+  color: var(--dark);
+  background-color: var(--secondary);
+  padding: 2px 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  height: 1rem;
+  min-width: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 25px;
+}
+
+@media (max-width: 900px) {
   .navbar .items {
+    display: none;
+  }
+
+  .navbar .heart {
     display: none;
   }
 
@@ -526,6 +562,7 @@ body.scroll-lock {
 .header {
   padding: 20px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
 }
@@ -533,11 +570,15 @@ body.scroll-lock {
 .header-left {
   display: flex;
   align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  align-items: center;
   gap: 2rem;
 }
 
 .header .header-right {
-  width: calc(100vw - 700px);
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -557,8 +598,9 @@ body.scroll-lock {
   list-style: none;
 }
 
-.header .items li a {
-  position: relative; /* Required for ::after positioning */
+.header .items li a, .header .items li p{
+  cursor: pointer;
+  position: relative;
   font-family: var(--font-primary);
   font-size: 18px;
   font-weight: 500;
@@ -567,27 +609,26 @@ body.scroll-lock {
   gap: 3px;
   color: var(--dark);
   text-decoration: none;
-  transition: color 0.3s ease-in-out; /* For smooth text color transition */
+  transition: color 0.3s ease-in-out; 
 }
 
-.header .items > li > a::after {
+.header .items > li > a::after, .header .items > li > p::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: -5px; /* Adjust position to appear just below the text */
+  bottom: -5px; 
   width: 0;
   height: 2px;
-  background-color: var(--dark); /* The color of the underline */
-  transition: width 0.3s ease-in-out; /* Animation duration and timing */
+  background-color: var(--dark);
+  transition: width 0.3s ease-in-out;
 }
 
-/* On hover, the underline will appear */
-.header .items > li > a:hover::after {
-  width: 100%; /* The underline expands to cover the full width of the text */
+.header .items > li > a:hover::after,  .header .items > li > p:hover::after  {
+  width: 100%; 
 }
 
 .header .items > li > a:hover {
-  color: var(--accent-dark); /* Optional: Change the text color on hover */
+  color: var(--accent-dark);
 }
 
 .header .nav-dropdown-content {
@@ -642,7 +683,7 @@ body.scroll-lock {
 }
 
 .header .shoping-cart {
-  font-size: 30px;
+  font-size: 28px;
   color: var(--dark);
 }
 
@@ -652,30 +693,40 @@ body.scroll-lock {
   display: none;
 }
 
-@media (max-width: 1080px) {
-  .header {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-  }
+.header .cart-options{
+  display: flex;
+  gap: 0.8rem;
+}
 
-  .header-left {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
+.header .cart{
+  position: relative;
+}
 
-  .header .header-right {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.header .cart .cart-count{
+  position: absolute;
+  top: -10px;
+  left: 60%;
+  color: var(--dark);
+  background-color: var(--secondary);
+  padding: 2px 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  height: 1.25rem;
+  min-width: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 25px;
+}
+
+@media (max-width: 1024px){
+  .header .shoping-cart {
+    font-size: 24px;
   }
 }
 
-@media (max-width: 768px) {
+
+@media (max-width: 858px) {
   .header {
     padding: 15px;
   }
@@ -694,8 +745,14 @@ body.scroll-lock {
     gap: 0px;
   }
 
-  .header .shoping-cart {
+  .header .cart-options{
     display: none;
+  }
+}
+
+@media (max-width: 580px) {
+  .header {
+    padding: 15px 10px;
   }
 }
 
@@ -1277,4 +1334,43 @@ body.scroll-lock {
   .footer2-name {
     margin-bottom: 1rem;
   }
+}
+
+/* Empty Category */
+
+.empty-category {
+  width: 100%;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-category h2 {
+  font-size: 2.5rem;
+  color: var(--heading-color);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.empty-category p {
+  font-size: 1.2rem;
+  color: #141414;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.empty-category a{
+    color: var(--dark);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    background-color: var(--secondary);
+}
+
+.empty-category a:hover{
+    background-color: var(--temp-blue);
 }

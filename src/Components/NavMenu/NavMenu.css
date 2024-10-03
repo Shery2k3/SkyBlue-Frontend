@@ -21,11 +21,11 @@
 .nav-menu {
   position: fixed;
   top: 0;
-  left: -350px; /* Start hidden to the left */
+  left: -350px; 
   height: 100%;
   width: 350px;
   background: var(--accent-light);
-  z-index: 10; /* Above the overlay */
+  z-index: 10; 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -37,7 +37,7 @@
   left: 0; /* Slide into view */
 }
 
-.menu-closer {
+.nav-menu .menu-closer {
   cursor: pointer;
   font-size: 1.5rem;
   position: absolute;
@@ -58,7 +58,8 @@
   border-bottom: 1px solid #00273e80;
 }
 
-.nav-menu .items li a {
+.nav-menu .items li a,  .nav-menu .items li p{
+  cursor: pointer;
   text-decoration: none;
   color: #000;
   font-size: 18px;
@@ -67,7 +68,7 @@
   padding: 1rem;
 }
 
-.nav-menu .items li a:hover {
+.nav-menu .items li a:hover, .nav-menu .items li p:hover {
   background: #bde9fc;
 }
 

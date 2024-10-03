@@ -8,43 +8,80 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { Breadcrumb } from "antd";
 import "./ProductGrid.css";
 
-const ProductGrid = ({ category, products, subCategory }) => {
-  const [sortby, setSortby] = useState("Price (Low to High)");
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+const ProductGrid = ({
+  category,
+  products,
+  subCategory,
+  sortby,
+  handleSortChange,
+  pageSize,
+  handleDisplayChange,
+}) => {
+  const [sortingDropdownVisible, setSortingDropdownVisible] = useState(false);
+  const [displayDropdownVisible, setDisplayDropdownVisible] = useState(false);
 
-  // Function to handle sorting change
-  const handleSortChange = (value, label) => {
-    setSortby(label);
-    setDropdownVisible(false);
+  const toggleSortingDropdown = () => {
+    setSortingDropdownVisible(!sortingDropdownVisible);
   };
 
-  // Toggle dropdown visibility
-  const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible);
+  const toggleDisplayDropdown = () => {
+    setDisplayDropdownVisible(!displayDropdownVisible);
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownVisible && event.target.closest(".sort-button") === null) {
-        setDropdownVisible(false);
+      if (
+        sortingDropdownVisible &&
+        event.target.closest(".sort-button") === null
+      ) {
+        setSortingDropdownVisible(false);
       }
     };
 
     const handleScroll = () => {
-      if (dropdownVisible) {
-        setDropdownVisible(false);
+      if (sortingDropdownVisible) {
+        setSortingDropdownVisible(false);
       }
     };
 
     document.addEventListener("click", handleClickOutside);
     document.addEventListener("scroll", handleScroll);
 
-    // Clean up event listeners
     return () => {
       document.removeEventListener("click", handleClickOutside);
       document.removeEventListener("scroll", handleScroll);
     };
-  }, [dropdownVisible]);
+  }, [sortingDropdownVisible]);
+
+  useEffect(() => {
+    setSortingDropdownVisible(false);
+    setDisplayDropdownVisible(false);
+  }, [sortby, pageSize]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        displayDropdownVisible &&
+        event.target.closest(".display-button") === null
+      ) {
+        setDisplayDropdownVisible(false);
+      }
+    };
+
+    const handleScroll = () => {
+      if (displayDropdownVisible) {
+        setDisplayDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    document.addEventListener("scroll", handleScroll);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, [displayDropdownVisible]);
 
   return (
     <div className="product-grid-container">
@@ -70,7 +107,9 @@ const ProductGrid = ({ category, products, subCategory }) => {
         >
           {({ loading }) =>
             loading ? (
-              <button>Preparing PDF...</button>
+              <button className="download-button loading">
+                Preparing Order Sheet...
+              </button>
             ) : (
               <button className="download-button">Download Order Sheet</button>
             )
@@ -91,7 +130,6 @@ const ProductGrid = ({ category, products, subCategory }) => {
                   <img src={item.ImageUrl} alt={item.Name} />
                 </span>
                 <span className="category-name">
-                  {" "}
                   {item.Name.length > 20
                     ? `${item.Name.substring(0, 20)}...`
                     : item.Name}
@@ -101,59 +139,113 @@ const ProductGrid = ({ category, products, subCategory }) => {
           </div>
         </div>
       )}
-
-      <div className="products-controller">
-        <div className="sort-container">
-          <p>Sort by:</p>
-          <div className="sort-button">
-            <div className="sorted-option" onClick={toggleDropdown}>
-              {sortby}{" "}
-              <span>
-                <FontAwesomeIcon icon={faChevronDown} />
-              </span>
-            </div>
-
-            {/* Dropdown options */}
-            {dropdownVisible && (
-              <div className="sort-dropdown-content">
-                <span
-                  className="sort-drop-down-item"
-                  onClick={() => handleSortChange("price_asc", "Lowest Price")}
-                >
-                  Lowest Price
-                </span>
-                <span
-                  className="sort-drop-down-item"
-                  onClick={() =>
-                    handleSortChange("price_desc", "Highest Price")
-                  }
-                >
-                  Highest Price
-                </span>
-                <span
-                  className="sort-drop-down-item"
-                  onClick={() => handleSortChange("name_desc", "Name: A-Z")}
-                >
-                  Name: A-Z
-                </span>
-                <span
-                  className="sort-drop-down-item"
-                  onClick={() => handleSortChange("name_asc", "Name: Z-A")}
-                >
-                  Name: Z-A
-                </span>
-                <span
-                  className="sort-drop-down-item"
-                  onClick={() => handleSortChange("recent", "Latest")}
-                >
-                  Latest
+      {products.length > 0 && (
+        <div className="products-controller">
+          <div className="sort-container">
+            <p>Sort by:</p>
+            <div className="sort-button">
+              <div className="sorted-option" onClick={toggleSortingDropdown}>
+                {sortby === "price_asc"
+                  ? "Lowest Price"
+                  : sortby === "price_desc"
+                  ? "Highest Price"
+                  : sortby === "name_asc"
+                  ? "Name: A-Z"
+                  : sortby === "name_desc"
+                  ? "Name: Z-A"
+                  : "Latest"}{" "}
+                <span>
+                  <FontAwesomeIcon icon={faChevronDown} />
                 </span>
               </div>
-            )}
+
+              {/* Dropdown options */}
+              {sortingDropdownVisible && (
+                <div className="sort-dropdown-content">
+                  <span
+                    className="sort-drop-down-item"
+                    onClick={() => handleSortChange("recent")}
+                  >
+                    Latest
+                  </span>
+                  <span
+                    className="sort-drop-down-item"
+                    onClick={() => handleSortChange("price_asc")}
+                  >
+                    Lowest Price
+                  </span>
+                  <span
+                    className="sort-drop-down-item"
+                    onClick={() => handleSortChange("price_desc")}
+                  >
+                    Highest Price
+                  </span>
+                  <span
+                    className="sort-drop-down-item"
+                    onClick={() => handleSortChange("name_asc")}
+                  >
+                    Name: A-Z
+                  </span>
+                  <span
+                    className="sort-drop-down-item"
+                    onClick={() => handleSortChange("name_desc")}
+                  >
+                    Name: Z-A
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="display-container">
+            <p>Display:</p>
+            <div className="display-button">
+              <div className="displayed-option" onClick={toggleDisplayDropdown}>
+                {pageSize}{" "}
+                <span>
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </span>
+              </div>
+
+              {/* Dropdown options */}
+              {displayDropdownVisible && (
+                <div className="display-dropdown-content">
+                  <span
+                    className="display-drop-down-item"
+                    onClick={() => handleDisplayChange(12)}
+                  >
+                    12
+                  </span>
+                  <span
+                    className="display-drop-down-item"
+                    onClick={() => handleDisplayChange(24)}
+                  >
+                    24
+                  </span>
+                  <span
+                    className="display-drop-down-item"
+                    onClick={() => handleDisplayChange(36)}
+                  >
+                    36
+                  </span>
+                  <span
+                    className="display-drop-down-item"
+                    onClick={() => handleDisplayChange(48)}
+                  >
+                    48
+                  </span>
+                  <span
+                    className="display-drop-down-item"
+                    onClick={() => handleDisplayChange(60)}
+                  >
+                    60
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-
+      )}
       <div className="product-grid">
         {products &&
           products.map((product) => (

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout/Layout";
 import Header from "../../Components/Header/Header";
-import Banner from "../../Components/Banner/Banner";
-import ProductGrid from "../../Components/ProductGrid/ProductGrid";
+import ProductGrid2 from "../../Components/ProductGrid2/ProductGrid2";
 import useRetryRequest from "../../api/useRetryRequest";
 import axiosInstance from "../../api/axiosConfig";
 
@@ -31,7 +30,7 @@ const BestSeller = () => {
   return (
     <Layout pageTitle="Best Seller" style="style1" isLoading={isLoading}>
       <Header />
-      <ProductGrid category="Best Sellers" products={products} />
+      <ProductGrid2 category="Best Sellers" products={products} header={true}/>
     </Layout>
   );
 };

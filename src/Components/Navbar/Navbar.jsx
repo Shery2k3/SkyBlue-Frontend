@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LogoAccent from "/Logos/LogoAccent.png";
 import { useNav } from "../../Context/NavContext/NavContext";
+import { useCategoryNav } from "../../Context/CategoryMenuContext/CategoryMenuContext";
+import { useCartCount } from "../../Context/CartCount/CartCount";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronDown,
   faBars,
+  faHeart,
   faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -27,6 +30,10 @@ const items = [
 
 const Navbar = () => {
   const { isNavOpen, toggleNav } = useNav();
+  const { cartCount, updateCartCount } = useCartCount();
+  const { isCategoryNavOpen, toggleCategoryNav } = useCategoryNav();
+
+
   const [isVisible, setIsVisible] = useState(false);
 
   const handleScroll = () => {
@@ -44,7 +51,7 @@ const Navbar = () => {
 
   return (
     <nav className={`navbar ${isVisible ? "visible" : ""}`}>
-      <FontAwesomeIcon icon={faBars} className="menu" onClick={toggleNav}/>
+      <FontAwesomeIcon icon={faBars} className="menu" onClick={toggleNav} />
       <Link to="/">
         <img src={LogoAccent} alt="logo" className="logo" />
       </Link>
@@ -52,6 +59,9 @@ const Navbar = () => {
         <ul className="items">
           <li>
             <Link to="/">Home</Link>
+          </li>
+          <li onClick={toggleCategoryNav}>
+            <p>All Categories</p>
           </li>
           <li className="shop-menu">
             <Link to="/all-products">
@@ -82,10 +92,15 @@ const Navbar = () => {
             <Link to="/user/account-info">My Account</Link>
           </li>
         </ul>
-
-        <Link to="/cart" className="cart">
-          <FontAwesomeIcon icon={faCartShopping} />
-        </Link>
+        <div className="cart-options">
+          <Link to="/wishlist" className="heart">
+            <FontAwesomeIcon icon={faHeart} />
+          </Link>
+          <Link to="/cart" className="cart">
+            <span className="cart-count">{cartCount}</span>
+            <FontAwesomeIcon icon={faCartShopping} />
+          </Link>
+        </div>
       </div>
     </nav>
   );

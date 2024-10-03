@@ -125,7 +125,11 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
   };
 
   const handleClick = () => {
-    openModal(product);
+    const modifiedProduct = {
+      ...product,
+      Id: product.ProductId, // Override Id with ProductId
+    };
+    openModal(modifiedProduct);
   };
 
   return (
@@ -141,7 +145,8 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
         </span>
         <span className="product-name">
           <p onClick={handleClick} className="name">{product.Name}</p>
-          <span className="smallscreen-price">${price.toFixed(2)}</span>
+          <span className="unit-price">Price: ${unitPrice.toFixed(2)}</span>
+          <span className="smallscreen-price">total: ${price.toFixed(2)}</span>
         </span>
       </div>
       <div className="controller-container">

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import message from "antd/es/message/";
 import "./Newsletter.css";
 
 const Newsletter = () => {
@@ -8,6 +9,7 @@ const Newsletter = () => {
     e.preventDefault();
     console.log("Email submitted:", email);
     setEmail("");
+    message.success("Subscribed to Newsletter");
   };
 
   return (

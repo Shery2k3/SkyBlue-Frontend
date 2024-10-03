@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { ModalProvider } from "./Context/ModalContext/ModalContext";
+import { CartCountProvider } from "./Context/CartCount/CartCount";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import NotFound from "./Components/NotFound/NotFound";
 import Loader from "./Components/Loader/Loader";
@@ -33,11 +34,15 @@ const TermsConditions = lazy(() =>
   import("./Pages/Information/TermsConditions")
 );
 const OrderPlaced = lazy(() => import("./Components/NotFound/OrderPlaced"));
+const WishList = lazy(() => import("./Pages/Wishlist/WishList"))
+
 
 function App() {
   return (
     <ModalProvider>
+      
       <BrowserRouter>
+      <CartCountProvider>
         {/* Use the Loader as a fallback */}
         <Suspense fallback={<Loader isActive={true} />}>
           <Routes>
@@ -96,6 +101,11 @@ function App() {
               path="orderplaced"
               element={<ProtectedRoute element={OrderPlaced} />}
             />
+             <Route
+              path="wishlist"
+              element={<ProtectedRoute element={WishList} />}
+            />
+            
             <Route
               path="privacy-policy"
               element={<ProtectedRoute element={PrivacyPolicy} />}
@@ -113,7 +123,9 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
+        </CartCountProvider>
       </BrowserRouter>
+     
     </ModalProvider>
   );
 }

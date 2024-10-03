@@ -6,6 +6,7 @@ import emptyCart from "/Images/empty-cart.webp";
 import CartItemGrid from "../../Components/CartItemGrid/CartItemGrid";
 import useRetryRequest from "../../api/useRetryRequest";
 import axiosInstance from "../../api/axiosConfig";
+import { useCartCount } from "../../Context/CartCount/CartCount";
 import "./Cart.css";
 
 const Cart = () => {
@@ -19,7 +20,8 @@ const Cart = () => {
     discount: 1.19,
     total: 0,
   });
-  const retryRequest = useRetryRequest(); // Use the custom hook
+  const retryRequest = useRetryRequest(); // Use the custom hook]
+  const { cartCount, updateCartCount } = useCartCount();
 
   const fetchCartData = async () => {
     setFetching(true);
@@ -39,6 +41,8 @@ const Cart = () => {
       console.error("Failed to load data:", error);
       setIsLoading(false);
       setFetching(false);
+    } finally {
+      updateCartCount()
     }
   };
 

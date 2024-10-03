@@ -2,16 +2,20 @@ import SearchBar from "../Search/SearchBar";
 import { Link } from "react-router-dom";
 import LogoAccent from "/Logos/LogoAccent.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCategoryNav } from "../../Context/CategoryMenuContext/CategoryMenuContext";
 import { useNav } from "../../Context/NavContext/NavContext";
+import { useCartCount } from "../../Context/CartCount/CartCount";
 import {
+  faHeart,
   faCartShopping,
   faChevronDown,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 
-
 const Header = () => {
   const { isNavOpen, toggleNav } = useNav();
+  const { cartCount, updateCartCount } = useCartCount();
+  const { isCategoryNavOpen, toggleCategoryNav } = useCategoryNav();
 
   return (
     <div className="header">
@@ -24,7 +28,11 @@ const Header = () => {
           <li>
             <Link to="/">Home</Link>
           </li>
-          
+
+          <li onClick={toggleCategoryNav}>
+            <p>All Categories</p>
+          </li>
+
           <li className="shop-menu">
             <Link to="/all-products">
               Shop{" "}
@@ -59,9 +67,15 @@ const Header = () => {
 
       <div className="header-right">
         <SearchBar />
-        <Link to="/cart">
-          <FontAwesomeIcon className="shoping-cart" icon={faCartShopping} />
-        </Link>
+        <div className="cart-options">
+          <Link to="/wishlist">
+            <FontAwesomeIcon className="shoping-cart" icon={faHeart} />
+          </Link>
+          <Link className="cart" to="/cart">
+            <span className="cart-count">{cartCount}</span>
+            <FontAwesomeIcon className="shoping-cart" icon={faCartShopping} />
+          </Link>
+        </div>
       </div>
     </div>
   );

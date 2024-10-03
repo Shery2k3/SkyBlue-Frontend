@@ -9,7 +9,7 @@ import SubBanners from "../../Components/SubBanners/SubBanners";
 import Category from "../../Components/Category/Category";
 import ProductSlider from "../../Components/ProductSlider/ProductSlider";
 import About from "../../Components/About/About";
-import ProductGrid from "../../Components/ProductGrid/ProductGrid";
+import ProductGrid2 from "../../Components/ProductGrid2/ProductGrid2";
 import useRetryRequest from "../../api/useRetryRequest";
 import axiosInstance from "../../api/axiosConfig";
 
@@ -98,7 +98,7 @@ const Home = () => {
         <ProductSlider category="New Arrivals" products={newArrival} />
         <About />
         <ProductSlider category="Best Sellers" products={bestSellers} />
-        <ProductGrid category="Exclusive Products" products={allProducts} />
+        <ProductGrid2 category="Exclusive Products" products={allProducts} />
       </>
     </Layout>
   );

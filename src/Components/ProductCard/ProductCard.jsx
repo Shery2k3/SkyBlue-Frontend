@@ -42,7 +42,7 @@ const ProductCard = ({ product }) => {
       <hr className="card-seperator" />
       <div className="product-detail">
         <p className="product-name">{shortenedName}</p>
-        <p className="product-price">${Price}</p>
+        <p className="product-price">${Price.toFixed(2)}</p>
         <span className="add-to-cart">
           <FontAwesomeIcon icon={faPlus} />
         </span>

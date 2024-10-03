@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNav } from "../../Context/NavContext/NavContext";
+import { useCategoryNav } from "../../Context/CategoryMenuContext/CategoryMenuContext";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
@@ -9,6 +10,7 @@ import "./NavMenu.css";
 
 const NavMenu = () => {
   const { isNavOpen, toggleNav } = useNav();
+  const {isCategoryNavOpen, toggleCategoryNav} = useCategoryNav()
   const [isShopOpen, setIsShopOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const { logout } = useContext(AuthContext);
@@ -50,6 +52,11 @@ const NavMenu = () => {
               Home
             </Link>
           </li>
+          <li onClick={() => { toggleNav(); toggleCategoryNav(); }}>
+            <p>
+              All Categories
+            </p>
+          </li>
 
           <li className="menu-item">
             <div className="menu-header" onClick={toggleShop}>
@@ -81,6 +88,12 @@ const NavMenu = () => {
                 </Link>
               </li>
             </ul>
+          </li>
+
+          <li>
+            <Link to="/wishlist" onClick={toggleNav}>
+              Wishlist
+            </Link>
           </li>
 
           <li>

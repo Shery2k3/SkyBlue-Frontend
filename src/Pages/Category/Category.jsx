@@ -4,24 +4,25 @@ import Layout from "../../Components/Layout/Layout";
 import Header from "../../Components/Header/Header";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import Pagination from "../../Components/Pagination/Pagination";
-import useRetryRequest from "../../api/useRetryRequest"; // Import the custom hook
-import axiosInstance from "../../api/axiosConfig"; // Import the configured Axios instance
-import "./Category.css";
+import useRetryRequest from "../../api/useRetryRequest";
+import axiosInstance from "../../api/axiosConfig";
 
 const Category = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [category, setCategory] = useState("category");
   const [products, setProducts] = useState([]);
-  const [childProducts, setChildProducts] = useState([]); // Add state for child products
+  const [childProducts, setChildProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const { categoryId } = useParams();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page")) || 1;
+  const sortBy = searchParams.get("sortBy") || "recent";
+  const pageSize = searchParams.get("pageSize") || 12;
   const navigate = useNavigate();
-  const retryRequest = useRetryRequest(); // Use the custom hook
+  const retryRequest = useRetryRequest();
 
   const handlePageChange = (pageNumber) => {
-    navigate(`?page=${pageNumber}`);
+    setSearchParams({ page: pageNumber, sortBy, pageSize }); 
   };
 
   useEffect(() => {
@@ -33,20 +34,18 @@ const Category = () => {
 
     const fetchData = async () => {
       try {
-        // Use Promise.all to call both APIs simultaneously
         const [categoryResponse, childCategoryResponse] = await retryRequest(() =>
           Promise.all([
-            axiosInstance.get(`/product/category/${categoryId}?page=${currentPage}&size=18`),
-            axiosInstance.get(`/product/category/child/${categoryId}`)
+            axiosInstance.get(
+              `/product/category/${categoryId}?page=${currentPage}&size=${pageSize}&sortBy=${sortBy}`
+            ),
+            axiosInstance.get(`/product/category/child/${categoryId}`),
           ])
         );
-        
-        // Update the state with the responses
         setCategory(categoryResponse.data.categoryName);
         setProducts(categoryResponse.data.data);
         setTotalPages(categoryResponse.data.totalPages);
-        setChildProducts(childCategoryResponse.data); // Set child products
-        
+        setChildProducts(childCategoryResponse.data);
       } catch (error) {
         console.error("Failed to load data:", error);
       } finally {
@@ -55,19 +54,36 @@ const Category = () => {
     };
 
     fetchData();
-  }, [categoryId, currentPage, retryRequest]);
+  }, [categoryId, currentPage, sortBy, pageSize, retryRequest]); // Add sortBy to dependencies
+
+  const handleSortChange = (value) => {
+    setSearchParams({ page: currentPage, sortBy: value, pageSize: pageSize }); // Update sortBy in the URL
+  };
+
+  const handleDisplayChange = (value) => {
+    setSearchParams({page: 1, sortBy: sortBy, pageSize: value})
+  }
 
   return (
     <Layout pageTitle={category} style="style1" isLoading={isLoading}>
       <Header />
-      {products.length > 0 ? (
+      {childProducts.length > 0 || products.length > 0 ? (
         <>
-          <ProductGrid category={category} products={products} subCategory={childProducts} />
+          <ProductGrid
+            category={category}
+            products={products}
+            subCategory={childProducts}
+            sortby={sortBy}
+            handleSortChange={handleSortChange} // Pass the sorting handler
+            pageSize={pageSize}
+            handleDisplayChange={handleDisplayChange}
+          />
+           {products.length > 0 && 
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             handlePageChange={handlePageChange}
-          />
+          />}
         </>
       ) : (
         <div className="empty-category">

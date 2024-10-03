@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
 import Header from "../../Components/Header/Header";
 import ProductGrid2 from "../../Components/ProductGrid2/ProductGrid2";
-import useRetryRequest from "../../api/useRetryRequest"; // Import the custom hook
-import axiosInstance from "../../api/axiosConfig"; // Import Axios instance
+import useRetryRequest from "../../api/useRetryRequest";
+import axiosInstance from "../../api/axiosConfig";
 
-const NewArrivals = () => {
+const WishList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
-  const retryRequest = useRetryRequest(); // Use the retry hook
+  const retryRequest = useRetryRequest();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await retryRequest(() =>
-          axiosInstance.get("/product/newarrivals?size=12")
+          axiosInstance.get("/customer/wishlist")
         );
         setProducts(response.data);
         setIsLoading(false);
@@ -28,11 +29,19 @@ const NewArrivals = () => {
   }, [retryRequest]);
 
   return (
-    <Layout pageTitle="New Arrivals" style="style1" isLoading={isLoading}>
+    <Layout pageTitle="Wishlist" style="style1" isLoading={isLoading}>
       <Header />
-      <ProductGrid2 category="New Arrivals" products={products} header={true}/>
+      {products.length > 0 ? (
+        <ProductGrid2 category="Wishlist" products={products} header={true} />
+      ) : (
+        <div className="empty-category">
+          <h2>Oops! It's Empty</h2>
+          <p>You dont have anything in the Wishlist yet</p>
+          <Link to="/">Go to Shop</Link>
+        </div>
+      )}
     </Layout>
   );
 };
 
-export default NewArrivals;
+export default WishList;

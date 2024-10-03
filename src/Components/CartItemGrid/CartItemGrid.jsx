@@ -2,6 +2,7 @@ import "./CartItemGrid.css";
 import CartItem from "../CartItem/CartItem";
 import CartInfo from "../CartInfo/CartInfo";
 import axiosInstance from "../../api/axiosConfig";
+import { useCartCount } from "../../Context/CartCount/CartCount";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
 
@@ -15,6 +16,8 @@ const CartItemGrid = ({
   const { subtotal, shipping, tax, discount, total } = cartSummary;
 
   const navigate = useNavigate();
+  const { cartCount, updateCartCount } = useCartCount();
+
   console.log(isFetching)
 
   const handleClearCart = async () => {
@@ -28,6 +31,8 @@ const CartItemGrid = ({
         key: "remove",
         duration: 2,
       });
+    } finally {
+      updateCartCount()
     }
   };
 

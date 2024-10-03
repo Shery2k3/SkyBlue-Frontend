@@ -107,6 +107,10 @@ const LoginForm = () => {
                   right: '10px',
                   top: '50%',
                   transform: 'translateY(-50%)',
+                  width: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   cursor: 'pointer',
                 }}
               >
