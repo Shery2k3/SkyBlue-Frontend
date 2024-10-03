@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import message from "antd/es/message/";
-import "./Newsletter.css";
+import "./NewsLetter.css";
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
