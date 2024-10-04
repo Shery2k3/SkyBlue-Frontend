@@ -26,12 +26,14 @@ const ProductModal = ({ product, onClose }) => {
     Price,
     Stock,
     OrderMinimumQuantity,
+    AllowedQuantities,
   } = product.data || product;
 
-  const [quantity, setQuantity] = useState(OrderMinimumQuantity || 1);
-  const quantities = Array.from(
-    { length: 20 },
-    (_, i) => (i + 1) * OrderMinimumQuantity
+  const quantities = AllowedQuantities
+    ? AllowedQuantities.split(",").map(Number)
+    : null;
+  const [quantity, setQuantity] = useState(
+    quantities && quantities.length > 0 ? quantities[0] : 1
   );
 
   const [isInWishlist, setIsInWishlist] = useState(false);
@@ -46,12 +48,18 @@ const ProductModal = ({ product, onClose }) => {
   const inputRef = useRef(null);
 
   const increaseQuantity = () => {
-    setQuantity((prevQuantity) => prevQuantity + (OrderMinimumQuantity || 1));
+    const incrementValue =
+      quantities && quantities.length > 0 ? quantities[0] : 1;
+
+    setQuantity((prevQuantity) => prevQuantity + incrementValue);
   };
 
   const decreaseQuantity = () => {
-    if (quantity > (OrderMinimumQuantity || 1)) {
-      setQuantity((prevQuantity) => prevQuantity - (OrderMinimumQuantity || 1));
+    const decrementValue =
+      quantities && quantities.length > 0 ? quantities[0] : 1;
+
+    if (quantity > decrementValue) {
+      setQuantity((prevQuantity) => prevQuantity - decrementValue);
     }
   };
 
@@ -211,10 +219,13 @@ const ProductModal = ({ product, onClose }) => {
             <p className="product-unit-price">Unit Price: ${Price}</p>
           </span>
           <div className="product-quantity">
-            <span className="button" onClick={decreaseQuantity}>
-              <FontAwesomeIcon icon={faMinus} />
-            </span>
-            {OrderMinimumQuantity === 1 ? (
+            {!AllowedQuantities && (
+              <span className="button" onClick={decreaseQuantity}>
+                <FontAwesomeIcon icon={faMinus} />
+              </span>
+            )}
+
+            {!AllowedQuantities ? (
               <input
                 type="number"
                 className="quantity"
@@ -252,13 +263,15 @@ const ProductModal = ({ product, onClose }) => {
                 </div>
               </div>
             )}
-            <span className="button" onClick={increaseQuantity}>
-              <FontAwesomeIcon icon={faPlus} />
-            </span>
+            {!AllowedQuantities && (
+              <span className="button" onClick={increaseQuantity}>
+                <FontAwesomeIcon icon={faPlus} />
+              </span>
+            )}
           </div>
           <div className="add-to-cart-container">
             <div
-              className={`add-to-cart ${isSubmitting ? "disabled" : ""}`} 
+              className={`add-to-cart ${isSubmitting ? "disabled" : ""}`}
               onClick={handleSubmit}
               style={{ cursor: isSubmitting ? "wait" : "pointer" }}
             >
@@ -268,7 +281,7 @@ const ProductModal = ({ product, onClose }) => {
               className="wishlist-mark"
               icon={isInWishlist ? solidHeart : regularHeart}
               onClick={isInWishlist ? removefromWishlist : addtoWishlist}
-              style={{ cursor: isProcessingWishlist ? "wait" : "pointer" }} // Disable interaction during processing
+              style={{ cursor: isProcessingWishlist ? "wait" : "pointer" }}
             />
           </div>
         </div>

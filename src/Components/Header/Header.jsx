@@ -29,10 +29,6 @@ const Header = () => {
             <Link to="/">Home</Link>
           </li>
 
-          <li onClick={toggleCategoryNav}>
-            <p>All Categories</p>
-          </li>
-
           <li className="shop-menu">
             <Link to="/all-products">
               Shop{" "}
@@ -61,6 +57,10 @@ const Header = () => {
           </li>
           <li>
             <Link to="/user/account-info">My Account</Link>
+          </li>
+
+          <li onClick={toggleCategoryNav}>
+            <p>All Categories</p>
           </li>
         </ul>
       </div>

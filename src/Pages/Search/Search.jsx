@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import Layout from "../../Components/Layout/Layout";
 import Header from "../../Components/Header/Header";
 import ProductGrid from "../../Components/ProductGrid/ProductGrid";
 import Pagination from "../../Components/Pagination/Pagination";
 import searchImage from "../../../public/Images/search.webp";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import axiosInstance from "../../api/axiosConfig";
@@ -17,19 +16,28 @@ const Search = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [size, setSize] = useState(18);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = parseInt(searchParams.get("page")) || 1;
+  const sortBy = searchParams.get("sortBy") || "name_asc";
+  const pageSize = searchParams.get("pageSize") || 12;
+  const categoryParam = searchParams.get("category") || "";
+  const term = searchParams.get("term") || "";
 
   const navigate = useNavigate();
-  const location = useLocation();
   const retryRequest = useRetryRequest(); // Use the retry hook
 
   const handlePageChange = (pageNumber) => {
-    navigate(
-      `?category=${category}&term=${searchTerm}&page=${pageNumber}&size=${size}`
-    );
+    setSearchParams({ category: categoryParam, term, page: pageNumber, pageSize });
   };
+
+  const handleSortChange = (value) => {
+    setSearchParams({ category: categoryParam, page: currentPage, term, sortBy: value, pageSize: pageSize }); // Update sortBy in the URL
+  };
+
+  const handleDisplayChange = (value) => {
+    setSearchParams({ category: categoryParam, page: 1, term, sortBy: sortBy, pageSize: value})
+  }
 
   useEffect(() => {
     setIsLoading(true);
@@ -39,27 +47,14 @@ const Search = () => {
       behavior: "smooth",
     });
 
-    const getQueryParams = () => {
-      const params = new URLSearchParams(location.search);
-      return {
-        category: params.get("category") || "",
-        term: params.get("term") || "",
-        page: parseInt(params.get("page")) || 1,
-        size: parseInt(params.get("size")) || 18,
-      };
-    };
-
-    const { category, term, page, size } = getQueryParams();
-    setCategory(category);
+    setCategory(categoryParam);
     setSearchTerm(term);
-    setCurrentPage(page);
-    setSize(size);
 
     const fetchData = async () => {
       try {
         const response = await retryRequest(() =>
           axiosInstance.get(
-            `/product/search/${category}?term=${term}&page=${page}&size=${size}`
+            `/product/search/${categoryParam}?term=${term}&page=${currentPage}&size=${pageSize}&sortBy=${sortBy}`
           )
         );
         setProducts(response.data.data);
@@ -72,7 +67,7 @@ const Search = () => {
     };
 
     fetchData();
-  }, [location.search, retryRequest]);
+  }, [searchParams, retryRequest, currentPage, pageSize, categoryParam, term]);
 
   return (
     <Layout
@@ -86,6 +81,10 @@ const Search = () => {
           <ProductGrid
             category={`Search Results (${searchTerm})`}
             products={products}
+            sortby={sortBy}
+            handleSortChange={handleSortChange}
+            pageSize={pageSize}
+            handleDisplayChange={handleDisplayChange}
           />
           <Pagination
             currentPage={currentPage}

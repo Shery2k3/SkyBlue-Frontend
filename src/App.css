@@ -612,7 +612,17 @@ body.scroll-lock {
   transition: color 0.3s ease-in-out; 
 }
 
-.header .items > li > a::after, .header .items > li > p::after {
+.header .items li p {
+  background-color: var(--secondary);
+  padding: 5px 15px;
+  border-radius: 8px;
+}
+
+.header .items li p:hover{
+  background-color: var(--temp-blue);
+}
+
+.header .items > li > a::after {
   content: "";
   position: absolute;
   left: 0;
@@ -623,7 +633,7 @@ body.scroll-lock {
   transition: width 0.3s ease-in-out;
 }
 
-.header .items > li > a:hover::after,  .header .items > li > p:hover::after  {
+.header .items > li > a:hover::after {
   width: 100%; 
 }
 

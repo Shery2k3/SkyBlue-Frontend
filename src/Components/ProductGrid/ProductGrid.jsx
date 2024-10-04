@@ -100,7 +100,7 @@ const ProductGrid = ({
         />
       </div>
 
-      <div className="download-button-container">
+      {/* <div className="download-button-container">
         <PDFDownloadLink
           document={<OrderSheet category={category} products={products} />}
           fileName={`OrderSheet.pdf`}
@@ -115,7 +115,7 @@ const ProductGrid = ({
             )
           }
         </PDFDownloadLink>
-      </div>
+      </div> */}
 
       {Array.isArray(subCategory) && subCategory.length > 0 && (
         <div className="sub-category-container">

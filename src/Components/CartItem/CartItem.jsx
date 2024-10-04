@@ -11,13 +11,8 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
   const [unitPrice, setUnitPrice] = useState(product.Price)
   const [tempQuantity, setQuantity] = useState(product.Quantity);
   const [price, setPrice] = useState(product.Price * product.Quantity);
-  const [MinimumQuantity, setMinimumQuantity] = useState(
-    product.OrderMinimumQuantity
-  );
-  const quantities = Array.from(
-    { length: 20 },
-    (_, i) => (i + 1) * MinimumQuantity
-  );
+  const quantities = product.AllowedQuantities ? product.AllowedQuantities.split(',').map(Number) : null;
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isUserInteraction, setUserInteraction] = useState(false); 
   const { openModal } = useModal(); 
@@ -79,16 +74,21 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
   }, [tempQuantity, isUserInteraction, debouncedUpdateQuantity]);
 
   const increaseQuantity = () => {
-    setQuantity((prevQuantity) => prevQuantity + MinimumQuantity);
+    const incrementValue = quantities && quantities.length > 0 ? quantities[0] : 1;
+    
+    setQuantity((prevQuantity) => prevQuantity + incrementValue);
     setUserInteraction(true); // Indicate user interaction
   };
 
   const decreaseQuantity = () => {
-    if (tempQuantity > MinimumQuantity) {
-      setQuantity((prevQuantity) => prevQuantity - MinimumQuantity);
+    const decrementValue = quantities && quantities.length > 0 ? quantities[0] : 1;
+  
+    if (tempQuantity > decrementValue) {
+      setQuantity((prevQuantity) => prevQuantity - decrementValue);
       setUserInteraction(true); // Indicate user interaction
     }
   };
+  
 
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value, 10);
@@ -154,7 +154,7 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
           <span className="button" onClick={decreaseQuantity}>
             <FontAwesomeIcon icon={faMinus} />
           </span>
-          {MinimumQuantity === 1 ? (
+          {!quantities ? (
             <input
               type="number"
               className="quantity"
