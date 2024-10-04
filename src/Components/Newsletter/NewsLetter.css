@@ -44,6 +44,16 @@
   background-color: #003554;
 }
 
+.newsletter button:hover {
+  background-color: #003554;
+}
+
+.newsletter button.disabled {
+  cursor: wait;
+  pointer-events: none; 
+  opacity: 0.5;
+}
+
 @media (max-width: 1500px) {
   .newsletter p {
     width: 100%;

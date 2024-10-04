@@ -6,6 +6,7 @@ import "./NewsLetter.css";
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -13,22 +14,40 @@ const Newsletter = () => {
   };
 
   const handleSubmit = async (e) => {
+    setIsSubmitting(true)
+    message.loading({ content: "Subscribing", key: "subscribe" });
     e.preventDefault();
     if (!validateEmail(email)) {
       message.error("Please enter a valid email address");
       return;
     }
+    
     try {
       const response = await axiosInstance.post("/customer/newsletter", { email });
-      message.success("Subscribed to Newsletter");
+      message.success({
+        content: "Subscribed to Newsletter",
+        key: "subscribe",
+        duration: 1,
+      });
       setEmail("");
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        message.error("Email already exists");
+        message.error({
+          content: "Email already exists",
+          key: "subscribe",
+          duration: 1,
+        });
       } else {
-        message.error("Failed to subscribe to Newsletter");
+        message.error({
+          content: "Failed to subscribe to Newsletter",
+          key: "subscribe",
+          duration: 1,
+        });
       }
       console.error("Error submitting email:", error);
+    } finally {
+      setIsSubmitting(false)
+      setEmail("");
     }
   };
 
@@ -49,7 +68,7 @@ const Newsletter = () => {
             placeholder="Enter your email"
             required
           />
-          <button type="submit">Subscribe</button>
+          <button className={`subscribe-button ${isSubmitting ? "disabled" : ""}`} type="submit">Subscribe</button>
         </form>
       </div>
     </div>
