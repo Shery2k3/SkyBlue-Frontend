@@ -2,9 +2,14 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import "./Notice.css";
+import axiosInstance from '../../api/axiosConfig'
+import useRetryRequest from "../../api/useRetryRequest";
 
 const Notice = () => {
   const [isActive, setIsActive] = useState(true);
+  const [notice, setNotice] = useState('');
+
+  const retryRequest = useRetryRequest();
 
   const handleClose = () => {
     setIsActive(false);
@@ -24,6 +29,20 @@ const Notice = () => {
     }
   }, [isActive]);
 
+  useEffect(() => {
+    const fetchNotice = async () => {
+      try {
+        const response = await retryRequest(() => 
+          axiosInstance.get('/product/slider/notice')
+        );
+        setNotice(response.data[0].image);
+      } catch (error) {
+        console.error("Failed to load data:", error);
+      }
+    }
+    fetchNotice();
+  }, [retryRequest]);
+
   return (
     <div
       className={`notice-modal-container ${isActive ? "active" : "inactive"}`}
@@ -31,7 +50,7 @@ const Notice = () => {
     >
       <div className="notice-modal">
         <FontAwesomeIcon className="modal-closer" icon={faX} onClick={handleClose} />
-        <img src="https://i.ibb.co/cb8YHd5/Logo-Dark.png" alt="Notice" />
+        <img src={notice} alt="Notice" />
       </div>
     </div>
   );

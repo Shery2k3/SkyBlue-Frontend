@@ -1,15 +1,35 @@
 import React, { useState } from "react";
 import message from "antd/es/message/";
+import axiosInstance from "../../api/axiosConfig";
+import retryRequest from "../../api/useRetryRequest";
 import "./NewsLetter.css";
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
 
-  const handleSubmit = (e) => {
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Email submitted:", email);
-    setEmail("");
-    message.success("Subscribed to Newsletter");
+    if (!validateEmail(email)) {
+      message.error("Please enter a valid email address");
+      return;
+    }
+    try {
+      const response = await axiosInstance.post("/customer/newsletter", { email });
+      message.success("Subscribed to Newsletter");
+      setEmail("");
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        message.error("Email already exists");
+      } else {
+        message.error("Failed to subscribe to Newsletter");
+      }
+      console.error("Error submitting email:", error);
+    }
   };
 
   return (
