@@ -1,12 +1,13 @@
 import { useContext, useCallback } from "react";
 import { AuthContext } from "../Context/AuthContext/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axiosInstance from "./axiosConfig";
 
 // Custom hook for retry logic
 const useRetryRequest = () => {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Retry logic helper function
   const retryRequest = useCallback(async (axiosCall, retries = 3) => {
@@ -19,7 +20,9 @@ const useRetryRequest = () => {
         if (error.response) {
           if (error.response.status === 403) {
             logout();
-            navigate('/login');
+            if (location.pathname !== "/reset-password") {
+              navigate('/login');
+            }
             console.error(`Forbidden access: ${error.response.status}`);
             throw new Error(`Forbidden access: ${error.response.status}`);
           }
@@ -33,13 +36,15 @@ const useRetryRequest = () => {
         if (attempt >= retries) {
           console.error(`Failed after ${retries} attempts`);
           logout();
-          navigate('/login');
+          if (location.pathname !== "/reset-password") {
+            navigate('/login');
+          }
           throw error;
         }
         console.warn(`Retrying request, attempt: ${attempt}`);
       }
     }
-  }, [logout, navigate]);
+  }, [logout, navigate, location.pathname]);
 
   return retryRequest;
 };

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import API_BASE_URL from "../../constant";
 import axios from "axios";
 import "./ResetPasswordForm.css"; 
 import { Alert } from "antd";
+import { useLocation } from "react-router-dom";
 
 const ResetPasswordForm = () => {
   const [password, setPassword] = useState("");
@@ -12,6 +13,8 @@ const ResetPasswordForm = () => {
     message: "",
     type: "info",
   });
+  const [isTokenValid, setIsTokenValid] = useState(false);
+  const location = useLocation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,9 +37,12 @@ const ResetPasswordForm = () => {
       return;
     }
 
+    const token = new URLSearchParams(location.search).get("token");
+
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/change-password`, {
-        password,
+      const response = await axios.post(`${API_BASE_URL}/auth/save-new-password`, {
+        token,
+        newPassword: password,
       });
 
       if (response.status === 200) {
@@ -61,47 +67,85 @@ const ResetPasswordForm = () => {
     }
   };
 
+  useEffect(() => {
+    const validateToken = async () => {
+      const token = new URLSearchParams(location.search).get("token");
+
+      try {
+        const response = await axios.get(`${API_BASE_URL}/auth/validate-reset-token`, {
+          params: { token },
+        });
+
+        if (response.status === 200) {
+          setIsTokenValid(true);
+        } else {
+          setAlert({
+            visible: true,
+            message: "Invalid or expired token.",
+            type: "error",
+          });
+        }
+      } catch (error) {
+        setAlert({
+          visible: true,
+          message: "Invalid or expired token.",
+          type: "error",
+        });
+      }
+    };
+
+    validateToken();
+  }, [location.search]);
+
   return (
     <div className="wrapper-change-password">
       <div className="inner-wrapper-change-password">
-        <form onSubmit={handleSubmit}>
-          <h2 className="form-heading">Change Password</h2>
-          <p>Enter your new password below.</p>
-          <div className="input-box">
-            <input
-              type="password"
-              placeholder="New Password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="input-box">
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          {alert.visible && (
-            <Alert
-              message={alert.message}
-              type={alert.type}
-              closable
-              onClose={() => setAlert({ ...alert, visible: false })}
-              style={{ marginBottom: 16 }}
-            />
-          )}
-          <button type="submit" className="submit-button">
-            Change Password
-          </button>
-        </form>
+        {isTokenValid ? (
+          <form onSubmit={handleSubmit}>
+            <h2 className="form-heading">Change Password</h2>
+            <p>Enter your new password below.</p>
+            <div className="input-box">
+              <input
+                type="password"
+                placeholder="New Password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="input-box">
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            {alert.visible && (
+              <Alert
+                message={alert.message}
+                type={alert.type}
+                closable
+                onClose={() => setAlert({ ...alert, visible: false })}
+                style={{ marginBottom: 16 }}
+              />
+            )}
+            <button type="submit" className="submit-button">
+              Change Password
+            </button>
+          </form>
+        ) : (
+          <Alert
+            message="Invalid or expired token."
+            type="error"
+            style={{ marginBottom: 16 }}
+          />
+        )}
       </div>
     </div>
   );

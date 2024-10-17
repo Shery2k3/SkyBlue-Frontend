@@ -20,7 +20,7 @@ const ForgetPasswordForm = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/forgot-password`, {
+      const response = await axios.post(`${API_BASE_URL}/auth/forget-password`, {
         email,
       });
 
