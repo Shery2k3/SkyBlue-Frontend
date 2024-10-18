@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axiosConfig"; // Import the configured Axios instance
 import "./Category.css";
+import { Link } from "react-router-dom";
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
@@ -29,13 +30,26 @@ const Category = () => {
   return (
     <div className="category-container">
       <h2>Top Categories</h2>
-      <div className="category-menu">
-        {categories.map((category) => (
-          <span key={category.Id} onClick={() => handleCategoryClick(category)}>
-            {category.Name}
-          </span>
-        ))}
-      </div>
+      <div className="sub-category-container">
+          <div className="sub-categories">
+            {categories.map((item) => (
+              <Link
+                to={`/category/${item.Id}`}
+                key={item.Id}
+                className="sub-category-item"
+              >
+                <span className="image-container">
+                  <img src={item.Image} alt={item.Name} />
+                </span>
+                <span className="category-name">
+                  {item.Name.length > 20
+                    ? `${item.Name.substring(0, 20)}...`
+                    : item.Name}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
     </div>
   );
 };

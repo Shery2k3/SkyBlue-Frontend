@@ -55,3 +55,48 @@
     font-family: var(--font-primary);
   }
 }
+
+
+.sub-category-item {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--dark);
+  box-shadow: rgba(17, 151, 231, 0.2) 0px 3px 8px;
+  border-radius: 12px;
+}
+
+.sub-category-item .image-container {
+  width: 225px;
+  height: 175px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #fff;
+  border-radius: 12px 12px 0 0;
+}
+
+.sub-category-item img {
+  cursor: pointer;
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
+
+.sub-category-item .category-name {
+  text-align: center;
+  font-weight: 600;
+  background: var(--accent);
+  padding: 10px 0;
+  border-radius: 0 0 12px 12px;
+}
+
+.sub-categories {
+  margin: 0 20px 4rem 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
