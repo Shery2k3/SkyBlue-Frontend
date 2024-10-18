@@ -43,6 +43,10 @@ const Notice = () => {
     fetchNotice();
   }, [retryRequest]);
 
+  if (!notice) {
+    return null;
+  }
+
   return (
     <div
       className={`notice-modal-container ${isActive ? "active" : "inactive"}`}
