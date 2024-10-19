@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFacebookF,
+
   faInstagram,
   faWhatsapp,
-  faXTwitter,
+
 } from "@fortawesome/free-brands-svg-icons";
 import {
   faPhone,
@@ -103,14 +103,10 @@ const Footer1 = () => {
           </div>
 
           <div className="footer1-socials-section">
-            <h2 className="footer1-heading">OUR SOCIALS</h2>
+            <h2 className="footer1-heading" style={{ paddingLeft: "25px" }}>OUR SOCIALS</h2>
+
             <div className="footer1-socials">
-              <a href="/" target="_">
-                <FontAwesomeIcon
-                  icon={faFacebookF}
-                  className="footer1-social"
-                />
-              </a>
+
               <a
                 href="https://www.instagram.com/skybluewholesaleltd"
                 target="_"
@@ -120,7 +116,7 @@ const Footer1 = () => {
                   className="footer1-social"
                 />
               </a>
-              <FontAwesomeIcon icon={faXTwitter} className="footer1-social" />
+
               <FontAwesomeIcon
                 icon={faWhatsapp}
                 className="footer1-social"
