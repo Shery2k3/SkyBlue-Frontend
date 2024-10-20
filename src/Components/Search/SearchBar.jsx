@@ -22,7 +22,7 @@ const useDebounce = (value, delay) => {
 const SearchBar = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState({
-    Id: "all",
+    Id: -1,
     Name: "All Category",
   });
   const [searchTerm, setSearchTerm] = useState("");
@@ -42,11 +42,6 @@ const SearchBar = () => {
         const response = await axiosInstance.get(`/product/category/all`);
         const categoriesData = response.data;
         setCategories(categoriesData);
-
-        // Set the selected category to the last item in the fetched categories
-        if (categoriesData.length > 0) {
-          setSelectedCategory(categoriesData[categoriesData.length - 1]);
-        }
       } catch (error) {
         console.error("Failed to load data:", error);
       }
@@ -154,6 +149,18 @@ const SearchBar = () => {
               isDropdownVisible ? "show" : ""
             }`}
           >
+            <p
+              key={-1}
+              onClick={() =>
+                handleCategoryClick({
+                  Id: -1,
+                  Name: "All Category",
+                })
+              }
+              className="category-drop-down-item"
+            >
+              All Items
+            </p>
             {categories.map((category) => (
               <p
                 key={category.Id}

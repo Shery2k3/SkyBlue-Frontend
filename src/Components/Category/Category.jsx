@@ -28,7 +28,7 @@ const Category = () => {
   };
 
   return (
-    <div className="category-container">
+    <div className="home-category-container">
       <h2>Top Categories</h2>
       <div className="sub-category-container">
           <div className="sub-categories">

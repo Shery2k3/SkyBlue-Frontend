@@ -103,7 +103,7 @@ const Footer1 = () => {
           </div>
 
           <div className="footer1-socials-section">
-            <h2 className="footer1-heading" style={{ paddingLeft: "25px" }}>OUR SOCIALS</h2>
+            <h2 className="footer1-heading">OUR SOCIALS</h2>
 
             <div className="footer1-socials">
 

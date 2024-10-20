@@ -1028,7 +1028,8 @@ body.scroll-lock {
   font-size: 1.5rem;
   width: 160px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: left;
+  gap: 10px;
 }
 
 .footer1-social {
