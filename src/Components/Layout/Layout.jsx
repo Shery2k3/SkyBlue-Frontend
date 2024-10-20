@@ -10,9 +10,11 @@ const Footer1 = lazy(() => import("../Footer/Footer1"));
 
 import ProductModal from "../ProductModal/ProductModal";
 import { useModal } from "../../Context/ModalContext/ModalContext";
+import { useCartCount } from "../../Context/CartCount/CartCount";
 
 const Layout = ({ pageTitle, children, style, isLoading }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 867);
+  const { cartCount, updateCartCount } = useCartCount();
   const { modalProduct, closeModal } = useModal();
 
   useEffect(() => {
@@ -21,6 +23,8 @@ const Layout = ({ pageTitle, children, style, isLoading }) => {
       behavior: "smooth",
     });
     document.title = `SkyBlue | ${pageTitle}`;
+
+    updateCartCount()
 
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 867);

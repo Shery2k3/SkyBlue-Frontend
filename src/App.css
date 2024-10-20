@@ -1137,6 +1137,7 @@ body.scroll-lock {
   }
 
   .footer1-socials {
+    justify-content: center;
     margin-bottom: 1rem;
     font-size: 1.5rem;
     width: 160px;

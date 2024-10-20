@@ -1,10 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-
-  faInstagram,
-  faWhatsapp,
-
-} from "@fortawesome/free-brands-svg-icons";
+import { faInstagram, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
   faPhone,
   faLocationDot,
@@ -106,7 +101,6 @@ const Footer1 = () => {
             <h2 className="footer1-heading">OUR SOCIALS</h2>
 
             <div className="footer1-socials">
-
               <a
                 href="https://www.instagram.com/skybluewholesaleltd"
                 target="_"
