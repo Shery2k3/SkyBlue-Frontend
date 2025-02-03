@@ -147,9 +147,8 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
               value={formData.FirstName}
               onChange={handleChange}
             />
-            {errors.FirstName && (
-              <span className="error">{errors.FirstName}</span>
-            )}
+           {errors.FirstName && <span className="error-message">{errors.FirstName}</span>}
+      
           </div>
           <div className="form-group">
             <label>Last name: *</label>
@@ -159,9 +158,8 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
               value={formData.LastName}
               onChange={handleChange}
             />
-            {errors.LastName && (
-              <span className="error">{errors.LastName}</span>
-            )}
+            {errors.LastName && <span className="error-message">{errors.LastName}</span>}
+      
           </div>
         </div>
         <div className="form-group">
@@ -173,7 +171,7 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
             onChange={handleChange}
             readOnly
           />
-          {errors.Email && <span className="error">{errors.Email}</span>}
+          {errors.Email && <span className="error-message">{errors.Email}</span>}
         </div>
       </section>
 
@@ -200,7 +198,7 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
             value={formData.Address1}
             onChange={handleChange}
           />
-          {errors.Address1 && <span className="error">{errors.Address1}</span>}
+          {errors.Address1 && <span className="error-message">{errors.Address1}</span>}
         </div>
         <div className="form-group">
           <label>Street address 2:</label>
@@ -221,7 +219,7 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
               onChange={handleChange}
             />
             {errors.ZipPostalCode && (
-              <span className="error">{errors.ZipPostalCode}</span>
+              <span className="error-message">{errors.ZipPostalCode}</span>
             )}
           </div>
           <div className="form-group">
@@ -232,7 +230,7 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
               value={formData.City}
               onChange={handleChange}
             />
-            {errors.City && <span className="error">{errors.City}</span>}
+            {errors.City && <span className="error-message">{errors.City}</span>}
           </div>
         </div>
         <div className="form-groups-container">
@@ -280,7 +278,7 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
             onChange={handleChange}
           />
           {errors.PhoneNumber && (
-            <span className="error">{errors.PhoneNumber}</span>
+            <span className="error-message">{errors.PhoneNumber}</span>
           )}
         </div>
       </section>
