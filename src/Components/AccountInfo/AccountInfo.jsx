@@ -120,7 +120,9 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
     }
 
     try {
-      await retryRequest(() => axiosInstance.put("/customer/update-info", formData));
+      await retryRequest(() =>
+        axiosInstance.put("/customer/update-info", formData)
+      );
       message.success("Info Updated");
     } catch (error) {
       console.error("Error:", error);
@@ -147,8 +149,9 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
               value={formData.FirstName}
               onChange={handleChange}
             />
-           {errors.FirstName && <span className="error-message">{errors.FirstName}</span>}
-      
+            {errors.FirstName && (
+              <span className="error-message">{errors.FirstName}</span>
+            )}
           </div>
           <div className="form-group">
             <label>Last name: *</label>
@@ -158,8 +161,9 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
               value={formData.LastName}
               onChange={handleChange}
             />
-            {errors.LastName && <span className="error-message">{errors.LastName}</span>}
-      
+            {errors.LastName && (
+              <span className="error-message">{errors.LastName}</span>
+            )}
           </div>
         </div>
         <div className="form-group">
@@ -171,7 +175,9 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
             onChange={handleChange}
             readOnly
           />
-          {errors.Email && <span className="error-message">{errors.Email}</span>}
+          {errors.Email && (
+            <span className="error-message">{errors.Email}</span>
+          )}
         </div>
       </section>
 
@@ -198,7 +204,9 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
             value={formData.Address1}
             onChange={handleChange}
           />
-          {errors.Address1 && <span className="error-message">{errors.Address1}</span>}
+          {errors.Address1 && (
+            <span className="error-message">{errors.Address1}</span>
+          )}
         </div>
         <div className="form-group">
           <label>Street address 2:</label>
@@ -230,7 +238,9 @@ const AccountInfo = ({ isLoading, setIsLoading }) => {
               value={formData.City}
               onChange={handleChange}
             />
-            {errors.City && <span className="error-message">{errors.City}</span>}
+            {errors.City && (
+              <span className="error-message">{errors.City}</span>
+            )}
           </div>
         </div>
         <div className="form-groups-container">
