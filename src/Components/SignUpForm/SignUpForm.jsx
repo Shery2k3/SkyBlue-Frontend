@@ -36,7 +36,7 @@ const SignupForm = () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/customer/countries`);
         const filteredCountries = response.data.filter(
-          (country) => country.Id === 1  || country.Id === 2 //Id 1 is United States and Id 2 is Canada
+          (country) => country.Id === 1 || country.Id === 2 //Id 1 is United States and Id 2 is Canada
         );
         setCountries(filteredCountries);
       } catch (error) {
@@ -45,7 +45,6 @@ const SignupForm = () => {
     };
     fetchCountries();
   }, []);
-
 
   useEffect(() => {
     if (selectedCountryId) {
@@ -309,6 +308,59 @@ const SignupForm = () => {
               />
               {errors.phone && (
                 <span className="error-message">{errors.phone.message}</span>
+              )}
+            </div>
+            <div className="input-box">
+              <label htmlFor="streetAddress1">Street Address 1</label>
+              <input
+                type="text"
+                id="streetAddress1"
+                {...register("streetAddress1", {
+                  required: "Street Address 1 is required",
+                })}
+                autoComplete="address-line1"
+              />
+              {errors.streetAddress1 && (
+                <span className="error-message">
+                  {errors.streetAddress1.message}
+                </span>
+              )}
+            </div>
+            <div className="input-box">
+              <label htmlFor="streetAddress2">Street Address 2</label>
+              <input
+                type="text"
+                id="streetAddress2"
+                {...register("streetAddress2")}
+                autoComplete="address-line2"
+              />
+            </div>
+            <div className="input-box">
+              <label htmlFor="city">City</label>
+              <input
+                type="text"
+                id="city"
+                {...register("city", {
+                  required: "city is required",
+                })}
+                autoComplete="city"
+              />
+              {errors.city && (
+                <span className="error-message">
+                  {errors.city.message}
+                </span>
+              )}
+            </div>
+            <div className="input-box">
+              <label htmlFor="zipCode">Zip Code</label>
+              <input
+                type="text"
+                id="zipCode"
+                {...register("zipCode", { required: "Zip Code is required" })}
+                autoComplete="postal-code"
+              />
+              {errors.zipCode && (
+                <span className="error-message">{errors.zipCode.message}</span>
               )}
             </div>
 
