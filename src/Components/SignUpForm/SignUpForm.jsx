@@ -36,7 +36,7 @@ const SignupForm = () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/customer/countries`);
         const filteredCountries = response.data.filter(
-          (country) => country.Id === 1 || country.Id === 2
+          (country) => country.Id === 1  || country.Id === 2 //Id 1 is United States and Id 2 is Canada
         );
         setCountries(filteredCountries);
       } catch (error) {
@@ -46,7 +46,6 @@ const SignupForm = () => {
     fetchCountries();
   }, []);
 
-  console.log("Countries:", countries);
 
   useEffect(() => {
     if (selectedCountryId) {
@@ -55,7 +54,6 @@ const SignupForm = () => {
           const response = await axios.get(
             `${API_BASE_URL}/customer/states/${selectedCountryId}`
           );
-          console.log("Fetching states");
           setStates(response.data);
         } catch (error) {
           message.error("Failed to load states");
@@ -66,7 +64,12 @@ const SignupForm = () => {
   }, [selectedCountryId]);
 
   const onSubmit = async (data) => {
-    console.log("Form data before conversion:", data);
+    //console.log("Form data before conversion:", data);
+
+    if (!fileList.length || !data.documents.length) {
+      message.error("Please upload a Business License.");
+      return;
+    }
 
     const formData = new FormData();
     for (const key in data) {
@@ -79,7 +82,7 @@ const SignupForm = () => {
       }
     }
 
-    console.log("FormData object:", formData);
+    //console.log("FormData object:", formData);
 
     try {
       const response = await axios.post(
@@ -93,15 +96,24 @@ const SignupForm = () => {
       );
 
       if (response.status === 201) {
-        message.success("Signup successful!");
+        message.success("Signup successful!, waiting for approval.");
         reset();
-      } else if (response.status === 400) {
-        message.error("Email already present.");
       } else {
         message.error("Something went wrong.");
       }
     } catch (error) {
-      message.error("Something went wrong.");
+      if (error.response && error.response.status === 400) {
+        if (
+          error.response.data &&
+          error.response.data.message === "Email already exists"
+        ) {
+          message.error("Email already exists.");
+        } else {
+          message.error("Bad Request.");
+        }
+      } else {
+        message.error("Something went wrong.");
+      }
     }
   };
 
@@ -109,8 +121,6 @@ const SignupForm = () => {
     const selectedCountryId = e.target.value;
     setSelectedCountryId(selectedCountryId);
   };
-
-  const password = watch("password");
 
   const handleFileChange = ({ fileList }) => {
     setFileList(fileList);
