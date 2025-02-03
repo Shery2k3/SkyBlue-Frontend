@@ -6,8 +6,12 @@ import { message } from "antd";
 import "./SignUpForm.css";
 import LogoAccent from "/Logos/LogoAccent.png";
 import { Link } from "react-router-dom";
-import { Upload, Button } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Upload, Button } from "antd";
+import {
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 
 const SignupForm = () => {
   const {
@@ -24,11 +28,17 @@ const SignupForm = () => {
   const [selectedCountryId, setSelectedCountryId] = useState(null);
   const [fileList, setFileList] = useState([]);
 
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
   useEffect(() => {
     const fetchCountries = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/customer/countries`);
-        setCountries(response.data);
+        const filteredCountries = response.data.filter(
+          (country) => country.Id === 1 || country.Id === 2
+        );
+        setCountries(filteredCountries);
       } catch (error) {
         message.error("Failed to load countries");
       }
@@ -36,12 +46,16 @@ const SignupForm = () => {
     fetchCountries();
   }, []);
 
+  console.log("Countries:", countries);
+
   useEffect(() => {
     if (selectedCountryId) {
       const fetchStates = async () => {
         try {
-          const response = await axios.get(`${API_BASE_URL}/customer/states/${selectedCountryId}`);
-          console.log('Fetching states')
+          const response = await axios.get(
+            `${API_BASE_URL}/customer/states/${selectedCountryId}`
+          );
+          console.log("Fetching states");
           setStates(response.data);
         } catch (error) {
           message.error("Failed to load states");
@@ -68,11 +82,15 @@ const SignupForm = () => {
     console.log("FormData object:", formData);
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/signup`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        `${API_BASE_URL}/auth/signup`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.status === 201) {
         message.success("Signup successful!");
@@ -96,7 +114,10 @@ const SignupForm = () => {
 
   const handleFileChange = ({ fileList }) => {
     setFileList(fileList);
-    setValue("documents", fileList.map(file => file.originFileObj));
+    setValue(
+      "documents",
+      fileList.map((file) => file.originFileObj)
+    );
   };
 
   return (
@@ -110,17 +131,25 @@ const SignupForm = () => {
             <h2 className="form-heading">Register Your Account</h2>
 
             <div className="linebreak">
-              <h3><span>Your Personal Details</span></h3>
+              <h3>
+                <span>Your Personal Details</span>
+              </h3>
             </div>
             <div className="input-box">
               <label htmlFor="firstName">First Name</label>
               <input
                 type="text"
                 id="firstName"
-                {...register("firstName", { required: "First name is required" })}
+                {...register("firstName", {
+                  required: "First name is required",
+                })}
                 autoComplete="given-name"
               />
-              {errors.firstName && <span className="error-message">{errors.firstName.message}</span>}
+              {errors.firstName && (
+                <span className="error-message">
+                  {errors.firstName.message}
+                </span>
+              )}
             </div>
             <div className="input-box">
               <label htmlFor="lastName">Last Name</label>
@@ -130,7 +159,9 @@ const SignupForm = () => {
                 {...register("lastName", { required: "Last name is required" })}
                 autoComplete="family-name"
               />
-              {errors.lastName && <span className="error-message">{errors.lastName.message}</span>}
+              {errors.lastName && (
+                <span className="error-message">{errors.lastName.message}</span>
+              )}
             </div>
             <div className="input-box">
               <label htmlFor="email">Email</label>
@@ -146,31 +177,47 @@ const SignupForm = () => {
                 })}
                 autoComplete="email"
               />
-              {errors.email && <span className="error-message">{errors.email.message}</span>}
+              {errors.email && (
+                <span className="error-message">{errors.email.message}</span>
+              )}
             </div>
 
             <div className="linebreak">
-              <h3><span>Company Details</span></h3>
+              <h3>
+                <span>Company Details</span>
+              </h3>
             </div>
             <div className="input-box">
               <label htmlFor="companyName">Company Name</label>
               <input
                 type="text"
                 id="companyName"
-                {...register("companyName", { required: "Company name is required" })}
+                {...register("companyName", {
+                  required: "Company name is required",
+                })}
                 autoComplete="organization"
               />
-              {errors.companyName && <span className="error-message">{errors.companyName.message}</span>}
+              {errors.companyName && (
+                <span className="error-message">
+                  {errors.companyName.message}
+                </span>
+              )}
             </div>
             <div className="input-box">
               <label htmlFor="storeAddress">Store Address</label>
               <input
                 type="text"
                 id="storeAddress"
-                {...register("storeAddress", { required: "Store address is required" })}
+                {...register("storeAddress", {
+                  required: "Store address is required",
+                })}
                 autoComplete="address"
               />
-              {errors.storeAddress && <span className="error-message">{errors.storeAddress.message}</span>}
+              {errors.storeAddress && (
+                <span className="error-message">
+                  {errors.storeAddress.message}
+                </span>
+              )}
             </div>
 
             <label htmlFor="businessLicense">
@@ -184,10 +231,15 @@ const SignupForm = () => {
                   beforeUpload={() => false}
                   multiple
                 >
-                  <Button icon={<UploadOutlined />} className="upload-btn"></Button>
+                  <Button
+                    icon={<UploadOutlined />}
+                    className="upload-btn"
+                  ></Button>
                 </Upload>
               </div>
-              <p className="drag-text">Click or drag file to this area to upload</p>
+              <p className="drag-text">
+                Click or drag file to this area to upload
+              </p>
             </div>
 
             <div className="input-box">
@@ -205,14 +257,18 @@ const SignupForm = () => {
                   </option>
                 ))}
               </select>
-              {errors.country && <span className="error-message">{errors.country.message}</span>}
+              {errors.country && (
+                <span className="error-message">{errors.country.message}</span>
+              )}
             </div>
 
             <div className="input-box">
               <label htmlFor="state">State / Province</label>
               <select
                 id="state"
-                {...register("state", { required: "State is required if not showing then select none" })}
+                {...register("state", {
+                  required: "State is required if not showing then select none",
+                })}
                 autoComplete="state"
               >
                 <option value="">Select State</option>
@@ -223,11 +279,15 @@ const SignupForm = () => {
                   </option>
                 ))}
               </select>
-              {errors.state && <span className="error-message">{errors.state.message}</span>}
+              {errors.state && (
+                <span className="error-message">{errors.state.message}</span>
+              )}
             </div>
 
             <div className="linebreak">
-              <h3><span>Your Contact Information</span></h3>
+              <h3>
+                <span>Your Contact Information</span>
+              </h3>
             </div>
             <div className="input-box">
               <label htmlFor="phone">Phone</label>
@@ -237,40 +297,68 @@ const SignupForm = () => {
                 {...register("phone", { required: "Phone number is required" })}
                 autoComplete="tel"
               />
-              {errors.phone && <span className="error-message">{errors.phone.message}</span>}
+              {errors.phone && (
+                <span className="error-message">{errors.phone.message}</span>
+              )}
             </div>
 
             <div className="linebreak">
-              <h3><span>Password</span></h3>
+              <h3>
+                <span>Password</span>
+              </h3>
             </div>
             <div className="input-box">
               <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters long",
-                  },
-                })}
-                autoComplete="new-password"
-              />
-              {errors.password && <span className="error-message">{errors.password.message}</span>}
+              <div className="password-container">
+                <input
+                  type={passwordVisible ? "text" : "password"}
+                  id="password"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters long",
+                    },
+                  })}
+                  autoComplete="new-password"
+                />
+                <span
+                  className="eye-icon"
+                  onClick={() => setPasswordVisible(!passwordVisible)}
+                >
+                  {passwordVisible ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                </span>
+              </div>
+              {errors.password && (
+                <span className="error-message">{errors.password.message}</span>
+              )}
             </div>
             <div className="input-box">
               <label htmlFor="confirmPassword">Confirm Password</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                {...register("confirmPassword", {
-                  required: "Please confirm your password",
-                  validate: (value) =>
-                    value === password || "Passwords do not match",
-                })}
-                autoComplete="new-password"
-              />
+              <div className="password-container">
+                <input
+                  type={confirmPasswordVisible ? "text" : "password"}
+                  id="confirmPassword"
+                  {...register("confirmPassword", {
+                    required: "Confirm Password is required",
+                    validate: (value) =>
+                      value === watch("password") || "Passwords do not match",
+                  })}
+                  autoComplete="new-password"
+                />
+                <span
+                  className="eye-icon"
+                  onClick={() =>
+                    setConfirmPasswordVisible(!confirmPasswordVisible)
+                  }
+                >
+                  {confirmPasswordVisible ? (
+                    <EyeInvisibleOutlined />
+                  ) : (
+                    <EyeOutlined />
+                  )}
+                </span>
+              </div>
               {errors.confirmPassword && (
                 <span className="error-message">
                   {errors.confirmPassword.message}
@@ -279,10 +367,14 @@ const SignupForm = () => {
             </div>
 
             <div className="input-box">
-              <button type="submit" className="submit-button">Register</button>
+              <button type="submit" className="submit-button">
+                Register
+              </button>
             </div>
             <div className="form-footer">
-              <p>Already have an account? <Link to="/login">Login here</Link></p>
+              <p>
+                Already have an account? <Link to="/login">Login here</Link>
+              </p>
             </div>
           </form>
         </div>

@@ -202,6 +202,22 @@
   max-width: 80px;
 }
 
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  width: 100%;
+  padding-right: 30px; /* Adjust padding to make space for the eye icon */
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+}
 
 @media (max-width: 580px) {
   .logo img {
