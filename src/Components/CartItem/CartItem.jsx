@@ -8,14 +8,18 @@ import { useModal } from "../../Context/ModalContext/ModalContext";
 import "./CartItem.css";
 
 const CartItem = ({ product, onUpdate, onRemove }) => {
-  const [unitPrice, setUnitPrice] = useState(product.Price)
+  console.log("Cartitem.jsx", product);
+
+  const [unitPrice, setUnitPrice] = useState(product.Price);
   const [tempQuantity, setQuantity] = useState(product.Quantity);
   const [price, setPrice] = useState(product.Price * product.Quantity);
-  const quantities = product.AllowedQuantities ? product.AllowedQuantities.split(',').map(Number) : null;
+  const quantities = product.AllowedQuantities
+    ? product.AllowedQuantities.split(",").map(Number)
+    : null;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [isUserInteraction, setUserInteraction] = useState(false); 
-  const { openModal } = useModal(); 
+  const [isUserInteraction, setUserInteraction] = useState(false);
+  const { openModal } = useModal();
 
   const dropdownRef = useRef(null);
   const dropdownContainerRef = useRef(null);
@@ -74,21 +78,22 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
   }, [tempQuantity, isUserInteraction, debouncedUpdateQuantity]);
 
   const increaseQuantity = () => {
-    const incrementValue = quantities && quantities.length > 0 ? quantities[0] : 1;
-    
+    const incrementValue =
+      quantities && quantities.length > 0 ? quantities[0] : 1;
+
     setQuantity((prevQuantity) => prevQuantity + incrementValue);
     setUserInteraction(true); // Indicate user interaction
   };
 
   const decreaseQuantity = () => {
-    const decrementValue = quantities && quantities.length > 0 ? quantities[0] : 1;
-  
+    const decrementValue =
+      quantities && quantities.length > 0 ? quantities[0] : 1;
+
     if (tempQuantity > decrementValue) {
       setQuantity((prevQuantity) => prevQuantity - decrementValue);
       setUserInteraction(true); // Indicate user interaction
     }
   };
-  
 
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value, 10);
@@ -143,21 +148,30 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
             onClick={handleClick}
           />
         </span>
-        <span className="product-name">
-          <p onClick={handleClick} className="name">{product.Name}</p>
-          <span className="unit-price">Price: ${unitPrice.toFixed(2)}</span>
-          <span className="smallscreen-price">total: ${price.toFixed(2)}</span>
-        </span>
+        <div className="product-info">
+          <p onClick={handleClick} className="product-name">
+            {product.Name}
+          </p>
+          <span className="unit-price">
+            Unit Price: ${unitPrice.toFixed(2)}
+          </span>
+          {product.Discount > 0 && (
+            <span className="discount-message">
+              After discount of ${product.Discount}, final price is $
+              {product.FinalPrice.toFixed(2)}
+            </span>
+          )}
+        </div>
       </div>
       <div className="controller-container">
         <div className="product-quantity">
-          <span className="button" onClick={decreaseQuantity}>
+          <button className="quantity-button" onClick={decreaseQuantity}>
             <FontAwesomeIcon icon={faMinus} />
-          </span>
+          </button>
           {!quantities ? (
             <input
               type="number"
-              className="quantity"
+              className="quantity-input"
               value={tempQuantity}
               onChange={handleQuantityChange}
               min="1"
@@ -180,24 +194,36 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
                 ref={dropdownRef}
               >
                 {quantities.map((qty) => (
-                  <span key={qty} onClick={() => handleDropdownSelection(qty)}>
+                  <div
+                    key={qty}
+                    className="dropdown-item"
+                    onClick={() => handleDropdownSelection(qty)}
+                  >
                     {qty}
-                  </span>
+                  </div>
                 ))}
               </div>
             </div>
           )}
-
-          <span className="button" onClick={increaseQuantity}>
+          <button className="quantity-button" onClick={increaseQuantity}>
             <FontAwesomeIcon icon={faPlus} />
-          </span>
+          </button>
         </div>
-        <span className="bigscreen-price">${price.toFixed(2)}</span>
-        <FontAwesomeIcon
-          className="remove-item"
-          icon={faTrash}
-          onClick={handleRemove}
-        />
+        <div className="price-info">
+          <span className="bigscreen-price">
+            {product.Discount > 0 ? (
+              <>
+        ${ (product.FinalPrice * product.Quantity).toFixed(2) }
+        <p className="savings">You Save ${(product.Discount * product.Quantity).toFixed(2)}</p>
+      </>
+            ) : (
+              `$${(product.FinalPrice * product.Quantity).toFixed(2)}`
+            )}
+          </span>
+          <button className="remove-button" onClick={handleRemove}>
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
+        </div>
       </div>
     </div>
   );

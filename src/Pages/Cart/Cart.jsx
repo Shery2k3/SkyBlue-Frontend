@@ -27,6 +27,7 @@ const Cart = () => {
     setFetching(true);
     try {
       const response = await retryRequest(() => axiosInstance.get("/cart/items"));
+      console.log(response.data);
       setProducts(response.data.cartItems);
       setCartSummary({
         subtotal: response.data.totalPrice,

@@ -10,16 +10,24 @@ const CartInfo = ({
   discount = 0,
   total = 0,
 }) => {
+  const isTaxMissing = tax === 0;
+
   return (
     <>
       {isFetching ? (
-        <div className="cart-info" cart-info>
+        <div className="cart-info">
           <div className="data-loader-container">
             <Spin size="large" />
           </div>
         </div>
       ) : (
+        
         <div className="cart-info">
+        {isTaxMissing && (
+            <p className="tax-warning">
+              ⚠ Tax rate not found for the given state province and country.
+            </p>
+          )}
           <div className="info-item">
             <span>Sub-Total:</span>
             <span>${subtotal.toFixed(2)}</span>
@@ -40,8 +48,11 @@ const CartInfo = ({
             <span>Total:</span>
             <span>${total.toFixed(2)}</span>
           </div>
+
           <Link to="/onepagecheckout">
-            <button className="checkout-button">Checkout</button>
+            <button className="checkout-button" disabled={isTaxMissing}>
+              Checkout
+            </button>
           </Link>
         </div>
       )}
