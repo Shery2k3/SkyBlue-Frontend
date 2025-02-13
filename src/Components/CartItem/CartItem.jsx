@@ -213,9 +213,11 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
           <span className="bigscreen-price">
             {product.Discount > 0 ? (
               <>
-        ${ (product.FinalPrice * product.Quantity).toFixed(2) }
-        <p className="savings">You Save ${(product.Discount * product.Quantity).toFixed(2)}</p>
-      </>
+                ${(product.FinalPrice * product.Quantity).toFixed(2)}
+                <p className="savings">
+                  You Save ${(product.Discount * product.Quantity).toFixed(2)}
+                </p>
+              </>
             ) : (
               `$${(product.FinalPrice * product.Quantity).toFixed(2)}`
             )}
