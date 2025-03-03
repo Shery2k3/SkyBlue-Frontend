@@ -32,6 +32,11 @@ const AllCategoryNav = () => {
     fetchData();
   }, [retryRequest]);
 
+
+
+
+  console.log(categories);
+
   // Function to toggle the open state for a category
   const toggleCategory = (categoryId) => {
     setOpenCategories((prevOpenCategories) => ({

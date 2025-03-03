@@ -157,8 +157,8 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
           </span>
           {product.Discount > 0 && (
             <span className="discount-message">
-              After discount of ${product.Discount}, final price is $
-              {product.FinalPrice.toFixed(2)}
+            After discount of ${product.Discount.toFixed(2)}, final price is $
+            {product.FinalPrice.toFixed(2)}
             </span>
           )}
         </div>

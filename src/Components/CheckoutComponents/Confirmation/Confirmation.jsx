@@ -7,6 +7,8 @@ const Confirmation = ({ shippingMethod, products, cartSummary, userInfo }) => {
 
   const { openModal } = useModal();
 
+  console.log("products", products);
+
   return (
     <div className="confirmation">
       <div className="address-container">
@@ -84,7 +86,15 @@ const Confirmation = ({ shippingMethod, products, cartSummary, userInfo }) => {
                 </td>
                 <td>${product.Price.toFixed(2)}</td>
                 <td>{product.Quantity}</td>
-                <td>${(product.Price * product.Quantity).toFixed(2)}</td>
+                <td>
+                  ${(product.FinalPrice * product.Quantity).toFixed(2)}
+                  {product.Discount > 0 && (
+                    <div className="discount-message">
+                      discount of ${product.Discount.toFixed(2)}, final price is $
+                      {(product.FinalPrice).toFixed(2)}
+                    </div>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
