@@ -6,12 +6,13 @@ import {
   faXmark,
   faPlus,
   faHome,
-  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axiosConfig";
 import useRetryRequest from "../../api/useRetryRequest";
 import "./AllCategoryNav.css";
+
+const MAX_DEPTH_TO_DISPLAY = 2; // Maximum depth of categories to display (0-based)
 
 const AllCategoryNav = () => {
   const retryRequest = useRetryRequest();
@@ -72,6 +73,7 @@ const AllCategoryNav = () => {
         const response = await retryRequest(() =>
           axiosInstance.get("/product/category/tree")
         );
+        console.log("Categories data:", response.data);
         setCategories(response.data);
         // Initialize navigation path with root level
         setNavigationPath([
@@ -105,8 +107,8 @@ const AllCategoryNav = () => {
       selected: category.Id,
     };
 
-    // Add next level if there are children
-    if (category.children && category.children.length > 0) {
+    // Add next level if there are children and we haven't reached max depth
+    if (category.children && category.children.length > 0 && level < MAX_DEPTH_TO_DISPLAY) {
       newPath.push({
         level: level + 1,
         categories: category.children,
@@ -114,7 +116,7 @@ const AllCategoryNav = () => {
       });
       setCurrentLevel(level + 1);
     } else {
-      // If no children, just redirect to the category page
+      // If no children or reached max depth, redirect to the category page
       redirect(category.Id);
     }
 
@@ -168,6 +170,18 @@ const AllCategoryNav = () => {
     }
   };
 
+  // Check if a category has deeper nested children
+  const hasNestedChildren = (category) => {
+    if (!category.children) return false;
+    
+    for (const child of category.children) {
+      if (child.children && child.children.length > 0) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   // Render a single category column
   const renderCategoryColumn = (levelData, level) => {
     return (
@@ -195,6 +209,16 @@ const AllCategoryNav = () => {
                     </span>
                   )}
                 </div>
+
+                {/* Show "View More" for categories at max depth that have deeper children */}
+                {level === MAX_DEPTH_TO_DISPLAY && hasNestedChildren(category) && (
+                  <div 
+                    className="view-more-link"
+                    onClick={() => redirect(category.Id)}
+                  >
+                    View More
+                  </div>
+                )}
               </li>
             ))
           ) : (
@@ -289,8 +313,15 @@ const AllCategoryNav = () => {
                           className="mobile-next-button"
                           onClick={(e) => {
                             e.stopPropagation();
-                            navigateToSubcategory(category, index);
-                            setCurrentLevel(index + 1);
+                            
+                            // If we're at max depth and category has nested children,
+                            // redirect to category page instead of showing more levels
+                            if (index === MAX_DEPTH_TO_DISPLAY && hasNestedChildren(category)) {
+                              redirect(category.Id);
+                            } else {
+                              navigateToSubcategory(category, index);
+                              setCurrentLevel(index + 1);
+                            }
                           }}
                           aria-label={`View subcategories of ${category.Name}`}
                         >
@@ -298,6 +329,16 @@ const AllCategoryNav = () => {
                         </button>
                       )}
                     </div>
+                    
+                    {/* Show "View More" for categories at max depth that have deeper children */}
+                    {index === MAX_DEPTH_TO_DISPLAY && hasNestedChildren(category) && (
+                      <div 
+                        className="mobile-view-more"
+                        onClick={() => redirect(category.Id)}
+                      >
+                        View More
+                      </div>
+                    )}
                   </li>
                 ))
               ) : (
