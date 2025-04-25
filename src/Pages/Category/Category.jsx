@@ -42,6 +42,7 @@ const Category = () => {
             axiosInstance.get(`/product/category/child/${categoryId}`),
           ])
         );
+        console.log(categoryResponse.data, childCategoryResponse.data);
         setCategory(categoryResponse.data.categoryName);
         setProducts(categoryResponse.data.data);
         setTotalPages(categoryResponse.data.totalPages);
