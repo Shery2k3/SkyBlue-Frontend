@@ -33,7 +33,6 @@ const Navbar = () => {
   const { cartCount, updateCartCount } = useCartCount();
   const { isCategoryNavOpen, toggleCategoryNav } = useCategoryNav();
 
-
   const [isVisible, setIsVisible] = useState(false);
 
   const handleScroll = () => {

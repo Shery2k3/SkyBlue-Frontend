@@ -79,8 +79,6 @@
     margin-top: 10px;
 }
 
-
-
 .product-card .add-to-cart {
     position: absolute;
     right: 20px;
@@ -103,6 +101,65 @@
     border: 2.5px solid var(--dark);
 }
 
+/* Quantity input styles */
+.product-card .quantity-input-container {
+    position: absolute;
+    right: 20px;
+    bottom: 15px;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 20px;
+    border: 2px solid var(--secondary);
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+.product-card .quantity-input {
+    width: 40px;
+    height: 28px;
+    border: none;
+    text-align: center;
+    font-family: var(--font-accent);
+    font-weight: 600;
+    color: var(--dark);
+    padding: 0;
+    -moz-appearance: textfield;
+}
+
+.product-card .quantity-input::-webkit-outer-spin-button,
+.product-card .quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.product-card .quantity-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: var(--secondary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s;
+}
+
+.product-card .quantity-btn:hover {
+    background: var(--dark);
+}
+
+.product-card .quantity-btn.add {
+    background: var(--secondary);
+}
+
+.product-card .quantity-btn.add:hover {
+    background: var(--dark);
+}
+
 @media only screen and (max-width: 820px) {
     .product-card {
         width: 240px;
@@ -122,5 +179,21 @@
         width: 95%;
         height: 95%;
         object-fit: contain;
+    }
+    
+    .product-card .quantity-input-container {
+        right: 10px;
+        bottom: 10px;
+    }
+    
+    .product-card .quantity-input {
+        width: 35px;
+        height: 24px;
+    }
+    
+    .product-card .quantity-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
     }
 }
