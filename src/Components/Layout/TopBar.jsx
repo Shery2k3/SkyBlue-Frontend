@@ -8,6 +8,9 @@ const TopBars = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const adminUrl = import.meta.env.VITE_ADMIN_URL;
+
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 767);
@@ -22,7 +25,7 @@ const TopBars = () => {
   return (
     <div>
       {isAdmin && (
-        <div className="topbar-admin" onClick={() => navigate("/admin")}>
+        <div className="topbar-admin" onClick={() => window.location.href = adminUrl}>
           Administration
         </div>
       )}
