@@ -1,0 +1,19 @@
+.topbar-admin {
+  color: white;
+  text-align: center;
+  padding: 4px 0;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  background-color: var(--secondary);
+}
+
+.topbar-info {
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding: 5px;
+  font-size: 0.95rem;
+  font-family: var(--font-primary);
+}

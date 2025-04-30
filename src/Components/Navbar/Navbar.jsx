@@ -11,6 +11,7 @@ import {
   faHeart,
   faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
+import TopBars from "../Layout/TopBar";
 
 const items = [
   {
@@ -49,7 +50,8 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className={`navbar ${isVisible ? "visible" : ""}`}>
+   <>
+     <nav className={`navbar ${isVisible ? "visible" : ""}`}>
       <FontAwesomeIcon icon={faBars} className="menu" onClick={toggleNav} />
       <Link to="/">
         <img src={LogoAccent} alt="logo" className="logo" />
@@ -102,6 +104,8 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
+   </>
+   
   );
 };
 

@@ -25,6 +25,7 @@ const LoginForm = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevState) => ({

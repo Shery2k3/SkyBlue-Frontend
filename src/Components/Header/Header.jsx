@@ -11,6 +11,7 @@ import {
   faChevronDown,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
+import TopBars from "../Layout/TopBar";
 
 const Header = () => {
   const { isNavOpen, toggleNav } = useNav();
@@ -18,7 +19,9 @@ const Header = () => {
   const { isCategoryNavOpen, toggleCategoryNav } = useCategoryNav();
 
   return (
-    <div className="header">
+    <>
+      <TopBars />
+      <div className="header">
       <div className="header-left">
         <Link to="/">
           <img src={LogoAccent} alt="logo" className="logo" />
@@ -78,6 +81,8 @@ const Header = () => {
         </div>
       </div>
     </div>
+    </>
+    
   );
 };
 

@@ -37,7 +37,6 @@ const Layout = ({ pageTitle, children, style, isLoading }) => {
   return (
     <>
       <Loader isActive={isLoading} />
-
       <div className="layout">
         <Navbar />
         <NavMenu />
