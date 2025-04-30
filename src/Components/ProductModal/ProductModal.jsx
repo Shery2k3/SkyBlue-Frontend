@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCartCount } from "../../Context/CartCount/CartCount";
 import useRetryRequest from "../../api/useRetryRequest";
@@ -9,134 +9,219 @@ import {
   faCartShopping,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
-
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import "./ProductModal.css";
-import Skeleton from "antd/es/skeleton/";
-import message from "antd/es/message/";
+import { Skeleton, message, notification } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const ProductModal = ({ product, onClose }) => {
-  const { cartCount, updateCartCount } = useCartCount();
+  const { updateCartCount } = useCartCount();
+  const navigate = useNavigate();
+  const retryRequest = useRetryRequest();
 
+  // Extract product data
   const {
     Id,
     Images = [product.images],
     Name,
     Price,
     Stock,
-    OrderMinimumQuantity,
+    OrderMinimumQuantity = 1,
     AllowedQuantities,
   } = product.data || product;
 
+  // Parse allowed quantities
   const quantities = AllowedQuantities
     ? AllowedQuantities.split(",").map(Number)
     : null;
-  const [quantity, setQuantity] = useState(
-    quantities && quantities.length > 0 ? quantities[0] : 1
-  );
 
+  // State management
+  const [quantity, setQuantity] = useState(
+    quantities && quantities.length > 0 ? quantities[0] : OrderMinimumQuantity
+  );
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessingWishlist, setIsProcessingWishlist] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Refs
   const dropdownRef = useRef(null);
-  const retryRequest = useRetryRequest();
   const dropdownContainerRef = useRef(null);
   const inputRef = useRef(null);
 
-  const increaseQuantity = () => {
-    const incrementValue =
-      quantities && quantities.length > 0 ? quantities[0] : 1;
+  // Handler functions
+  const increaseQuantity = useCallback(() => {
+    const incrementValue = quantities && quantities.length > 0 ? quantities[0] : 1;
+    setQuantity(prevQuantity => prevQuantity + incrementValue);
+  }, [quantities]);
 
-    setQuantity((prevQuantity) => prevQuantity + incrementValue);
-  };
-
-  const decreaseQuantity = () => {
-    const decrementValue =
-      quantities && quantities.length > 0 ? quantities[0] : 1;
-
+  const decreaseQuantity = useCallback(() => {
+    const decrementValue = quantities && quantities.length > 0 ? quantities[0] : 1;
     if (quantity > decrementValue) {
-      setQuantity((prevQuantity) => prevQuantity - decrementValue);
+      setQuantity(prevQuantity => prevQuantity - decrementValue);
     }
-  };
+  }, [quantities, quantity]);
 
-  const handleQuantityChange = (e) => {
-    setQuantity(e.target.value);
-  };
+  const handleQuantityChange = useCallback((e) => {
+    const value = parseInt(e.target.value, 10);
+    if (!isNaN(value)) {
+      setQuantity(value);
+    }
+  }, []);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     const value = parseInt(inputRef.current.value, 10);
-    if (!isNaN(value) && value >= (OrderMinimumQuantity || 1)) {
+    if (!isNaN(value) && value >= OrderMinimumQuantity) {
       const roundedValue = Math.max(
-        OrderMinimumQuantity || 1,
-        Math.ceil(value / (OrderMinimumQuantity || 1)) *
-          (OrderMinimumQuantity || 1)
+        OrderMinimumQuantity,
+        Math.ceil(value / OrderMinimumQuantity) * OrderMinimumQuantity
       );
       setQuantity(roundedValue);
     } else {
-      setQuantity(OrderMinimumQuantity || 1);
+      setQuantity(OrderMinimumQuantity);
     }
-  };
+  }, [OrderMinimumQuantity]);
 
-  const handleDropdownSelection = (selectedQuantity) => {
+  const handleDropdownSelection = useCallback((selectedQuantity) => {
     setQuantity(selectedQuantity);
     setDropdownOpen(false);
-  };
+  }, []);
 
-  const handleClose = (e) => {
+  const handleClose = useCallback((e) => {
     if (e.target.classList.contains("product-modal-container")) {
       onClose();
     }
-  };
+  }, [onClose]);
 
-  const handleClickOutside = (e) => {
-    if (
-      dropdownContainerRef.current &&
-      !dropdownContainerRef.current.contains(e.target)
-    ) {
-      setDropdownOpen(false);
-    }
-  };
+  const navigateToPage = useCallback((path) => {
+    onClose(); // Close the modal first
+    setTimeout(() => navigate(path), 0); // Navigate in the next tick to ensure modal has closed
+  }, [navigate, onClose]);
 
-  const handleSubmit = async () => {
+  // Handle adding to cart
+  const handleSubmit = useCallback(async (e) => {
+    e.stopPropagation();
     if (isSubmitting) return;
+    
     setIsSubmitting(true);
-
-    message.loading({ content: "Adding item...", key: "add" });
     try {
       const response = await axiosInstance.post(`/cart/add`, {
         productId: Id,
         quantity: quantity,
       });
-      message.success({
-        content: "Added to Cart!",
-        key: "add",
-        duration: 1,
-      });
-      onClose();
+
+      if (response.data.success) {
+        notification.success({
+          message: (
+            <div style={{ textAlign: "center" }}>
+              Added to Cart!{" "}
+              <a onClick={(e) => {
+                e.stopPropagation();
+                navigateToPage("/cart");
+              }}>Go to Cart</a>
+            </div>
+          ),
+          duration: 3,
+          key: "added-to-cart",
+          placement: "top",
+        });
+        updateCartCount();
+      } else {
+        message.error({
+          content: response.data.message,
+          key: "add",
+          duration: 3,
+        });
+      }
     } catch (error) {
-      console.error("Error submitting product:", error);
-      message.error("Failed to Add to Cart");
+      console.error("Error adding to cart:", error);
+      const errorMessage =
+        error.response?.data?.message || "Failed to Add to Cart";
+      message.error(errorMessage);
     } finally {
-      updateCartCount();
       setIsSubmitting(false);
     }
-  };
+  }, [Id, quantity, isSubmitting, updateCartCount, navigateToPage]);
 
+  // Wishlist operations
+  const addToWishlist = useCallback(async (e) => {
+    e.stopPropagation();
+    if (isProcessingWishlist) return;
+    
+    setIsProcessingWishlist(true);
+    setIsInWishlist(true);
+    message.loading({ content: "Adding item...", key: "addwishlist" });
+    
+    try {
+      await axiosInstance.post(`/customer/wishlist/${Id}`);
+      notification.success({
+        message: (
+          <div style={{ textAlign: "center" }}>
+            Added to Wishlist!{" "}
+            <a onClick={(e) => {
+              e.stopPropagation();
+              navigateToPage("/wishlist");
+            }}>Go to Wishlist</a>
+          </div>
+        ),
+        key: "addwishlist",
+        duration: 3,
+        placement: "top",
+      });
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+      message.error("Failed to Add to Wishlist");
+      setIsInWishlist(false);
+    } finally {
+      setIsProcessingWishlist(false);
+    }
+  }, [Id, isProcessingWishlist, navigateToPage]);
+
+  const removeFromWishlist = useCallback(async (e) => {
+    e.stopPropagation();
+    if (isProcessingWishlist) return;
+    
+    setIsProcessingWishlist(true);
+    setIsInWishlist(false);
+    message.loading({ content: "Removing item...", key: "removewishlist" });
+    
+    try {
+      await axiosInstance.delete(`/customer/wishlist/${Id}`);
+      message.success({
+        content: "Removed from Wishlist!",
+        key: "removewishlist",
+        duration: 1,
+      });
+      window.location.reload(); // Reload the page to reflect changes
+    } catch (error) {
+      console.error("Error removing from wishlist:", error);
+      message.error("Failed to Remove from Wishlist");
+      setIsInWishlist(true);
+    } finally {
+      setIsProcessingWishlist(false);
+    }
+  }, [Id, isProcessingWishlist]);
+
+  // Handle clicks outside dropdown
   useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        dropdownContainerRef.current &&
+        !dropdownContainerRef.current.contains(e.target)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  const handleImageLoad = () => {
-    setIsLoading(false);
-  };
-
+  // Load wishlist status
   useEffect(() => {
     const fetchWishListInfo = async () => {
       try {
@@ -145,65 +230,25 @@ const ProductModal = ({ product, onClose }) => {
         );
         setIsInWishlist(response.data);
       } catch (error) {
-        console.error("Failed to load data:", error);
+        console.error("Failed to load wishlist data:", error);
       }
     };
 
-    fetchWishListInfo();
-  }, [retryRequest]);
-
-  const addtoWishlist = async () => {
-    if (isProcessingWishlist) return; // Prevent action if processing
-    setIsProcessingWishlist(true); // Set processing state
-    setIsInWishlist(true);
-    message.loading({ content: "Adding item...", key: "addwishlist" });
-    try {
-      const response = await axiosInstance.post(`/customer/wishlist/${Id}`);
-      message.success({
-        content: "Added to Wishlist!",
-        key: "addwishlist",
-        duration: 1,
-      });
-    } catch (error) {
-      console.error("Error submitting product:", error);
-      message.error("Failed to Add to Wishlist");
-      setIsInWishlist(false);
-    } finally {
-      setIsProcessingWishlist(false); // Reset processing state
+    if (Id) {
+      fetchWishListInfo();
     }
-  };
-
-  const removefromWishlist = async () => {
-    if (isProcessingWishlist) return; // Prevent action if processing
-    setIsProcessingWishlist(true); // Set processing state
-    setIsInWishlist(false);
-    message.loading({ content: "Removing item...", key: "removewishlist" });
-    try {
-      const response = await axiosInstance.delete(`/customer/wishlist/${Id}`);
-      message.success({
-        content: "Removed from Wishlist!",
-        key: "removewishlist",
-        duration: 1,
-      });
-    } catch (error) {
-      console.error("Error submitting product:", error);
-      message.error("Failed to Remove from Wishlist");
-      setIsInWishlist(true);
-    } finally {
-      setIsProcessingWishlist(false); // Reset processing state
-    }
-  };
+  }, [Id, retryRequest]);
 
   return (
     <div className="product-modal-container" onClick={handleClose}>
-      <div className="product-modal">
+      <div className="product-modal" onClick={(e) => e.stopPropagation()}>
         <div className="product-image-container">
           {isLoading && <Skeleton.Image active />}
           <img
             src={Images[0]}
             className="product-image"
             alt={Name}
-            onLoad={handleImageLoad}
+            onLoad={() => setIsLoading(false)}
             style={{ display: isLoading ? "none" : "block" }}
           />
         </div>
@@ -232,7 +277,7 @@ const ProductModal = ({ product, onClose }) => {
                 value={quantity}
                 onChange={handleQuantityChange}
                 onBlur={handleBlur}
-                min={OrderMinimumQuantity || 1}
+                min={OrderMinimumQuantity}
                 ref={inputRef}
               />
             ) : (
@@ -280,7 +325,7 @@ const ProductModal = ({ product, onClose }) => {
             <FontAwesomeIcon
               className="wishlist-mark"
               icon={isInWishlist ? solidHeart : regularHeart}
-              onClick={isInWishlist ? removefromWishlist : addtoWishlist}
+              onClick={isInWishlist ? removeFromWishlist : addToWishlist}
               style={{ cursor: isProcessingWishlist ? "wait" : "pointer" }}
             />
           </div>

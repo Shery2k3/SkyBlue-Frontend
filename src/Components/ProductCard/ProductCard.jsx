@@ -1,199 +1,253 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Skeleton from "antd/es/skeleton/";
 import { faPlus, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import Skeleton from "antd/es/skeleton";
+import { message, notification } from "antd";
+import { useNavigate } from "react-router-dom";
 import "./ProductCard.css";
 import { useModal } from "../../Context/ModalContext/ModalContext";
 import { useCartCount } from "../../Context/CartCount/CartCount";
-import { message } from "antd";
 import axiosInstance from "../../api/axiosConfig";
-import { useNavigate } from "react-router-dom";
-import { notification, Button } from "antd";
 
 const ProductCard = ({ product }) => {
   const { openModal } = useModal();
-  const { cartCount, updateCartCount } = useCartCount();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { updateCartCount } = useCartCount();
   const navigate = useNavigate();
-
+  const quantityContainerRef = useRef(null);
+  
+  // Extract product data once
   const {
     Images,
     Name,
     Price,
     Stock,
-    OrderMinimumQuantity,
+    OrderMinimumQuantity = 1,
     OrderMaximumQuantity,
     AllowedQuantities,
+    Id
   } = product.data || product;
+
+  // Component states
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showQuantityInput, setShowQuantityInput] = useState(false);
-  const [quantity, setQuantity] = useState(OrderMinimumQuantity || 1);
-  const [quantityOptions, setQuantityOptions] = useState([]);
-  const [hasRestrictions, setHasRestrictions] = useState(false);
-  const quantityContainerRef = useRef(null);
+  const [quantity, setQuantity] = useState(OrderMinimumQuantity);
+  
+  // Derived data using useMemo
+  const shortenedName = useMemo(() => 
+    Name.length > 36 ? `${Name.substring(0, 36)}...` : Name
+  , [Name]);
 
-  const shortenedName = Name.length > 36 ? `${Name.substring(0, 36)}...` : Name;
-
-  // Determine if product has quantity restrictions and generate options
-  useEffect(() => {
-    // If AllowedQuantities is specified, use those values
-    if (
-      AllowedQuantities &&
-      Array.isArray(AllowedQuantities) &&
-      AllowedQuantities.length > 0
-    ) {
-      setQuantityOptions(AllowedQuantities);
-      setHasRestrictions(true);
-      return;
+  // Calculate quantity options and restrictions once when product changes
+  const { quantityOptions, hasRestrictions } = useMemo(() => {
+    // Case 1: If AllowedQuantities is specified
+    if (AllowedQuantities && Array.isArray(AllowedQuantities) && AllowedQuantities.length > 0) {
+      return {
+        quantityOptions: AllowedQuantities,
+        hasRestrictions: true
+      };
     }
-
-    // If OrderMinimumQuantity > 1, check if it's a case of increment restriction
+    
+    // Case 2: If OrderMinimumQuantity suggests an increment pattern
     if (OrderMinimumQuantity && OrderMinimumQuantity > 1) {
-      // Check if OrderMinimumQuantity is likely an increment value (e.g., 12, 24, 36)
       const possibleIncrement = OrderMinimumQuantity;
-
-      // Generate options based on increment up to max or stock
-      const options = [];
       const maxQty = Math.min(
         OrderMaximumQuantity || Stock,
         Stock || 1000,
         240
-      ); // Set maximum to 240 as requested
-
+      );
+      
+      const options = [];
       for (let i = possibleIncrement; i <= maxQty; i += possibleIncrement) {
         options.push(i);
       }
-
+      
       if (options.length > 1) {
-        setQuantityOptions(options);
-        setHasRestrictions(true);
-        setQuantity(options[0]);
-        return;
+        return {
+          quantityOptions: options,
+          hasRestrictions: true
+        };
       }
     }
-
+    
     // Default: no special restrictions
-    setHasRestrictions(false);
-    setQuantity(OrderMinimumQuantity || 1);
-  }, [OrderMinimumQuantity, OrderMaximumQuantity, AllowedQuantities, Stock]);
+    return {
+      quantityOptions: [],
+      hasRestrictions: false
+    };
+  }, [AllowedQuantities, OrderMinimumQuantity, OrderMaximumQuantity, Stock]);
+
+  // Update quantity when options change
+  useEffect(() => {
+    setQuantity(hasRestrictions && quantityOptions.length > 0 ? quantityOptions[0] : OrderMinimumQuantity);
+  }, [hasRestrictions, quantityOptions, OrderMinimumQuantity]);
 
   // Close quantity selector when clicking outside
   useEffect(() => {
+    if (!showQuantityInput) return;
+    
     const handleClickOutside = (event) => {
-      if (
-        showQuantityInput &&
-        quantityContainerRef.current &&
-        !quantityContainerRef.current.contains(event.target)
-      ) {
+      if (quantityContainerRef.current && !quantityContainerRef.current.contains(event.target)) {
         setShowQuantityInput(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showQuantityInput]);
 
-  const handleClick = () => {
+  // Event handlers (wrapped in useCallback to prevent unnecessary rerenders)
+  const handleImageLoad = useCallback(() => {
+    setIsLoading(false);
+  }, []);
+
+  const handleClick = useCallback(() => {
     if (Stock > 0 && !showQuantityInput) {
       openModal(product);
     }
-  };
+  }, [Stock, showQuantityInput, openModal, product]);
 
-  const handleImageLoad = () => {
-    setIsLoading(false);
-  };
-
-  const toggleQuantityInput = (e) => {
+  const toggleQuantityInput = useCallback((e) => {
     e.stopPropagation();
     if (Stock > 0) {
-      setShowQuantityInput(!showQuantityInput);
-      if (!showQuantityInput) {
-        setQuantity(
-          hasRestrictions ? quantityOptions[0] : OrderMinimumQuantity || 1
-        );
-      }
+      setShowQuantityInput(prev => !prev);
     }
-  };
+  }, [Stock]);
 
-  const handleQuantityChange = (e) => {
+  const handleQuantityChange = useCallback((e) => {
     e.stopPropagation();
-    let value = parseInt(e.target.value) || OrderMinimumQuantity || 1;
-
-    // Apply min/max constraints
-    if (OrderMinimumQuantity && value < OrderMinimumQuantity) {
-      value = OrderMinimumQuantity;
-    }
-    if (OrderMaximumQuantity && value > OrderMaximumQuantity) {
-      value = OrderMaximumQuantity;
-    }
-    if (value > Stock) {
-      value = Stock;
-    }
-
+    const value = Math.max(
+      OrderMinimumQuantity,
+      Math.min(
+        parseInt(e.target.value) || OrderMinimumQuantity,
+        OrderMaximumQuantity || Stock,
+        Stock
+      )
+    );
     setQuantity(value);
-  };
+  }, [OrderMinimumQuantity, OrderMaximumQuantity, Stock]);
 
-  const handleQuantityOptionClick = (qty, e) => {
+  const handleQuantityOptionClick = useCallback((qty, e) => {
     e.stopPropagation();
     setQuantity(qty);
-  };
+  }, []);
 
-  const handleAddToCart = async (e) => {
+  const handleAddToCart = useCallback(async (e) => {
     e.stopPropagation();
     setIsSubmitting(true);
+    
     try {
-      const response = await axiosInstance.post(`/cart/add`, {
-        productId: product.Id || product.data?.Id,
-        quantity: quantity,
+      const response = await axiosInstance.post('/cart/add', {
+        productId: Id || product.Id,
+        quantity
       });
-
-      console.log(response);
 
       if (response.data.success) {
         notification.success({
           message: (
             <div style={{ textAlign: "center" }}>
               Added to Cart!{" "}
-              <a onClick={() => navigate("/cart")} style={{ marginLeft: 8 }}>
-                Go to Cart
-              </a>
+              <a onClick={() => navigate("/cart")}>Go to Cart</a>
             </div>
           ),
           duration: 3,
           key: "added-to-cart",
-          placement: "top", // places it at the top-center
+          placement: "top"
         });
       } else {
-        // Handle validation errors from backend
         message.error({
           content: response.data.message,
           key: "add",
-          duration: 3,
+          duration: 3
         });
       }
     } catch (error) {
-      console.error("Error submitting product:", error);
-      // Extract error message from the backend if available
-      const errorMessage =
-        error.response?.data?.message || "Failed to Add to Cart";
+      console.error("Error adding to cart:", error);
+      const errorMessage = error.response?.data?.message || "Failed to Add to Cart";
       message.error(errorMessage);
     } finally {
       updateCartCount();
       setIsSubmitting(false);
-      // Reset the quantity input display
       setShowQuantityInput(false);
     }
+  }, [Id, product.Id, quantity, navigate, updateCartCount]);
+
+  // Render helpers - split rendering into logical sections
+  const renderQuantitySelector = () => {
+    if (!showQuantityInput) {
+      return (
+        <span className="add-to-cart" onClick={toggleQuantityInput}>
+          <FontAwesomeIcon icon={faPlus} />
+        </span>
+      );
+    }
+
+    return (
+      <div
+        ref={quantityContainerRef}
+        className={hasRestrictions ? "quantity-options-container" : "quantity-input-container"}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {hasRestrictions ? (
+          <>
+            <button className="close-btn" onClick={toggleQuantityInput} disabled={isSubmitting}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+            <div className="quantity-tabs-wrapper">
+              <div className="quantity-tabs">
+                {quantityOptions.map((qty) => (
+                  <button
+                    key={qty}
+                    className={`quantity-tab ${quantity === qty ? "active" : ""}`}
+                    onClick={(e) => handleQuantityOptionClick(qty, e)}
+                    disabled={isSubmitting}
+                  >
+                    {qty}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button 
+              className="quantity-btn add" 
+              onClick={handleAddToCart}
+              disabled={isSubmitting}
+            >
+              <FontAwesomeIcon icon={faCheck} />
+            </button>
+          </>
+        ) : (
+          <>
+            <input
+              type="number"
+              className="quantity-input"
+              value={quantity}
+              onChange={handleQuantityChange}
+              onClick={(e) => e.stopPropagation()}
+              min={OrderMinimumQuantity}
+              max={OrderMaximumQuantity || Stock}
+              disabled={isSubmitting}
+            />
+            <button 
+              className="quantity-btn add" 
+              onClick={handleAddToCart}
+              disabled={isSubmitting}
+            >
+              <FontAwesomeIcon icon={faCheck} />
+            </button>
+          </>
+        )}
+      </div>
+    );
   };
 
+  // Main render
   return (
     <div className="product-card" onClick={handleClick}>
       <div className="product-image-container">
         {isLoading && <Skeleton.Image active />}
         <img
           src={Images[0]}
-          alt="Product"
+          alt={Name}
           className="product-image"
           onLoad={handleImageLoad}
           style={{ display: isLoading ? "none" : "block" }}
@@ -208,63 +262,7 @@ const ProductCard = ({ product }) => {
       <div className="product-detail">
         <p className="product-name">{shortenedName}</p>
         <p className="product-price">${Price.toFixed(2)}</p>
-
-        {!showQuantityInput ? (
-          <span className="add-to-cart" onClick={toggleQuantityInput}>
-            <FontAwesomeIcon icon={faPlus} />
-          </span>
-        ) : (
-          <div
-            ref={quantityContainerRef}
-            className={
-              hasRestrictions
-                ? "quantity-options-container"
-                : "quantity-input-container"
-            }
-            onClick={(e) => e.stopPropagation()}
-          >
-            {hasRestrictions ? (
-              <>
-                <button className="close-btn" onClick={toggleQuantityInput}>
-                  <FontAwesomeIcon icon={faTimes} />
-                </button>
-                <div className="quantity-tabs-wrapper">
-                  <div className="quantity-tabs">
-                    {quantityOptions.map((qty) => (
-                      <button
-                        key={qty}
-                        className={`quantity-tab ${
-                          quantity === qty ? "active" : ""
-                        }`}
-                        onClick={(e) => handleQuantityOptionClick(qty, e)}
-                      >
-                        {qty}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <button className="quantity-btn add" onClick={handleAddToCart}>
-                  <FontAwesomeIcon icon={faCheck} />
-                </button>
-              </>
-            ) : (
-              <>
-                <input
-                  type="number"
-                  className="quantity-input"
-                  value={quantity}
-                  onChange={handleQuantityChange}
-                  onClick={(e) => e.stopPropagation()}
-                  min={OrderMinimumQuantity || 1}
-                  max={OrderMaximumQuantity || Stock}
-                />
-                <button className="quantity-btn add" onClick={handleAddToCart}>
-                  <FontAwesomeIcon icon={faCheck} />
-                </button>
-              </>
-            )}
-          </div>
-        )}
+        {renderQuantitySelector()}
       </div>
     </div>
   );
