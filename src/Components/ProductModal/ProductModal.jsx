@@ -256,7 +256,7 @@ const ProductModal = ({ product, onClose }) => {
         <div className="product-detail">
           <span>
             <h2 className="product-title">{Name}</h2>
-            <p className="available">Availability: In stock ({Stock})</p>
+            <p className="available">Availability: {Stock > 0 ? "In Stock" : "Out of stock"}</p>
           </span>
           <span>
             <p className="product-price">${Price.toFixed(2)}</p>
