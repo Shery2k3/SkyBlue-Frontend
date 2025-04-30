@@ -7,11 +7,14 @@ import { useModal } from "../../Context/ModalContext/ModalContext";
 import { useCartCount } from "../../Context/CartCount/CartCount";
 import { message } from "antd";
 import axiosInstance from "../../api/axiosConfig";
+import { useNavigate } from "react-router-dom";
+import { notification, Button } from "antd";
 
 const ProductCard = ({ product }) => {
   const { openModal } = useModal();
   const { cartCount, updateCartCount } = useCartCount();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const {
     Images,
@@ -142,17 +145,25 @@ const ProductCard = ({ product }) => {
     setIsSubmitting(true);
     try {
       const response = await axiosInstance.post(`/cart/add`, {
-        productId: product.Id,
+        productId: product.Id || product.data?.Id,
         quantity: quantity,
       });
 
       console.log(response);
 
       if (response.data.success) {
-        message.success({
-          content: "Added to Cart!",
-          key: "add",
-          duration: 1,
+        notification.success({
+          message: (
+            <div style={{ textAlign: "center" }}>
+              Added to Cart!{" "}
+              <a onClick={() => navigate("/cart")} style={{ marginLeft: 8 }}>
+                Go to Cart
+              </a>
+            </div>
+          ),
+          duration: 3,
+          key: "added-to-cart",
+          placement: "top", // places it at the top-center
         });
       } else {
         // Handle validation errors from backend
