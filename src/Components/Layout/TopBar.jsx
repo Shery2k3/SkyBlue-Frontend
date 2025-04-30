@@ -17,7 +17,7 @@ const TopBars = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const isAdmin = user?.roles?.some(role => role.Name === "Admin");
+  const isAdmin = user?.roles?.some(role => role.Name === "Administrators" || role.Name === "Admin");
 
   return (
     <div>

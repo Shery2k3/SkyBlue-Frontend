@@ -137,7 +137,7 @@ const SearchBar = () => {
   return (
     <div className="searchbar-container">
       <div className="search-bar">
-        <div className="category-dropdown" ref={dropdownRef}>
+        {/* <div className="category-dropdown" ref={dropdownRef}>
           <button className="category-dropbtn" onClick={handleButtonClick}>
             {selectedCategory.Name}
             <span className={`drop-down-icon`}>
@@ -171,7 +171,7 @@ const SearchBar = () => {
               </p>
             ))}
           </div>
-        </div>
+        </div> */}
         <input
           type="text"
           className="search-input"
