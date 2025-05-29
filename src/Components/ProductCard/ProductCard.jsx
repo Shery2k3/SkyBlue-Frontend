@@ -4,38 +4,43 @@ import axiosInstance from "../../api/axiosConfig.js";
 import { useModal } from "../../Context/ModalContext/ModalContext";
 import { message, notification } from "antd";
 import "./ProductCard.css";
+import { useCartCount } from "../../Context/CartCount/CartCount.jsx";
 
 const ProductCard = ({ product, updateCartCount, navigateToPage }) => {
+
   const {
     Id,
     Images,
     Name,
     Price,
     Stock,
+    AllowedQuantities,
     OrderMinimumQuantity,
     OrderMaximumQuantity,
   } = product.data || product;
 
+  // console.log("product", product);
+  // console.log("AllowedQuantities", AllowedQuantities);
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [quantity, setQuantity] = useState(OrderMinimumQuantity.toString());
+
+  const [quantity, setQuantity] = useState(() => {
+    if (AllowedQuantities) {
+      const first = AllowedQuantities.split(",")[0].trim();
+      return first;
+    }
+    return OrderMinimumQuantity.toString();
+  });
 
   const { openModal } = useModal();
 
-  const isFixedStep = OrderMinimumQuantity === 12;
+  const hasAllowedQuantities = !!AllowedQuantities;
 
   const quantities = useMemo(() => {
-    if (!isFixedStep) return [];
-    const list = [];
-    for (
-      let i = OrderMinimumQuantity;
-      i <= 228 && i <= OrderMaximumQuantity;
-      i += OrderMinimumQuantity
-    ) {
-      list.push(i);
-    }
-    return list;
-  }, [OrderMinimumQuantity, OrderMaximumQuantity]);
+    if (!hasAllowedQuantities) return [];
+    return AllowedQuantities.split(",").map((val) => parseInt(val.trim(), 10));
+  }, [AllowedQuantities]);
 
   const shortenedName = Name.length > 36 ? `${Name.substring(0, 36)}...` : Name;
 
@@ -158,7 +163,7 @@ const ProductCard = ({ product, updateCartCount, navigateToPage }) => {
             <p className="product-price">${Price.toFixed(2)}</p>
 
             <div className="quantity-cart-controls">
-              {isFixedStep ? (
+              {hasAllowedQuantities ? (
                 <select
                   value={quantity}
                   onChange={handleQuantityChange}
@@ -182,6 +187,7 @@ const ProductCard = ({ product, updateCartCount, navigateToPage }) => {
                   className="quantity-input"
                 />
               )}
+
               <button
                 className="add-btn"
                 onClick={handleAddToCart}
