@@ -3,7 +3,7 @@ import { useNav } from "../../Context/NavContext/NavContext";
 import { useCategoryNav } from "../../Context/CategoryMenuContext/CategoryMenuContext";
 import { AuthContext } from "../../Context/AuthContext/AuthContext";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faXmark } from "@fortawesome/free-solid-svg-icons";
 import "./NavMenu.css";
@@ -14,6 +14,7 @@ const NavMenu = () => {
   const [isShopOpen, setIsShopOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();

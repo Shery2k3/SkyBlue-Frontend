@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSearch,
+  faCaretDown,
+  faShoppingCart,
+} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "antd/es/skeleton/";
 import axiosInstance from "../../api/axiosConfig";
@@ -35,27 +39,22 @@ const SearchBar = () => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const suggestionsRef = useRef(null);
-
   const searchBarRef = useRef(null);
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get(`/product/category/all`);
-        const categoriesData = response.data;
-        setCategories(categoriesData);
+        setCategories(response.data);
       } catch (error) {
-        console.error("Failed to load data:", error);
+        console.error("Failed to load categories:", error);
       }
     };
-
     fetchData();
   }, []);
 
   useEffect(() => {
     setSuggestedProducts([]);
-
     const fetchData = async () => {
       if (debouncedSearchTerm) {
         try {
@@ -64,13 +63,9 @@ const SearchBar = () => {
               selectedCategory.Id
             )}?term=${debouncedSearchTerm.trim()}&page=1&size=6`
           );
-          if (response.data.data.length > 0) {
-            setSuggestedProducts(response.data.data);
-          } else {
-            setSuggestedProducts([]);
-          }
+          setSuggestedProducts(response.data.data || []);
         } catch (error) {
-          console.error("Failed to load data:", error);
+          console.error("Failed to fetch suggestions:", error);
           setSuggestedProducts([]);
         }
       } else {
@@ -81,28 +76,20 @@ const SearchBar = () => {
   }, [debouncedSearchTerm, selectedCategory]);
 
   useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
-      setIsDropdownVisible(false);
-      setSuggestedProducts([]);
-    }
-  };
-
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
-}, []);
-
-
-  // const handleCategoryClick = (category) => {
-  //   setSelectedCategory(category);
-  //   setIsDropdownVisible(false);
-  // };
-
-  // const handleButtonClick = () => {
-  //   setIsDropdownVisible(!isDropdownVisible);
-  // };
+    const handleClickOutside = (event) => {
+      if (
+        searchBarRef.current &&
+        !searchBarRef.current.contains(event.target)
+      ) {
+        setIsDropdownVisible(false);
+        setSuggestedProducts([]);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
@@ -134,79 +121,54 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="searchbar-container" ref={searchBarRef}>
-      <div className="search-bar">
-        {/* <div className="category-dropdown" ref={dropdownRef}>
-          <button className="category-dropbtn" onClick={handleButtonClick}>
-            {selectedCategory.Name}
-            <span className={`drop-down-icon`}>
-              <FontAwesomeIcon icon={faCaretDown} />
+    <div className="searchbar-wrapper">
+      <div className="searchbar-container" ref={searchBarRef}>
+        <div className="search-bar">
+          <input
+            type="text"
+            className="search-input"
+            value={searchTerm}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            placeholder="Search"
+          />
+          <FontAwesomeIcon
+            icon={faSearch}
+            className="search-icon"
+            onClick={handleSearchClick}
+          />
+        </div>
+
+        <div
+          className={`search-suggestions ${
+            suggestedProducts.length > 0 ? "show" : ""
+          }`}
+          ref={suggestionsRef}
+        >
+          {suggestedProducts.map((product) => (
+            <span key={product.Id} onClick={handleClick(product)}>
+              <div className="image-container">
+                {isLoading && <Skeleton.Image active />}
+                <img
+                  src={product.Images[0]}
+                  alt={product.Name}
+                  className="product-image"
+                  onLoad={handleImageLoad}
+                  style={{ display: isLoading ? "none" : "block" }}
+                />
+              </div>
+              {product.Name}
             </span>
-          </button>
-          <div
-            className={`category-dropdown-content ${
-              isDropdownVisible ? "show" : ""
-            }`}
-          >
-            <p
-              key={-1}
-              onClick={() =>
-                handleCategoryClick({
-                  Id: -1,
-                  Name: "All Category",
-                })
-              }
-              className="category-drop-down-item"
-            >
-              All Items
-            </p>
-            {categories.map((category) => (
-              <p
-                key={category.Id}
-                onClick={() => handleCategoryClick(category)}
-                className="category-drop-down-item"
-              >
-                {category.Name}
-              </p>
-            ))}
-          </div>
-        </div> */}
-        <input
-          type="text"
-          className="search-input"
-          value={searchTerm}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Search"
-        />
-        <FontAwesomeIcon
-          icon={faSearch}
-          className="search-icon"
-          onClick={handleSearchClick}
-        />
+          ))}
+        </div>
       </div>
-      <div
-        className={`search-suggestions ${
-          suggestedProducts.length > 0 ? "show" : ""
-        }`}
-        ref={suggestionsRef}
-      >
-        {suggestedProducts.map((product) => (
-          <span key={product.Id} onClick={handleClick(product)}>
-            <div className="image-container">
-              {isLoading && <Skeleton.Image active />}
-              <img
-                src={product.Images[0]}
-                alt={product.Name}
-                className="product-image"
-                onLoad={handleImageLoad}
-                style={{ display: isLoading ? "none" : "block" }}
-              />
-            </div>
-            {product.Name}
-          </span>
-        ))}
-      </div>
+
+      {/* Cart icon shown beside searchbar on smaller screens */}
+      <FontAwesomeIcon
+        icon={faShoppingCart}
+        className="cart-icon-mobile"
+        onClick={() => navigate("/cart")}
+      />
     </div>
   );
 };

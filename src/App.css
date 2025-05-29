@@ -947,6 +947,36 @@ body.scroll-lock {
   background: var(--dark);
 }
 
+/* New wrapper around the search bar + cart icon */
+.searchbar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Cart icon is hidden on large screens */
+.cart-icon-mobile {
+  display: none;
+  font-size: 22px;
+  color: var(--dark);
+  cursor: pointer;
+}
+
+/* Show cart icon on screens smaller than 768px */
+@media screen and (max-width: 768px) {
+  .cart-icon-mobile {
+    display: block;
+  }
+
+  .searchbar-wrapper {
+    justify-content: space-between;
+  }
+
+  .searchbar-container {
+    flex: 1;
+  }
+}
 /* Banner */
 
 .banner {
