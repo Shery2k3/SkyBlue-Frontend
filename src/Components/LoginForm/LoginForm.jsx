@@ -13,7 +13,7 @@ const LoginForm = () => {
   const [formData, setFormData] = useState({
     loginemail: "",
     password: "",
-    rememberMe: false,
+    rememberMe: true,
   });
   const [alert, setAlert] = useState({
     visible: false,

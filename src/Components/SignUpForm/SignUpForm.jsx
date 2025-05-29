@@ -5,13 +5,14 @@ import API_BASE_URL from "../../constant";
 import { message } from "antd";
 import "./SignUpForm.css";
 import LogoAccent from "/Logos/LogoAccent.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Upload, Button } from "antd";
 import {
   EyeInvisibleOutlined,
   EyeOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
+
 
 const SignupForm = () => {
   const {
@@ -31,20 +32,24 @@ const SignupForm = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchCountries = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/customer/countries`);
-        const filteredCountries = response.data.filter(
-          (country) => country.Id === 1 || country.Id === 2 //Id 1 is United States and Id 2 is Canada
-        );
-        setCountries(filteredCountries);
+        const canada = response.data.find((country) => country.Id === 2);
+        if (canada) {
+          setCountries([canada]); // Only keep Canada
+          setSelectedCountryId(canada.Id); // Auto-select Canada
+          setValue("country", canada.Id); // Set form value
+        }
       } catch (error) {
         message.error("Failed to load countries");
       }
     };
     fetchCountries();
-  }, []);
+  }, [setValue]);
 
   useEffect(() => {
     if (selectedCountryId) {
@@ -97,6 +102,11 @@ const SignupForm = () => {
       if (response.status === 201) {
         message.success("Signup successful!, waiting for approval.");
         reset();
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+
       } else {
         message.error("Something went wrong.");
       }
@@ -114,11 +124,6 @@ const SignupForm = () => {
         message.error("Something went wrong.");
       }
     }
-  };
-
-  const handleCountryChange = (e) => {
-    const selectedCountryId = e.target.value;
-    setSelectedCountryId(selectedCountryId);
   };
 
   const handleFileChange = ({ fileList }) => {
@@ -256,10 +261,9 @@ const SignupForm = () => {
               <select
                 id="country"
                 {...register("country", { required: "Country is required" })}
-                onChange={handleCountryChange}
-                autoComplete="country"
+                value={selectedCountryId || ""}
+                disabled
               >
-                <option value="">Select Country</option>
                 {countries.map((country) => (
                   <option key={country.Id} value={country.Id}>
                     {country.Name}
@@ -276,12 +280,11 @@ const SignupForm = () => {
               <select
                 id="state"
                 {...register("state", {
-                  required: "State is required if not showing then select none",
+                  required: "State is required",
                 })}
                 autoComplete="state"
               >
                 <option value="">Select State</option>
-                <option value={null}>None</option>
                 {states.map((state) => (
                   <option key={state.Id} value={state.Id}>
                     {state.Name}
@@ -346,9 +349,7 @@ const SignupForm = () => {
                 autoComplete="city"
               />
               {errors.city && (
-                <span className="error-message">
-                  {errors.city.message}
-                </span>
+                <span className="error-message">{errors.city.message}</span>
               )}
             </div>
             <div className="input-box">
