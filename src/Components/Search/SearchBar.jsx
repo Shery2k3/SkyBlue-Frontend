@@ -36,6 +36,9 @@ const SearchBar = () => {
   const dropdownRef = useRef(null);
   const suggestionsRef = useRef(null);
 
+  const searchBarRef = useRef(null);
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -78,32 +81,28 @@ const SearchBar = () => {
   }, [debouncedSearchTerm, selectedCategory]);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
-        suggestionsRef.current &&
-        !suggestionsRef.current.contains(event.target)
-      ) {
-        setIsDropdownVisible(false);
-        setSuggestedProducts([]);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-    setIsDropdownVisible(false);
+  const handleClickOutside = (event) => {
+    if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
+      setIsDropdownVisible(false);
+      setSuggestedProducts([]);
+    }
   };
 
-  const handleButtonClick = () => {
-    setIsDropdownVisible(!isDropdownVisible);
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
   };
+}, []);
+
+
+  // const handleCategoryClick = (category) => {
+  //   setSelectedCategory(category);
+  //   setIsDropdownVisible(false);
+  // };
+
+  // const handleButtonClick = () => {
+  //   setIsDropdownVisible(!isDropdownVisible);
+  // };
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
@@ -135,7 +134,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="searchbar-container">
+    <div className="searchbar-container" ref={searchBarRef}>
       <div className="search-bar">
         {/* <div className="category-dropdown" ref={dropdownRef}>
           <button className="category-dropbtn" onClick={handleButtonClick}>
