@@ -13,12 +13,12 @@ const ProductCard = ({ product, updateCartCount, navigateToPage }) => {
     Price,
     Stock,
     OrderMinimumQuantity,
-    OrderMaximumQuantity ,
+    OrderMaximumQuantity,
   } = product.data || product;
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [quantity, setQuantity] = useState(OrderMinimumQuantity);
+  const [quantity, setQuantity] = useState(OrderMinimumQuantity.toString());
 
   const { openModal } = useModal();
 
@@ -27,7 +27,11 @@ const ProductCard = ({ product, updateCartCount, navigateToPage }) => {
   const quantities = useMemo(() => {
     if (!isFixedStep) return [];
     const list = [];
-    for (let i = OrderMinimumQuantity; i <= 228 && i <= OrderMaximumQuantity; i += OrderMinimumQuantity) {
+    for (
+      let i = OrderMinimumQuantity;
+      i <= 228 && i <= OrderMaximumQuantity;
+      i += OrderMinimumQuantity
+    ) {
       list.push(i);
     }
     return list;
@@ -38,39 +42,44 @@ const ProductCard = ({ product, updateCartCount, navigateToPage }) => {
   const handleImageLoad = () => setIsLoading(false);
 
   const handleQuantityChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= OrderMinimumQuantity && value <= OrderMaximumQuantity) {
-      setQuantity(value);
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) {
+      setQuantity(value); // store as string to allow editing freely
     }
   };
 
   // Handle manual input for number input (prevent going below minimum)
-  const handleQuantityInput = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (isNaN(value) || value < OrderMinimumQuantity) {
-      setQuantity(OrderMinimumQuantity);
-    } else if (value > OrderMaximumQuantity) {
-      setQuantity(OrderMaximumQuantity);
+  const handleQuantityInput = () => {
+    const parsed = parseInt(quantity, 10);
+    if (isNaN(parsed) || parsed < OrderMinimumQuantity) {
+      setQuantity(OrderMinimumQuantity.toString());
+    } else if (parsed > OrderMaximumQuantity) {
+      setQuantity(OrderMaximumQuantity.toString());
     } else {
-      setQuantity(value);
+      setQuantity(parsed.toString());
     }
   };
 
   // Handle key events to prevent invalid input
   const handleKeyDown = (e) => {
     // Allow: backspace, delete, tab, escape, enter
-    if ([46, 8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
-        // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
-        (e.keyCode === 65 && e.ctrlKey === true) ||
-        (e.keyCode === 67 && e.ctrlKey === true) ||
-        (e.keyCode === 86 && e.ctrlKey === true) ||
-        (e.keyCode === 88 && e.ctrlKey === true) ||
-        // Allow: home, end, left, right
-        (e.keyCode >= 35 && e.keyCode <= 39)) {
+    if (
+      [46, 8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
+      // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+      (e.keyCode === 65 && e.ctrlKey === true) ||
+      (e.keyCode === 67 && e.ctrlKey === true) ||
+      (e.keyCode === 86 && e.ctrlKey === true) ||
+      (e.keyCode === 88 && e.ctrlKey === true) ||
+      // Allow: home, end, left, right
+      (e.keyCode >= 35 && e.keyCode <= 39)
+    ) {
       return;
     }
     // Ensure that it is a number and stop the keypress
-    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+    if (
+      (e.shiftKey || e.keyCode < 48 || e.keyCode > 57) &&
+      (e.keyCode < 96 || e.keyCode > 105)
+    ) {
       e.preventDefault();
     }
   };
@@ -81,17 +90,23 @@ const ProductCard = ({ product, updateCartCount, navigateToPage }) => {
 
     setIsSubmitting(true);
 
+    const parsedQuantity = parseInt(quantity, 10);
+    if (isSubmitting || parsedQuantity < OrderMinimumQuantity) return;
+
     try {
       const response = await axiosInstance.post(`/cart/add`, {
         productId: Id,
-        quantity,
+        quantity: parsedQuantity,
       });
+
+      console.log("Add to Cart Response:", response);
 
       if (response.data.success) {
         notification.success({
           message: (
             <div style={{ textAlign: "center" }}>
-              Added to Cart! <a onClick={() => navigateToPage("/cart")}>Go to Cart</a>
+              Added to Cart!{" "}
+              <a onClick={() => navigateToPage("/cart")}>Go to Cart</a>
             </div>
           ),
           duration: 3,
@@ -137,11 +152,11 @@ const ProductCard = ({ product, updateCartCount, navigateToPage }) => {
 
       <div className="product-detail">
         <p className="product-name">{shortenedName}</p>
-        
+
         {Stock > 0 && (
           <div className="price-controls-container">
             <p className="product-price">${Price.toFixed(2)}</p>
-            
+
             <div className="quantity-cart-controls">
               {isFixedStep ? (
                 <select
