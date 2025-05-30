@@ -1,13 +1,12 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo } from "react";
 import Skeleton from "antd/es/skeleton/";
 import axiosInstance from "../../api/axiosConfig.js";
 import { useModal } from "../../Context/ModalContext/ModalContext";
 import { message, notification } from "antd";
 import "./ProductCard.css";
-import { useCartCount } from "../../Context/CartCount/CartCount.jsx";
+import { useNavigate } from "react-router-dom";
 
-const ProductCard = ({ product, updateCartCount, navigateToPage }) => {
-
+const ProductCard = ({ product, updateCartCount }) => {
   const {
     Id,
     Images,
@@ -34,6 +33,7 @@ const ProductCard = ({ product, updateCartCount, navigateToPage }) => {
   });
 
   const { openModal } = useModal();
+  const navigate = useNavigate();
 
   const hasAllowedQuantities = !!AllowedQuantities;
 
@@ -110,8 +110,7 @@ const ProductCard = ({ product, updateCartCount, navigateToPage }) => {
         notification.success({
           message: (
             <div style={{ textAlign: "center" }}>
-              Added to Cart!{" "}
-              <a onClick={() => navigateToPage("/cart")}>Go to Cart</a>
+              Added to Cart! <a onClick={() => navigate("/cart")}>Go to Cart</a>
             </div>
           ),
           duration: 3,

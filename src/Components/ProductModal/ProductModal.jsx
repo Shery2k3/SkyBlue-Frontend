@@ -46,6 +46,8 @@ const ProductModal = ({ product, onClose }) => {
   const [isProcessingWishlist, setIsProcessingWishlist] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [alreadyInCartMessage, setAlreadyInCartMessage] = useState("");
+
   // Refs
   const dropdownRef = useRef(null);
   const dropdownContainerRef = useRef(null);
@@ -53,14 +55,16 @@ const ProductModal = ({ product, onClose }) => {
 
   // Handler functions
   const increaseQuantity = useCallback(() => {
-    const incrementValue = quantities && quantities.length > 0 ? quantities[0] : 1;
-    setQuantity(prevQuantity => prevQuantity + incrementValue);
+    const incrementValue =
+      quantities && quantities.length > 0 ? quantities[0] : 1;
+    setQuantity((prevQuantity) => prevQuantity + incrementValue);
   }, [quantities]);
 
   const decreaseQuantity = useCallback(() => {
-    const decrementValue = quantities && quantities.length > 0 ? quantities[0] : 1;
+    const decrementValue =
+      quantities && quantities.length > 0 ? quantities[0] : 1;
     if (quantity > decrementValue) {
-      setQuantity(prevQuantity => prevQuantity - decrementValue);
+      setQuantity((prevQuantity) => prevQuantity - decrementValue);
     }
   }, [quantities, quantity]);
 
@@ -89,120 +93,158 @@ const ProductModal = ({ product, onClose }) => {
     setDropdownOpen(false);
   }, []);
 
-  const handleClose = useCallback((e) => {
-    if (e.target.classList.contains("product-modal-container")) {
-      onClose();
-    }
-  }, [onClose]);
+  const handleClose = useCallback(
+    (e) => {
+      if (e.target.classList.contains("product-modal-container")) {
+        onClose();
+      }
+    },
+    [onClose]
+  );
 
-  const navigateToPage = useCallback((path) => {
-    onClose(); // Close the modal first
-    setTimeout(() => navigate(path), 0); // Navigate in the next tick to ensure modal has closed
-  }, [navigate, onClose]);
+  const navigateToPage = useCallback(
+    (path) => {
+      onClose(); // Close the modal first
+      setTimeout(() => navigate(path), 0); // Navigate in the next tick to ensure modal has closed
+    },
+    [navigate, onClose]
+  );
 
   // Handle adding to cart
-  const handleSubmit = useCallback(async (e) => {
-    e.stopPropagation();
-    if (isSubmitting) return;
-    
-    setIsSubmitting(true);
-    try {
-      const response = await axiosInstance.post(`/cart/add`, {
-        productId: Id,
-        quantity: quantity,
-      });
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.stopPropagation();
+      if (isSubmitting) return;
 
-      if (response.data.success) {
+      setIsSubmitting(true);
+      setAlreadyInCartMessage(""); // clear message before request
+
+      try {
+        const response = await axiosInstance.post(`/cart/add`, {
+          productId: Id,
+          quantity: quantity,
+        });
+
+        if (response.data.success) {
+          if (response.data.alreadyInCart) {
+            // Show message but still success notification optional
+            setAlreadyInCartMessage("Product already in your cart");
+            // Optional: you can also show a small notification if you want:
+            notification.info({
+              message: "Product quantity updated in cart",
+              duration: 3,
+              key: "updated-cart",
+              placement: "top",
+            });
+          } else {
+            notification.success({
+              message: (
+                <div style={{ textAlign: "center" }}>
+                  Added to Cart!{" "}
+                  <a
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigateToPage("/cart");
+                    }}
+                  >
+                    Go to Cart
+                  </a>
+                </div>
+              ),
+              duration: 3,
+              key: "added-to-cart",
+              placement: "top",
+            });
+          }
+          updateCartCount();
+        } else {
+          // Show error message for other failures
+          message.error({
+            content: response.data.message,
+            key: "add",
+            duration: 3,
+          });
+        }
+      } catch (error) {
+        console.error("Error adding to cart:", error);
+        const errorMessage =
+          error.response?.data?.message || "Failed to Add to Cart";
+        message.error(errorMessage);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [Id, quantity, isSubmitting, updateCartCount, navigateToPage]
+  );
+
+  // Wishlist operations
+  const addToWishlist = useCallback(
+    async (e) => {
+      e.stopPropagation();
+      if (isProcessingWishlist) return;
+
+      setIsProcessingWishlist(true);
+      setIsInWishlist(true);
+      message.loading({ content: "Adding item...", key: "addwishlist" });
+
+      try {
+        await axiosInstance.post(`/customer/wishlist/${Id}`);
         notification.success({
           message: (
             <div style={{ textAlign: "center" }}>
-              Added to Cart!{" "}
-              <a onClick={(e) => {
-                e.stopPropagation();
-                navigateToPage("/cart");
-              }}>Go to Cart</a>
+              Added to Wishlist!{" "}
+              <a
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigateToPage("/wishlist");
+                }}
+              >
+                Go to Wishlist
+              </a>
             </div>
           ),
+          key: "addwishlist",
           duration: 3,
-          key: "added-to-cart",
           placement: "top",
         });
-        updateCartCount();
-      } else {
-        message.error({
-          content: response.data.message,
-          key: "add",
-          duration: 3,
-        });
+      } catch (error) {
+        console.error("Error adding to wishlist:", error);
+        message.error("Failed to Add to Wishlist");
+        setIsInWishlist(false);
+      } finally {
+        setIsProcessingWishlist(false);
       }
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-      const errorMessage =
-        error.response?.data?.message || "Failed to Add to Cart";
-      message.error(errorMessage);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [Id, quantity, isSubmitting, updateCartCount, navigateToPage]);
+    },
+    [Id, isProcessingWishlist, navigateToPage]
+  );
 
-  // Wishlist operations
-  const addToWishlist = useCallback(async (e) => {
-    e.stopPropagation();
-    if (isProcessingWishlist) return;
-    
-    setIsProcessingWishlist(true);
-    setIsInWishlist(true);
-    message.loading({ content: "Adding item...", key: "addwishlist" });
-    
-    try {
-      await axiosInstance.post(`/customer/wishlist/${Id}`);
-      notification.success({
-        message: (
-          <div style={{ textAlign: "center" }}>
-            Added to Wishlist!{" "}
-            <a onClick={(e) => {
-              e.stopPropagation();
-              navigateToPage("/wishlist");
-            }}>Go to Wishlist</a>
-          </div>
-        ),
-        key: "addwishlist",
-        duration: 3,
-        placement: "top",
-      });
-    } catch (error) {
-      console.error("Error adding to wishlist:", error);
-      message.error("Failed to Add to Wishlist");
+  const removeFromWishlist = useCallback(
+    async (e) => {
+      e.stopPropagation();
+      if (isProcessingWishlist) return;
+
+      setIsProcessingWishlist(true);
       setIsInWishlist(false);
-    } finally {
-      setIsProcessingWishlist(false);
-    }
-  }, [Id, isProcessingWishlist, navigateToPage]);
+      message.loading({ content: "Removing item...", key: "removewishlist" });
 
-  const removeFromWishlist = useCallback(async (e) => {
-    e.stopPropagation();
-    if (isProcessingWishlist) return;
-    
-    setIsProcessingWishlist(true);
-    setIsInWishlist(false);
-    message.loading({ content: "Removing item...", key: "removewishlist" });
-    
-    try {
-      await axiosInstance.delete(`/customer/wishlist/${Id}`);
-      message.success({
-        content: "Removed from Wishlist!",
-        key: "removewishlist",
-        duration: 1,
-      });
-      window.location.reload(); // Reload the page to reflect changes
-    } catch (error) {
-      console.error("Error removing from wishlist:", error);
-      message.error("Failed to Remove from Wishlist");
-      setIsInWishlist(true);
-    } finally {
-      setIsProcessingWishlist(false);
-    }
-  }, [Id, isProcessingWishlist]);
+      try {
+        await axiosInstance.delete(`/customer/wishlist/${Id}`);
+        message.success({
+          content: "Removed from Wishlist!",
+          key: "removewishlist",
+          duration: 1,
+        });
+        window.location.reload(); // Reload the page to reflect changes
+      } catch (error) {
+        console.error("Error removing from wishlist:", error);
+        message.error("Failed to Remove from Wishlist");
+        setIsInWishlist(true);
+      } finally {
+        setIsProcessingWishlist(false);
+      }
+    },
+    [Id, isProcessingWishlist]
+  );
 
   // Handle clicks outside dropdown
   useEffect(() => {
@@ -256,7 +298,9 @@ const ProductModal = ({ product, onClose }) => {
         <div className="product-detail">
           <span>
             <h2 className="product-title">{Name}</h2>
-            <p className="available">Availability: {Stock > 0 ? "In Stock" : "Out of stock"}</p>
+            <p className="available">
+              Availability: {Stock > 0 ? "In Stock" : "Out of stock"}
+            </p>
           </span>
           <span>
             <p className="product-price">${Price.toFixed(2)}</p>
@@ -314,6 +358,12 @@ const ProductModal = ({ product, onClose }) => {
               </span>
             )}
           </div>
+          {alreadyInCartMessage && (
+            <h3 style={{ color: "#0075c2", textAlign: "center" }}>
+              {alreadyInCartMessage}
+            </h3>
+          )}
+
           <div className="add-to-cart-container">
             <div
               className={`add-to-cart ${isSubmitting ? "disabled" : ""}`}
@@ -330,6 +380,7 @@ const ProductModal = ({ product, onClose }) => {
             />
           </div>
         </div>
+
         <div className="close" onClick={onClose}>
           <FontAwesomeIcon icon={faX} />
         </div>

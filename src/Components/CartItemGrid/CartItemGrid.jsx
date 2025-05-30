@@ -18,7 +18,6 @@ const CartItemGrid = ({
   const navigate = useNavigate();
   const { cartCount, updateCartCount } = useCartCount();
 
-  console.log(isFetching)
 
   const handleClearCart = async () => {
     try {
