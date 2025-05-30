@@ -42,7 +42,7 @@ const Layout = ({ pageTitle, children, style, isLoading }) => {
         <NavMenu />
         <AllCategoryNav />
         <div className="content">{children}</div>
-        <Newsletter />
+        {/* <Newsletter /> */}
         <Suspense fallback={<Loader isActive={true} />}>
           <Footer1 />
         </Suspense>
