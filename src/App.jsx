@@ -35,6 +35,7 @@ const TermsConditions = lazy(() =>
 );
 const OrderPlaced = lazy(() => import("./Components/NotFound/OrderPlaced"));
 const WishList = lazy(() => import("./Pages/Wishlist/WishList"))
+const viewProduct = lazy(() => import("./Components/viewProduct/viewProduct"));
 
 
 function App() {
@@ -80,6 +81,10 @@ function App() {
               path="all-products"
               element={<ProtectedRoute element={AllProducts} />}
             />
+            <Route 
+    path="view-product/:id" 
+    element={<ProtectedRoute element={viewProduct } />} 
+  />
             <Route
               path="search"
               element={<ProtectedRoute element={Search} />}

@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 import Skeleton from "antd/es/skeleton/";
 import axiosInstance from "../../api/axiosConfig.js";
-import { useModal } from "../../Context/ModalContext/ModalContext";
 import { message, notification } from "antd";
 import "./ProductCard.css";
 import { useNavigate } from "react-router-dom";
@@ -18,9 +17,6 @@ const ProductCard = ({ product, updateCartCount }) => {
     OrderMaximumQuantity,
   } = product.data || product;
 
-  // console.log("product", product);
-  // console.log("AllowedQuantities", AllowedQuantities);
-
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -32,7 +28,6 @@ const ProductCard = ({ product, updateCartCount }) => {
     return OrderMinimumQuantity.toString();
   });
 
-  const { openModal } = useModal();
   const navigate = useNavigate();
 
   const hasAllowedQuantities = !!AllowedQuantities;
@@ -129,9 +124,10 @@ const ProductCard = ({ product, updateCartCount }) => {
     }
   };
 
-  const handleClick = (e) => {
-    e.stopPropagation();
-    if (Stock > 0) openModal(product);
+  const handleClick = () => {
+    console.log("Product ID:", product);
+    console.log("Product clicked:", Id);
+    navigate(`view-product/${Id}`, { state: { product } });
   };
 
   return (
