@@ -1,0 +1,263 @@
+/* --- General container styling --- */
+.product-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  flex-wrap: wrap;
+}
+
+/* --- Image section --- */
+.product-image-container {
+  flex-shrink: 0;
+  width: 320px;
+  height: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  background-color: #fff;
+}
+
+/* --- Image Styling --- */
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 20px;
+}
+
+/* --- Detail section --- */
+.product-detail {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+}
+
+/* --- Typography --- */
+.product-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+}
+
+.product-price {
+  font-weight: 700;
+  font-size: 22px;
+  color: #18495c;
+  margin-bottom: 10px;
+}
+
+.product-detail > p {
+  font-size: 16px;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+/* --- Quantity Section --- */
+.quantity-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 260px;
+}
+
+.quantity-dropdown {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f1f8ff;
+  padding: 6px 10px;
+  border-radius: 30px;
+  border: 2px solid #5aa9e6;
+}
+
+.quantity-input {
+  width: 60px;
+  padding: 4px;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  border: none;
+  background: transparent;
+  outline: none;
+}
+
+.quantity-dropdown button {
+  background-color: #5aa9e6;
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.quantity-dropdown button:hover {
+  background-color: #3a78c2;
+}
+
+/* Dropdown */
+.quantity-dropdown-menu {
+  position: absolute;
+  top: 46px;
+  left: 0;
+  background: white;
+  border: 1.5px solid #5aa9e6;
+  border-radius: 8px;
+  width: 100%;
+  max-height: 140px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.quantity-dropdown-menu li {
+  padding: 8px 12px;
+  font-weight: 600;
+  color: #18495c;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.quantity-dropdown-menu li:hover {
+  background-color: #e6f0fb;
+}
+
+/* --- Buttons --- */
+.add-to-cart-btn {
+  width: 100%;
+  background-color: #5aa9e6;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  height: 42px;
+  font-weight: 900;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.25s ease;
+}
+
+.add-to-cart-btn:disabled {
+  background-color: #a1c8f4;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Already in Cart */
+.already-in-cart {
+  margin-top: 8px;
+  font-weight: 700;
+  color: #d9534f;
+}
+
+/* Wishlist */
+.wishlist-section {
+  margin-top: 28px;
+}
+
+.wishlist-btn {
+  background: transparent;
+  border: 2px solid #5aa9e6;
+  color: #5aa9e6;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 8px 18px;
+  border-radius: 25px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+
+.wishlist-btn:hover {
+  background-color: #5aa9e6;
+  color: white;
+}
+
+.wishlist-btn.active {
+  background-color: #18495c;
+  color: white;
+  border-color: #18495c;
+}
+
+.wishlist-btn:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+/* --- Responsive Improvements --- */
+@media (max-width: 768px) {
+  .product-page-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    max-width: 95vw;
+    padding: 0 12px;
+  }
+
+  .product-image-container {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+  }
+
+  .product-detail {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .product-title {
+    font-size: 22px;
+  }
+
+  .product-price {
+    font-size: 18px;
+  }
+
+  .quantity-input {
+    font-size: 16px;
+    width: 50px;
+  }
+
+  .add-to-cart-btn {
+    font-size: 16px;
+    height: 40px;
+  }
+
+  .wishlist-btn {
+    font-size: 14px;
+    padding: 6px 14px;
+  }
+
+  .quantity-dropdown {
+    justify-content: space-between;
+    padding: 4px 8px;
+    gap: 4px;
+  }
+
+  .quantity-dropdown button {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+}

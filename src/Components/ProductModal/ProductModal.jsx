@@ -8,6 +8,8 @@ import {
   faPlus,
   faCartShopping,
   faX,
+  faArrowLeft,
+  faShare,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
@@ -29,7 +31,11 @@ const ProductModal = ({ product, onClose }) => {
     Stock,
     OrderMinimumQuantity = 1,
     AllowedQuantities,
+    ShortDescription,
+    FullDescription,
   } = product.data || product;
+
+  console.log("Product data:", product);
 
   // Parse allowed quantities
   const quantities = AllowedQuantities
@@ -281,109 +287,192 @@ const ProductModal = ({ product, onClose }) => {
     }
   }, [Id, retryRequest]);
 
+  // Handle share functionality
+  const handleShare = async (productName) => {
+    // Create search URL with the product name
+    const baseUrl = window.location.origin;
+    const encodedProductName = encodeURIComponent(productName);
+    const shareUrl = `${baseUrl}/search?category=-1&term=${encodedProductName}`;
+
+    try {
+      // Copy to clipboard directly
+      await navigator.clipboard.writeText(shareUrl);
+
+      // Optional: Show success feedback
+      // You can replace this with your preferred notification method
+      message.success("Product link copied to clipboard!");
+
+      // Or show a toast notification if you have one
+      // showToast('Link copied to clipboard!');
+    } catch (error) {
+      // Fallback for older browsers or if clipboard API fails
+      try {
+        // Create a temporary textarea element
+        const textArea = document.createElement("textarea");
+        textArea.value = shareUrl;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        // Execute copy command
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+
+        console.log("Product link copied to clipboard (fallback)!");
+      } catch (fallbackError) {
+        // Final fallback - show prompt
+        prompt("Copy this link to share the product:", shareUrl);
+      }
+    }
+  };
+  // Handle back navigation
+  const onBack = () => {
+    navigate("/"); // Go back to the previous page
+    onClose();
+  };
+
   return (
     <div className="product-modal-container" onClick={handleClose}>
       <div className="product-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="product-image-container">
-          {isLoading && <Skeleton.Image active />}
-          <img
-            src={Images[0]}
-            className="product-image"
-            alt={Name}
-            onLoad={() => setIsLoading(false)}
-            style={{ display: isLoading ? "none" : "block" }}
-          />
-        </div>
-
-        <div className="product-detail">
-          <span>
-            <h2 className="product-title">{Name}</h2>
-            <p className="available">
-              Availability: {Stock > 0 ? "In Stock" : "Out of stock"}
-            </p>
-          </span>
-          <span>
-            <p className="product-price">${Price.toFixed(2)}</p>
-            <hr />
-            <p className="product-unit-price">Unit Price: ${Price}</p>
-          </span>
-          <div className="product-quantity">
-            {!AllowedQuantities && (
-              <span className="button" onClick={decreaseQuantity}>
-                <FontAwesomeIcon icon={faMinus} />
-              </span>
-            )}
-
-            {!AllowedQuantities ? (
-              <input
-                type="number"
-                className="quantity"
-                value={quantity}
-                onChange={handleQuantityChange}
-                onBlur={handleBlur}
-                min={OrderMinimumQuantity}
-                ref={inputRef}
-              />
-            ) : (
-              <div
-                className="quantity-dropdown-container"
-                ref={dropdownContainerRef}
-              >
-                <div
-                  className="quantity-dropdown"
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                >
-                  {quantity}
-                </div>
-                <div
-                  className={`quantity-dropdown-menu ${
-                    dropdownOpen ? "show" : ""
-                  }`}
-                  ref={dropdownRef}
-                >
-                  {quantities.map((qty) => (
-                    <span
-                      key={qty}
-                      onClick={() => handleDropdownSelection(qty)}
-                    >
-                      {qty}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-            {!AllowedQuantities && (
-              <span className="button" onClick={increaseQuantity}>
-                <FontAwesomeIcon icon={faPlus} />
-              </span>
-            )}
+        {/* Header buttons */}
+        <div className="modal-header-buttons">
+          <div className="modal-header-button" onClick={onBack} title="Go Back">
+            <FontAwesomeIcon icon={faArrowLeft} />
           </div>
-          {alreadyInCartMessage && (
-            <h3 style={{ color: "#0075c2", textAlign: "center" }}>
-              {alreadyInCartMessage}
-            </h3>
-          )}
-
-          <div className="add-to-cart-container">
-            <div
-              className={`add-to-cart ${isSubmitting ? "disabled" : ""}`}
-              onClick={handleSubmit}
-              style={{ cursor: isSubmitting ? "wait" : "pointer" }}
-            >
-              <FontAwesomeIcon icon={faCartShopping} /> <p>Add to Cart</p>
-            </div>
-            <FontAwesomeIcon
-              className="wishlist-mark"
-              icon={isInWishlist ? solidHeart : regularHeart}
-              onClick={isInWishlist ? removeFromWishlist : addToWishlist}
-              style={{ cursor: isProcessingWishlist ? "wait" : "pointer" }}
-            />
+          <div
+            className="modal-header-button"
+            onClick={() => handleShare(Name)}
+            title="Share Product"
+          >
+            <FontAwesomeIcon icon={faShare} />
           </div>
         </div>
 
+        {/* Close Button */}
         <div className="close" onClick={onClose}>
           <FontAwesomeIcon icon={faX} />
         </div>
+        {/* Top section with image and details side by side */}
+        <div className="product-modal-top">
+          <div className="product-image-container">
+            {isLoading && <Skeleton.Image active />}
+            <img
+              src={Images[0]}
+              className="product-image"
+              alt={Name}
+              onLoad={() => setIsLoading(false)}
+              style={{ display: isLoading ? "none" : "block" }}
+            />
+          </div>
+
+          <div className="product-detail">
+            {/* Product Info Section */}
+            <div className="product-info-section">
+              <h2 className="product-title">{Name}</h2>
+              <p className="available">
+                Availability: {Stock > 0 ? "In Stock" : "Out of stock"}
+              </p>
+              {ShortDescription && (
+                <p className="short-description">{ShortDescription}</p>
+              )}
+            </div>
+
+            {/* Price Section */}
+            <div className="price-section">
+              <p className="product-price">${Price.toFixed(2)}</p>
+              <hr />
+              <p className="product-unit-price">Unit Price: ${Price}</p>
+            </div>
+
+            {/* Quantity Section */}
+            <div className="product-quantity">
+              {!AllowedQuantities && (
+                <span className="button" onClick={decreaseQuantity}>
+                  <FontAwesomeIcon icon={faMinus} />
+                </span>
+              )}
+
+              {!AllowedQuantities ? (
+                <input
+                  type="number"
+                  className="quantity"
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                  onBlur={handleBlur}
+                  min={OrderMinimumQuantity}
+                  ref={inputRef}
+                />
+              ) : (
+                <div
+                  className="quantity-dropdown-container"
+                  ref={dropdownContainerRef}
+                >
+                  <div
+                    className="quantity-dropdown"
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                  >
+                    {quantity}
+                  </div>
+                  <div
+                    className={`quantity-dropdown-menu ${
+                      dropdownOpen ? "show" : ""
+                    }`}
+                    ref={dropdownRef}
+                  >
+                    {quantities.map((qty) => (
+                      <span
+                        key={qty}
+                        onClick={() => handleDropdownSelection(qty)}
+                      >
+                        {qty}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {!AllowedQuantities && (
+                <span className="button" onClick={increaseQuantity}>
+                  <FontAwesomeIcon icon={faPlus} />
+                </span>
+              )}
+            </div>
+
+            {/* Already in cart message */}
+            {alreadyInCartMessage && (
+              <h3 style={{ color: "#0075c2", textAlign: "center" }}>
+                {alreadyInCartMessage}
+              </h3>
+            )}
+
+            {/* Add to Cart and Wishlist Section */}
+            <div className="add-to-cart-container">
+              <div
+                className={`add-to-cart ${isSubmitting ? "disabled" : ""}`}
+                onClick={handleSubmit}
+                style={{ cursor: isSubmitting ? "wait" : "pointer" }}
+              >
+                <FontAwesomeIcon icon={faCartShopping} /> <p>Add to Cart</p>
+              </div>
+              <FontAwesomeIcon
+                className="wishlist-mark"
+                icon={isInWishlist ? solidHeart : regularHeart}
+                onClick={isInWishlist ? removeFromWishlist : addToWishlist}
+                style={{ cursor: isProcessingWishlist ? "wait" : "pointer" }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Full Description Section - spans full width at bottom with scroll */}
+        {FullDescription && (
+          <div
+            className="full-description"
+            dangerouslySetInnerHTML={{ __html: FullDescription }}
+          />
+        )}
       </div>
     </div>
   );
