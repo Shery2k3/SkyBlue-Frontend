@@ -10,7 +10,7 @@ import { Skeleton, message, notification } from "antd";
 import axiosInstance from "../../api/axiosConfig";
 import useRetryRequest from "../../api/useRetryRequest";
 import { useCartCount } from "../../Context/CartCount/CartCount";
-import "./ViewProduct.css";
+import "./viewProduct.css";
 import Header from "../Header/Header";
 import Layout from "../Layout/Layout";
 
