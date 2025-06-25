@@ -25,67 +25,70 @@ const Cart = () => {
 
   const [discountData, setDiscountData] = useState(null);
 
-
- const fetchDiscount = async () => {
-  try {
-    const response = await retryRequest(() => axiosInstance.get("/cart/discount-value"));
-    console.log("Discount fetched:", response.data);
-    setDiscountData(response.data);
-  } catch (error) {
-    console.error("Failed to fetch discount:", error);
-    setDiscountData(null); // Fallback if needed
-  }
-};
-
-  useEffect(() => {fetchDiscount()},[])
-
-  const fetchCartData = async () => {
-  setFetching(true);
-  try {
-    const response = await retryRequest(() => axiosInstance.get("/cart/items"));
-    const cartSubtotal = response.data.totalPrice;
-    const taxAmount = response.data.taxAmount;
-
-
-    // Calculate discount
-    let discountValue = 0;
-    if (discountData) {
-      if (discountData.UsePercentage) {
-        discountValue = (cartSubtotal * discountData.DiscountPercentage) / 100;
-      } else {
-        discountValue = discountData.DiscountAmount;
-      }
+  const fetchDiscount = async () => {
+    try {
+      const response = await retryRequest(() =>
+        axiosInstance.get("/cart/discount-value")
+      );
+      console.log("Discount fetched:", response.data);
+      setDiscountData(response.data);
+    } catch (error) {
+      console.error("Failed to fetch discount:", error);
+      setDiscountData(null); // Fallback if needed
     }
-
-    const finalPrice = cartSubtotal + taxAmount - discountValue;
-
-    setProducts(response.data.cartItems);
-    setCartSummary({
-      subtotal: cartSubtotal,
-      Shipping: 0,
-      tax: taxAmount,
-      discount: discountValue,
-      total: finalPrice,
-    });
-
-    setIsLoading(false);
-    setFetching(false);
-  } catch (error) {
-    console.error("Failed to load data:", error);
-    setIsLoading(false);
-    setFetching(false);
-  } finally {
-    updateCartCount();
-  }
-};
-
+  };
 
   useEffect(() => {
-  if (discountData !== null) {
-    fetchCartData(); // now safe to call
-  }
-}, [discountData]); // only when discountData is ready
+    fetchDiscount();
+  }, []);
 
+  const fetchCartData = async () => {
+    setFetching(true);
+    try {
+      const response = await retryRequest(() =>
+        axiosInstance.get("/cart/items")
+      );
+      const cartSubtotal = response.data.totalPrice;
+      const taxAmount = response.data.taxAmount;
+
+      // Calculate discount
+      let discountValue = 0;
+      if (discountData) {
+        if (discountData.UsePercentage) {
+          discountValue =
+            (cartSubtotal * discountData.DiscountPercentage) / 100;
+        } else {
+          discountValue = discountData.DiscountAmount;
+        }
+      }
+
+      const finalPrice = cartSubtotal + taxAmount - discountValue;
+
+      setProducts(response.data.cartItems);
+      setCartSummary({
+        subtotal: cartSubtotal,
+        Shipping: 0,
+        tax: taxAmount,
+        discount: discountValue,
+        total: finalPrice,
+      });
+
+      setIsLoading(false);
+      setFetching(false);
+    } catch (error) {
+      console.error("Failed to load data:", error);
+      setIsLoading(false);
+      setFetching(false);
+    } finally {
+      updateCartCount();
+    }
+  };
+
+  useEffect(() => {
+    if (discountData !== null) {
+      fetchCartData(); // now safe to call
+    }
+  }, [discountData]); // only when discountData is ready
 
   const handleUpdate = () => {
     fetchCartData();
@@ -94,7 +97,6 @@ const Cart = () => {
   const handleRemove = () => {
     fetchCartData();
   };
-
 
   return (
     <Layout pageTitle="Cart" isLoading={isLoading}>

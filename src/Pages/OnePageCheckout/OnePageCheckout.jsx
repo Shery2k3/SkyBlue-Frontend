@@ -17,6 +17,7 @@ const Confirmation = lazy(() =>
 );
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import axiosInstance from "../../api/axiosConfig";
+import useRetryRequest from "../../api/useRetryRequest";
 import "./OnePageCheckOut.css";
 
 const items = [
@@ -72,6 +73,27 @@ const OnePageCheckout = () => {
 
   const navigate = useNavigate();
 
+  const [discountData, setDiscountData] = useState(null);
+
+  const retryRequest = useRetryRequest(); // Use the custom hook]
+
+  const fetchDiscount = async () => {
+    try {
+      const response = await retryRequest(() =>
+        axiosInstance.get("/cart/discount-value")
+      );
+      console.log("Discount fetched:", response.data);
+      setDiscountData(response.data);
+    } catch (error) {
+      console.error("Failed to fetch discount:", error);
+      setDiscountData(null); // Fallback if needed
+    }
+  };
+
+  useEffect(() => {
+    fetchDiscount();
+  }, []);
+
   // Function to fetch both cart and user data in parallel
   const fetchDataInParallel = async () => {
     try {
@@ -80,6 +102,17 @@ const OnePageCheckout = () => {
         axiosInstance.get("/customer/info"),
       ]);
 
+      let discountValue = 0;
+      if (discountData) {
+        if (discountData.UsePercentage) {
+          discountValue =
+            (cartResponse.data.totalPrice * discountData.DiscountPercentage) /
+            100;
+        } else {
+          discountValue = discountData.DiscountAmount;
+        }
+      }
+
       // Set cart data
       const cartItems = cartResponse.data.cartItems;
       setProducts(cartItems);
@@ -87,8 +120,8 @@ const OnePageCheckout = () => {
         subtotal: cartResponse.data.totalPrice,
         Shipping: 0,
         tax: cartResponse.data.taxAmount,
-        Discount: 1.19,
-        total: cartResponse.data.finalPrice - 1.19,
+        Discount: discountValue,
+        total: cartResponse.data.finalPrice - discountValue,
       });
 
       // Set user info data
@@ -110,9 +143,15 @@ const OnePageCheckout = () => {
 
       setFormData({
         Name: `${userInfo.FirstName || ""} ${userInfo.LastName || ""}`.trim(),
-        Address: `${userInfo.Address1 || ""}${userInfo.Address2 ? ", " + userInfo.Address2 : ""}${userInfo.City ? ", " + userInfo.City : ""}${selectedState.Name ? ", " + selectedState.Name : ""}${userInfo.ZipPostalCode ? " " + userInfo.ZipPostalCode : ""}${selectedCountry.Name ? ",\n" + selectedCountry.Name : ""}`.trim(),
+        Address: `${userInfo.Address1 || ""}${
+          userInfo.Address2 ? ", " + userInfo.Address2 : ""
+        }${userInfo.City ? ", " + userInfo.City : ""}${
+          selectedState.Name ? ", " + selectedState.Name : ""
+        }${userInfo.ZipPostalCode ? " " + userInfo.ZipPostalCode : ""}${
+          selectedCountry.Name ? ",\n" + selectedCountry.Name : ""
+        }`.trim(),
         PhoneNumber: userInfo.PhoneNumber || "",
-        Email: userInfo.Email || ""
+        Email: userInfo.Email || "",
       });
 
       if (cartItems.length === 0) {
