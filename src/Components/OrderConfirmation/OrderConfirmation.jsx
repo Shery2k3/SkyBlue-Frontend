@@ -5,6 +5,14 @@ import "./OrderConfirmation.css";
 import axiosInstance from "../../api/axiosConfig";
 
 const OrderConfirmation = ({ subTotal, shipping, tax, discount, shippingMethod, total }) => {
+  console.log({
+    subTotal,
+    shipping,
+    tax,
+    discount,
+    shippingMethod,
+    total
+  });
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();

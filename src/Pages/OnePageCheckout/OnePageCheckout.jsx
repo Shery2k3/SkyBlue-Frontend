@@ -112,6 +112,8 @@ const OnePageCheckout = () => {
           discountValue = discountData.DiscountAmount;
         }
       }
+      console.log("Discount Data:", discountData);
+      console.log("Discount Value:", discountValue);
 
       // Set cart data
       const cartItems = cartResponse.data.cartItems;
@@ -167,9 +169,11 @@ const OnePageCheckout = () => {
   };
 
   useEffect(() => {
+  if (discountData !== null) {
     fetchDataInParallel();
-    console.log(formData);
-  }, []);
+  }
+}, [discountData]);
+
 
   const nextStep = () => {
     if (currentStep < items.length - 1) {
