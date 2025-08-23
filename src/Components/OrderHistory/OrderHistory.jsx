@@ -19,9 +19,21 @@ const columns = [
     align: "center",
   },
   {
-    title: "Sub Total",
-    dataIndex: "subTotal",
-    key: "subTotal",
+    title: "Subtotal (Excl. Tax)",
+    dataIndex: "subTotalExcl",
+    key: "subTotalExcl",
+    align: "center",
+  },
+  {
+    title: "Subtotal (Incl. Tax)",
+    dataIndex: "subTotalIncl",
+    key: "subTotalIncl",
+    align: "center",
+  },
+  {
+    title: "Discount",
+    dataIndex: "discount",
+    key: "discount",
     align: "center",
   },
   {
@@ -49,14 +61,21 @@ const OrderHistory = ({ setIsLoading }) => {
         const response = await retryRequest(() =>
           axiosInstance.get("/customer/orders")
         );
+        console.log("Orders data:", response.data);
+
         const transformedData = response.data.data.map((order) => ({
           key: order.Id,
           date: new Date(order.CreatedOnUtc).toLocaleDateString(),
           id: order.Id,
-          subTotal: "$" + order.OrderSubtotalInclTax.toFixed(2),
+          subTotalExcl: "$" + order.OrderSubtotalExclTax.toFixed(2),
+          subTotalIncl: "$" + order.OrderSubtotalInclTax.toFixed(2),
+          discount: order.OrderDiscount
+            ? "-$" + order.OrderDiscount.toFixed(2)
+            : "$0.00",
           tax: "$" + order.OrderTax.toFixed(2),
           total: "$" + order.OrderTotal.toFixed(2),
         }));
+
         setOrders(transformedData);
         setIsLoading(false);
       } catch (error) {
