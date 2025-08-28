@@ -103,17 +103,38 @@ const OnePageCheckout = () => {
       ]);
 
       let discountValue = 0;
+      let isDiscountValid = false;
+
       if (discountData) {
-        if (discountData.UsePercentage) {
-          discountValue =
-            (cartResponse.data.totalPrice * discountData.DiscountPercentage) /
-            100;
-        } else {
-          discountValue = discountData.DiscountAmount;
+        const now = new Date();
+
+        // Parse UTC dates
+        const startDate = discountData.StartDateUtc
+          ? new Date(discountData.StartDateUtc)
+          : null;
+        const endDate = discountData.EndDateUtc
+          ? new Date(discountData.EndDateUtc)
+          : null;
+
+        // Check if discount is active
+        if ((!startDate || now >= startDate) && (!endDate || now <= endDate)) {
+          isDiscountValid = true;
+        }
+
+        if (isDiscountValid) {
+          if (discountData.UsePercentage) {
+            discountValue =
+              (cartResponse.data.totalPrice * discountData.DiscountPercentage) /
+              100;
+          } else {
+            discountValue = discountData.DiscountAmount;
+          }
         }
       }
-      console.log("Discount Data:", discountData);
-      console.log("Discount Value:", discountValue);
+
+      console.log("DISCOUNT DATA:", discountData);
+      console.log("IS DISCOUNT VALID:", isDiscountValid);
+      console.log("DISCOUNT VALUE:", discountValue);
 
       // Set cart data
       const cartItems = cartResponse.data.cartItems;
@@ -169,11 +190,10 @@ const OnePageCheckout = () => {
   };
 
   useEffect(() => {
-  if (discountData !== null) {
-    fetchDataInParallel();
-  }
-}, [discountData]);
-
+    if (discountData !== null) {
+      fetchDataInParallel();
+    }
+  }, [discountData]);
 
   const nextStep = () => {
     if (currentStep < items.length - 1) {
