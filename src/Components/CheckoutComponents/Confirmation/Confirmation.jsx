@@ -46,7 +46,7 @@ const Confirmation = ({ shippingMethod, products, cartSummary, userInfo }) => {
               <strong>Address:</strong> {userInfo.Address}
             </p>
             <p>
-              <strong>Payment Method:</strong> {shippingMethod.shippingMethod}
+              <strong>Shipping Method:</strong> {shippingMethod.shippingMethod}
             </p>
           </span>
         </div>
