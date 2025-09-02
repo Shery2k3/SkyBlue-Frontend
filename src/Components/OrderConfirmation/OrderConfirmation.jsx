@@ -55,7 +55,7 @@ const OrderConfirmation = ({ subTotal, shipping, tax, discount, shippingMethod, 
       </div>
       <div className="info-item">
         <span>Discount:</span>
-        <span>-${discount.toFixed(2)}</span>
+        <span>${discount.toFixed(2)}</span>
       </div>
       <div className="cart-total">
         <span>Total:</span>
