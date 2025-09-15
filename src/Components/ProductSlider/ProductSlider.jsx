@@ -5,7 +5,7 @@ import "./ProductSlider.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const ProductSlider = ({ category, products }) => {
+const ProductSlider = ({ category, products,updateCartCount }) => {
   const sliderRef = useRef(null);
 
   const settings = {
@@ -73,7 +73,7 @@ const ProductSlider = ({ category, products }) => {
           <Slider ref={sliderRef} {...settings}>
             {products.map((product, index) => (
               <div className="slider-item" key={index}>
-                <ProductCard product={product} />
+                <ProductCard product={product} updateCartCount={updateCartCount}/>
               </div>
             ))}
           </Slider>

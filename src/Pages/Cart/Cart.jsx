@@ -43,70 +43,73 @@ const Cart = () => {
   }, []);
 
   const fetchCartData = async () => {
-  setFetching(true);
-  try {
-    const response = await retryRequest(() =>
-      axiosInstance.get("/cart/items")
-    );
-    const cartSubtotal = response.data.totalPrice;
-    const taxAmount = response.data.taxAmount;
+    setFetching(true);
+    try {
+      const response = await retryRequest(() =>
+        axiosInstance.get("/cart/items")
+      );
+      const cartSubtotal = response.data.totalPrice;
+      const taxAmount = response.data.taxAmount;
 
-    // Check discount validity based on dates
-    let isDiscountValid = false;
-    let discountValue = 0;
+      // Check discount validity based on dates
+      let isDiscountValid = false;
+      let discountValue = 0;
 
-    if (discountData) {
-      const now = new Date();
+      if (discountData) {
+        const now = new Date();
 
-      // Parse discount start/end
-      const startDate = discountData.StartDateUtc
-        ? new Date(discountData.StartDateUtc)
-        : null;
-      const endDate = discountData.EndDateUtc
-        ? new Date(discountData.EndDateUtc)
-        : null;
+        // Parse discount start/end
+        const startDate = discountData.StartDateUtc
+          ? new Date(discountData.StartDateUtc)
+          : null;
+        const endDate = discountData.EndDateUtc
+          ? new Date(discountData.EndDateUtc)
+          : null;
 
-      // Check if discount is active
-      if (
-        (!startDate || now >= startDate) && // If no startDate or current >= startDate
-        (!endDate || now <= endDate)        // If no endDate or current <= endDate
-      ) {
-        isDiscountValid = true;
-      }
+        // Check if discount is active
+        if (
+          (!startDate || now >= startDate) && // If no startDate or current >= startDate
+          (!endDate || now <= endDate) // If no endDate or current <= endDate
+        ) {
+          isDiscountValid = true;
+        }
 
-      // Apply discount only if valid
-      if (isDiscountValid) {
-        if (discountData.UsePercentage) {
-          discountValue =
-            (cartSubtotal * discountData.DiscountPercentage) / 100;
-        } else {
-          discountValue = discountData.DiscountAmount;
+        // Apply discount only if valid
+        if (isDiscountValid) {
+          if (discountData.UsePercentage) {
+            discountValue =
+              (cartSubtotal * discountData.DiscountPercentage) / 100;
+          } else {
+            discountValue = discountData.DiscountAmount;
+          }
         }
       }
+
+      const finalPrice = cartSubtotal + taxAmount - discountValue;
+
+      const sorted = response.data.cartItems.sort(
+        (a, b) => new Date(b.CreatedOnUtc) - new Date(a.CreatedOnUtc)
+      );
+
+      setProducts(sorted);
+      setCartSummary({
+        subtotal: cartSubtotal,
+        Shipping: 0,
+        tax: taxAmount,
+        discount: discountValue,
+        total: finalPrice,
+      });
+
+      setIsLoading(false);
+      setFetching(false);
+    } catch (error) {
+      console.error("Failed to load data:", error);
+      setIsLoading(false);
+      setFetching(false);
+    } finally {
+      updateCartCount();
     }
-
-    const finalPrice = cartSubtotal + taxAmount - discountValue;
-
-    setProducts(response.data.cartItems);
-    setCartSummary({
-      subtotal: cartSubtotal,
-      Shipping: 0,
-      tax: taxAmount,
-      discount: discountValue,
-      total: finalPrice,
-    });
-
-    setIsLoading(false);
-    setFetching(false);
-  } catch (error) {
-    console.error("Failed to load data:", error);
-    setIsLoading(false);
-    setFetching(false);
-  } finally {
-    updateCartCount();
-  }
-};
-
+  };
 
   useEffect(() => {
     if (discountData !== null) {

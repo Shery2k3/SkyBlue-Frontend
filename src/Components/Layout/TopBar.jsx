@@ -31,8 +31,7 @@ const TopBars = () => {
       )}
       {!isMobile && (
         <div className="topbar-info">
-          For account registration or related queries, please call at
-          647-522-7419. &nbsp;&nbsp; For order related queries, please call at
+           For order related queries, please call at
           647-402-5465
         </div>
       )}

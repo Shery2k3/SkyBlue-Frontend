@@ -155,10 +155,21 @@ const CartItem = ({ product, onUpdate, onRemove }) => {
           <span className="unit-price">
             Unit Price: ${unitPrice.toFixed(2)}
           </span>
+
+          {product.CreatedOnUtc && (
+            <span className="created-date">
+              Added on: {new Date(product.CreatedOnUtc).toLocaleDateString()}{" "}
+              {new Date(product.CreatedOnUtc).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          )}
+
           {product.Discount > 0 && (
             <span className="discount-message">
-            After discount of ${product.Discount.toFixed(2)}, final price is $
-            {product.FinalPrice.toFixed(2)}
+              After discount of ${product.Discount.toFixed(2)}, final price is $
+              {product.FinalPrice.toFixed(2)}
             </span>
           )}
         </div>

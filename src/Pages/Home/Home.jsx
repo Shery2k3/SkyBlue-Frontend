@@ -12,6 +12,7 @@ import About from "../../Components/About/About";
 import ProductGrid2 from "../../Components/ProductGrid2/ProductGrid2";
 import useRetryRequest from "../../api/useRetryRequest";
 import axiosInstance from "../../api/axiosConfig";
+import { useCartCount } from "../../Context/CartCount/CartCount";
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,6 +20,7 @@ const Home = () => {
   const [newArrival, setNewArrival] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
   const [showNotice, setShowNotice] = useState(false);
+  const { cartCount, updateCartCount } = useCartCount();
   const navigate = useNavigate();
   const retryRequest = useRetryRequest();
 
@@ -95,9 +97,9 @@ const Home = () => {
         <Banner />
         <SubBanners />
         <Category />
-        <ProductSlider category="New Arrivals" products={newArrival} />
+        <ProductSlider category="New Arrivals" products={newArrival} updateCartCount={updateCartCount} />
         <About />
-        <ProductSlider category="Best Sellers" products={bestSellers} />
+        <ProductSlider category="Best Sellers" products={bestSellers} updateCartCount={updateCartCount} />
         <ProductGrid2 category="Exclusive Products" products={allProducts} />
       </>
     </Layout>
