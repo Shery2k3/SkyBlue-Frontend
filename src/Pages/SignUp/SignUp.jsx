@@ -36,7 +36,29 @@ const SignUp = () => {
     }
   }, [contextToken, navigate]);
 
-  return <SignupForm />;
+  return <>
+    <div>
+    <div
+        style={{
+          width: "100%",
+          backgroundColor: "black",
+          color: "white",
+          textAlign: "center",
+          fontFamily: "var(--font-primary)", 
+          fontWeight: "600",
+          fontSize: "0.95rem",
+          padding: "5px 0",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          zIndex: 9999,
+        }}
+      >
+         For <strong>account registration</strong> queries, call:{" "}647-522-7419
+      </div>
+      <SignupForm />
+    </div>
+  </>;
 };
 
 export default SignUp;

@@ -18,7 +18,7 @@ const ProductCard = ({ product, updateCartCount }) => {
     OrderMaximumQuantity,
   } = product.data || product;
 
-   //console.log("product", product);
+  //console.log("product", product);
   // console.log("AllowedQuantities", AllowedQuantities);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -107,6 +107,7 @@ const ProductCard = ({ product, updateCartCount }) => {
       console.log("Add to Cart Response:", response);
 
       if (response.data.success) {
+        await updateCartCount?.();
         notification.success({
           message: (
             <div style={{ textAlign: "center" }}>
@@ -117,7 +118,6 @@ const ProductCard = ({ product, updateCartCount }) => {
           key: "added-to-cart",
           placement: "top",
         });
-        updateCartCount?.();
       } else {
         message.error(response.data.message || "Error adding to cart");
       }
@@ -144,6 +144,7 @@ const ProductCard = ({ product, updateCartCount }) => {
           className="product-image"
           onLoad={handleImageLoad}
           style={{ display: isLoading ? "none" : "block" }}
+          onContextMenu={(e) => e.preventDefault()} 
         />
         {Stock === 0 && (
           <div className="out-of-stock-overlay">

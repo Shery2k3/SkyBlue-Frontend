@@ -365,6 +365,7 @@ const ProductModal = ({ product, onClose }) => {
               alt={Name}
               onLoad={() => setIsLoading(false)}
               style={{ display: isLoading ? "none" : "block" }}
+              onContextMenu={(e) => e.preventDefault()} 
             />
           </div>
 

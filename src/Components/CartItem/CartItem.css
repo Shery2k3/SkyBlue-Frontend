@@ -216,6 +216,22 @@
   color: var(--dark);
 }
 
+.created-date {
+  display: block;
+  font-size: 0.75rem;
+  color: #010307;
+  margin-top: 2px;
+  font-style: italic;
+  word-break: break-word;
+}
+
+@media (max-width: 640px) {
+  .created-date {
+    font-size: 0.7rem;
+    text-align: left;
+  }
+}
+
 @media only screen and (max-width: 1024px) {
   .cart-item .product-name {
     font-size: 1rem;
