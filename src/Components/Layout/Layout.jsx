@@ -34,6 +34,8 @@ const Layout = ({ pageTitle, children, style, isLoading }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, [pageTitle]);
 
+  
+
   return (
     <>
       <Loader isActive={isLoading} />

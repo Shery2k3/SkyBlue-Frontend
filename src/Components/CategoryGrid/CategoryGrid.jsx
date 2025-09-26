@@ -2,10 +2,14 @@ import React from "react";
 import "./CategoryGrid.css";
 import { useNavigate } from "react-router-dom";
 
-const CategoryGrid = ({ categories }) => {
+const CategoryGrid = ({ categories,setCategories }) => {
+
+  console.log("Categories:", categories);
+
   const navigate = useNavigate();
 
   const handleCategoryClick = (category) => {
+    setCategories([])
     navigate(`/category/${category.Id}?page=1`);
   };
 

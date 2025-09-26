@@ -26,7 +26,7 @@ const AllCategoryNav = () => {
   const { isCategoryNavOpen, toggleCategoryNav } = useCategoryNav();
   const navigate = useNavigate();
 
-  // Get window width on resize
+  // Update window width
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -38,10 +38,12 @@ const AllCategoryNav = () => {
     };
   }, []);
 
-  // Handle escape key to close navigation
+  // Close on Escape key
   useEffect(() => {
     const handleEscKey = (event) => {
       if (event.key === "Escape" && isCategoryNavOpen) {
+        // Reset and close
+        resetNavigationState();
         toggleCategoryNav();
       }
     };
@@ -73,12 +75,12 @@ const AllCategoryNav = () => {
         const response = await retryRequest(() =>
           axiosInstance.get("/product/category/tree")
         );
-        console.log("Categories data:", response.data);
-        setCategories(response.data);
-        // Initialize navigation path with root level
+        // response.data expected to be a tree array
+        setCategories(response.data || []);
         setNavigationPath([
-          { level: 0, categories: response.data, selected: null },
+          { level: 0, categories: response.data || [], selected: null },
         ]);
+        setCurrentLevel(0);
       } catch (error) {
         console.error("Failed to load categories:", error);
       } finally {
@@ -89,25 +91,26 @@ const AllCategoryNav = () => {
     fetchData();
   }, [retryRequest]);
 
-  // Navigate to a subcategory
+  // Utility: reset navigation state to root
+  const resetNavigationState = () => {
+    setCurrentLevel(0);
+    setNavigationPath([{ level: 0, categories: categories, selected: null }]);
+  };
+
+  // Navigate to a subcategory (desktop columns)
   const navigateToSubcategory = (category, level) => {
-    // If clicking on the same category, just redirect to its page
-    if (
-      navigationPath[level] &&
-      navigationPath[level].selected === category.Id
-    ) {
+    // If clicking same selected category -> redirect
+    if (navigationPath[level] && navigationPath[level].selected === category.Id) {
       redirect(category.Id);
       return;
     }
 
-    // Update navigation path
     const newPath = navigationPath.slice(0, level + 1);
     newPath[level] = {
       ...newPath[level],
       selected: category.Id,
     };
 
-    // Add next level if there are children and we haven't reached max depth
     if (category.children && category.children.length > 0 && level < MAX_DEPTH_TO_DISPLAY) {
       newPath.push({
         level: level + 1,
@@ -116,25 +119,29 @@ const AllCategoryNav = () => {
       });
       setCurrentLevel(level + 1);
     } else {
-      // If no children or reached max depth, redirect to the category page
+      // no children or reached max depth
       redirect(category.Id);
     }
 
     setNavigationPath(newPath);
   };
 
+  // Redirect helper (navigates then closes & resets)
   const redirect = (id) => {
     navigate(`/category/${id}`);
+    // close and reset so next open starts from top
+    resetNavigationState();
     toggleCategoryNav();
   };
 
   // Navigate to home/all categories
   const navigateToHome = () => {
     navigate("/");
+    resetNavigationState();
     toggleCategoryNav();
   };
 
-  // Generate breadcrumb data for mobile view
+  // Build breadcrumbs (display only)
   const generateBreadcrumbs = () => {
     const breadcrumbs = [{ name: "All Categories", id: null }];
 
@@ -156,44 +163,25 @@ const AllCategoryNav = () => {
     return breadcrumbs;
   };
 
-  // Navigate to specific breadcrumb level
-  const navigateToBreadcrumb = (level) => {
-    if (level === null) {
-      // Reset to initial state
-      setCurrentLevel(0);
-      const initialPath = navigationPath.slice(0, 1);
-      initialPath[0].selected = null;
-      setNavigationPath(initialPath);
-    } else {
-      setCurrentLevel(level);
-      setNavigationPath(navigationPath.slice(0, level + 1));
-    }
-  };
-
-  // Check if a category has deeper nested children
+  // Check deeper nested children exist
   const hasNestedChildren = (category) => {
     if (!category.children) return false;
-    
     for (const child of category.children) {
-      if (child.children && child.children.length > 0) {
-        return true;
-      }
+      if (child.children && child.children.length > 0) return true;
     }
     return false;
   };
 
-  // Render a single category column
+  // Render a single column (desktop / tablet)
   const renderCategoryColumn = (levelData, level) => {
     return (
       <div key={`level-${level}`} className="category-column">
         <ul className="category-list">
-          {levelData.categories.length > 0 ? (
+          {levelData.categories && levelData.categories.length > 0 ? (
             levelData.categories.map((category) => (
               <li
                 key={category.Id}
-                className={`category-item ${
-                  levelData.selected === category.Id ? "selected" : ""
-                }`}
+                className={`category-item ${levelData.selected === category.Id ? "selected" : ""}`}
               >
                 <div
                   className="category-header"
@@ -202,17 +190,14 @@ const AllCategoryNav = () => {
                   <span className="category-name">{category.Name}</span>
                   {category.children && category.children.length > 0 && (
                     <span className="chevron-container">
-                      <FontAwesomeIcon
-                        icon={faChevronRight}
-                        className="chevron-icon"
-                      />
+                      <FontAwesomeIcon icon={faChevronRight} className="chevron-icon" />
                     </span>
                   )}
                 </div>
 
-                {/* Show "View More" for categories at max depth that have deeper children */}
+                {/* Show "View More" on desktop/tablet at max depth when deeper children exist */}
                 {level === MAX_DEPTH_TO_DISPLAY && hasNestedChildren(category) && (
-                  <div 
+                  <div
                     className="view-more-link"
                     onClick={() => redirect(category.Id)}
                   >
@@ -222,16 +207,14 @@ const AllCategoryNav = () => {
               </li>
             ))
           ) : (
-            <li className="empty-category-message">
-              No subcategories available
-            </li>
+            <li className="empty-category-message">No subcategories available</li>
           )}
         </ul>
       </div>
     );
   };
 
-  // Render breadcrumb navigation for mobile view
+  // MOBILE: breadcrumbs (display only, not clickable)
   const renderBreadcrumbs = () => {
     const breadcrumbs = generateBreadcrumbs();
 
@@ -239,23 +222,14 @@ const AllCategoryNav = () => {
       <div className="mobile-category-breadcrumb">
         {breadcrumbs.map((crumb, index) => (
           <span key={`crumb-${index}`} className="breadcrumb-item">
-            {index < breadcrumbs.length - 1 ? (
-              <span
-                className="breadcrumb-link"
-                onClick={() => navigateToBreadcrumb(crumb.level)}
-              >
-                {crumb.name}
-              </span>
-            ) : (
-              <span>{crumb.name}</span>
-            )}
+            <span>{crumb.name}</span>
           </span>
         ))}
       </div>
     );
   };
 
-  // For mobile view with vertical navigation
+  // MOBILE vertical view
   const renderMobileView = () => {
     return (
       <div className="category-mobile-view">
@@ -265,41 +239,42 @@ const AllCategoryNav = () => {
           <div
             key={`mobile-level-${index}`}
             className={`mobile-level ${currentLevel === index ? "active" : ""}`}
+            aria-hidden={currentLevel !== index}
           >
             {index > 0 && (
               <div
                 className="back-button"
-                onClick={() => setCurrentLevel(index - 1)}
+                onClick={() => {
+                  // go back one level and clear selection for the level we left
+                  setCurrentLevel(index - 1);
+                  const newPath = navigationPath.slice(0, index + 1);
+                  // clear the selection on the current index
+                  newPath[index] = { ...newPath[index], selected: null };
+                  setNavigationPath(newPath);
+                }}
               >
                 <FontAwesomeIcon icon={faChevronRight} className="back-icon" />
                 Back
               </div>
             )}
+
             <ul className="mobile-category-list">
               {index === 0 && (
                 <li className="mobile-category-item">
                   <div className="mobile-category-header">
-                    <span
-                      className="mobile-category-name"
-                      onClick={navigateToHome}
-                    >
-                      <FontAwesomeIcon
-                        icon={faHome}
-                        style={{ marginRight: "8px" }}
-                      />
+                    <span className="mobile-category-name" onClick={navigateToHome}>
+                      <FontAwesomeIcon icon={faHome} style={{ marginRight: "8px" }} />
                       Home / All Categories
                     </span>
                   </div>
                 </li>
               )}
 
-              {levelData.categories.length > 0 ? (
+              {levelData.categories && levelData.categories.length > 0 ? (
                 levelData.categories.map((category) => (
                   <li
                     key={category.Id}
-                    className={`mobile-category-item ${
-                      levelData.selected === category.Id ? "selected" : ""
-                    }`}
+                    className={`mobile-category-item ${levelData.selected === category.Id ? "selected" : ""}`}
                   >
                     <div className="mobile-category-header">
                       <span
@@ -308,18 +283,26 @@ const AllCategoryNav = () => {
                       >
                         {category.Name}
                       </span>
+
                       {category.children && category.children.length > 0 && (
                         <button
                           className="mobile-next-button"
                           onClick={(e) => {
                             e.stopPropagation();
-                            
-                            // If we're at max depth and category has nested children,
-                            // redirect to category page instead of showing more levels
+                            // if we're at max depth and it has deeper children -> go to category page
                             if (index === MAX_DEPTH_TO_DISPLAY && hasNestedChildren(category)) {
                               redirect(category.Id);
                             } else {
-                              navigateToSubcategory(category, index);
+                              // open next level
+                              // ensure navigationPath has this level set
+                              const newPath = navigationPath.slice(0, index + 1);
+                              newPath[index] = { ...newPath[index], selected: category.Id };
+                              newPath.push({
+                                level: index + 1,
+                                categories: category.children || [],
+                                selected: null,
+                              });
+                              setNavigationPath(newPath);
                               setCurrentLevel(index + 1);
                             }
                           }}
@@ -329,10 +312,10 @@ const AllCategoryNav = () => {
                         </button>
                       )}
                     </div>
-                    
-                    {/* Show "View More" for categories at max depth that have deeper children */}
+
+                    {/* Show "View More" on mobile at max depth if deeper children exist */}
                     {index === MAX_DEPTH_TO_DISPLAY && hasNestedChildren(category) && (
-                      <div 
+                      <div
                         className="mobile-view-more"
                         onClick={() => redirect(category.Id)}
                       >
@@ -342,9 +325,7 @@ const AllCategoryNav = () => {
                   </li>
                 ))
               ) : (
-                <li className="empty-category-message">
-                  No subcategories available
-                </li>
+                <li className="empty-category-message">No subcategories available</li>
               )}
             </ul>
           </div>
@@ -353,26 +334,27 @@ const AllCategoryNav = () => {
     );
   };
 
-  // Render loading state
   const renderLoading = () => (
     <div className="category-loading">
       <div className="loading-spinner"></div>
     </div>
   );
 
+  // overlay click handler: reset & close
+  const handleOverlayClick = () => {
+    resetNavigationState();
+    toggleCategoryNav();
+  };
+
   return (
     <>
       <div
-        className={`all-category-nav-overlay ${
-          isCategoryNavOpen ? "open" : ""
-        }`}
-        onClick={toggleCategoryNav}
+        className={`all-category-nav-overlay ${isCategoryNavOpen ? "open" : ""}`}
+        onClick={handleOverlayClick}
         aria-hidden="true"
-      ></div>
+      />
       <div
-        className={`all-category-nav-container ${
-          isCategoryNavOpen ? "open" : ""
-        }`}
+        className={`all-category-nav-container ${isCategoryNavOpen ? "open" : ""}`}
         ref={navigationRef}
         role="dialog"
         aria-modal="true"
@@ -380,7 +362,10 @@ const AllCategoryNav = () => {
       >
         <button
           className="menu-closer"
-          onClick={toggleCategoryNav}
+          onClick={() => {
+            resetNavigationState();
+            toggleCategoryNav();
+          }}
           aria-label="Close category menu"
         >
           <FontAwesomeIcon icon={faXmark} />
@@ -393,9 +378,7 @@ const AllCategoryNav = () => {
             renderMobileView()
           ) : (
             <div className="category-columns-container">
-              {navigationPath.map((levelData, index) =>
-                renderCategoryColumn(levelData, index)
-              )}
+              {navigationPath.map((levelData, index) => renderCategoryColumn(levelData, index))}
             </div>
           )}
         </div>
