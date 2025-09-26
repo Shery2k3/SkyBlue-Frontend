@@ -997,6 +997,29 @@ body.scroll-lock {
   }
 }
 
+.mobile-menu-cart {
+  display: none; /* hidden by default */
+  align-items: center;
+  gap: 1rem; /* spacing between menu and cart */
+}
+
+.mobile-menu-cart .menu,
+.mobile-menu-cart .cart-icon-mobile {
+  font-size: 1.5rem;
+  color: var(--dark);
+  cursor: pointer;
+}
+
+@media (max-width: 858px) {
+  .mobile-menu-cart {
+    display: flex;
+  }
+
+  .header .cart-options {
+    display: none; /* keep large-screen cart hidden */
+  }
+}
+
 /* Footer 1 */
 
 .footer1 {
