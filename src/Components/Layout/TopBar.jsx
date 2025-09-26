@@ -29,12 +29,12 @@ const TopBars = () => {
           Administration
         </div>
       )}
-      {!isMobile && (
+  
         <div className="topbar-info">
            For order related queries, please call at
           647-402-5465
         </div>
-      )}
+   
     </div>
   );
 };

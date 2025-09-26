@@ -36,7 +36,7 @@ const Categories = () => {
   return (
     <Layout pageTitle="Categories" style="style1" isLoading={isLoading}>
       <Header />
-      <CategoryGrid categories={categories} />
+      <CategoryGrid categories={categories} setCategories={setCategories}/>
     </Layout>
   );
 };

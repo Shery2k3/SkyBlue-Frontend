@@ -35,6 +35,15 @@ const SignupForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // configure AntD message globally
+    message.config({
+      top: 70,        // push messages below your black header (50px + some space)
+      duration: 3,    // seconds
+      maxCount: 1,    // only 1 at a time
+    });
+  }, []);
+
+  useEffect(() => {
     const fetchCountries = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/customer/countries`);
@@ -98,6 +107,8 @@ const SignupForm = () => {
           },
         }
       );
+
+      //console.log("SIGNUP RESPONSE:", response);
 
       if (response.status === 201) {
         message.success("Signup successful!, waiting for approval.");
