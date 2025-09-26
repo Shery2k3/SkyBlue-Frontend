@@ -163,12 +163,6 @@ const SearchBar = () => {
         </div>
       </div>
 
-      {/* Cart icon shown beside searchbar on smaller screens */}
-      <FontAwesomeIcon
-        icon={faShoppingCart}
-        className="cart-icon-mobile"
-        onClick={() => navigate("/cart")}
-      />
     </div>
   );
 };

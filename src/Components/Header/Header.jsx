@@ -11,6 +11,7 @@ import {
   faChevronDown,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 import TopBars from "../Layout/TopBar";
 
 const Header = () => {
@@ -18,71 +19,84 @@ const Header = () => {
   const { cartCount, updateCartCount } = useCartCount();
   const { isCategoryNavOpen, toggleCategoryNav } = useCategoryNav();
 
+  const navigate = useNavigate();
+
   return (
     <>
       <TopBars />
       <div className="header">
-      <div className="header-left">
-        <Link to="/">
-          <img src={LogoAccent} alt="logo" className="logo" />
-        </Link>
-        <FontAwesomeIcon icon={faBars} className="menu" onClick={toggleNav} />
-        <ul className="items">
-          <li>
-            <Link to="/">Home</Link>
-          </li>
+        <div className="header-left">
+          <Link to="/">
+            <img src={LogoAccent} alt="logo" className="logo" />
+          </Link>
+          <div className="mobile-menu-cart">
+            <FontAwesomeIcon
+              icon={faBars}
+              className="menu"
+              onClick={toggleNav}
+            />
+            <FontAwesomeIcon
+              icon={faCartShopping}
+              className="cart-icon-mobile"
+              onClick={() => navigate("/cart")}
+            />
+          </div>
 
-          <li className="shop-menu">
-            <Link to="/all-products">
-              Shop{" "}
-              <span>
-                <FontAwesomeIcon icon={faChevronDown} />
-              </span>
+          <ul className="items">
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+
+            <li className="shop-menu">
+              <Link to="/all-products">
+                Shop{" "}
+                <span>
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </span>
+              </Link>
+              <div className="nav-dropdown-content">
+                <Link to="/all-products" className="nav-drop-down-item">
+                  All Products
+                </Link>
+                <Link to="/best-sellers" className="nav-drop-down-item">
+                  Best Sellers
+                </Link>
+                <Link to="/new-arrivals" className="nav-drop-down-item">
+                  New Arrivals
+                </Link>
+                <Link to="/categories" className="nav-drop-down-item">
+                  Categories
+                </Link>
+              </div>
+            </li>
+
+            <li>
+              <Link to="/contact-us">Contact</Link>
+            </li>
+            <li>
+              <Link to="/user/account-info">My Account</Link>
+            </li>
+
+            <li onClick={toggleCategoryNav}>
+              <p>All Categories</p>
+            </li>
+          </ul>
+        </div>
+
+        <div className="header-right">
+          <SearchBar />
+          <div className="cart-options">
+            <Link to="/wishlist">
+              <FontAwesomeIcon className="shoping-cart" icon={faHeart} />
             </Link>
-            <div className="nav-dropdown-content">
-              <Link to="/all-products" className="nav-drop-down-item">
-                All Products
-              </Link>
-              <Link to="/best-sellers" className="nav-drop-down-item">
-                Best Sellers
-              </Link>
-              <Link to="/new-arrivals" className="nav-drop-down-item">
-                New Arrivals
-              </Link>
-              <Link to="/categories" className="nav-drop-down-item">
-                Categories
-              </Link>
-            </div>
-          </li>
-
-          <li>
-            <Link to="/contact-us">Contact</Link>
-          </li>
-          <li>
-            <Link to="/user/account-info">My Account</Link>
-          </li>
-
-          <li onClick={toggleCategoryNav}>
-            <p>All Categories</p>
-          </li>
-        </ul>
-      </div>
-
-      <div className="header-right">
-        <SearchBar />
-        <div className="cart-options">
-          <Link to="/wishlist">
-            <FontAwesomeIcon className="shoping-cart" icon={faHeart} />
-          </Link>
-          <Link className="cart" to="/cart">
-            <span className="cart-count">{cartCount}</span>
-            <FontAwesomeIcon className="shoping-cart" icon={faCartShopping} />
-          </Link>
+            <Link className="cart" to="/cart">
+              <span className="cart-count">{cartCount}</span>
+              <FontAwesomeIcon className="shoping-cart" icon={faCartShopping} />
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
     </>
-    
   );
 };
 
